@@ -1,0 +1,11 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h1>Account Inactive</h1>
+<small>This account is inactive.</small>
+<br>
+<a href="{% url 'account_email' %}">Change Email</a> | <a href="{% url 'account_signup' %}">Sign Up</a>
+{% endblock content %}
+    

@@ -1,0 +1,42 @@
+
+
+{% block content %}
+
+    <h2>Refer</h2>
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+
+        {% endif %}
+        <p>Refer Name: {{ referral.refer_name }} </p>
+        <p> Phone Number: {{ referral.phone_number }} </p>
+        <p> Business Name: {{ referral.business_owner }} </p>
+        <p> Referral ID: {{ referral.ref_shortcode }} </p>
+        <p>Total Vote Count: {{ referral.guest_referral.count }}</p>
+        <p>------------------------ -------------</p>
+
+    <form method="POST">
+    {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Vote">
+    </form>
+    {% if referral.guest_referral %}
+        <h2>Guests</h2>
+    <table>
+    <tr>
+        <th>S/N </th>
+        <th>Name </th>
+        <th>Phone Number </th>
+    </tr>
+        {% for ref in referral.guest_referral.all %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ ref.guest_name }}</td>
+                <td>{{ ref.phone_number }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+{% endblock %}
+

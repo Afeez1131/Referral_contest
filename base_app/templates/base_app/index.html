@@ -1,0 +1,213 @@
+{% extends 'base_app/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h2>Business:</h2>
+    {% for b in business %}
+        <h2><a href="{{ b.get_absolute_url }}">{{ b }}</a></h2>
+    {% endfor %}
+
+
+
+        <!-- Features -->
+        <div id="features" class="cards-1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="h2-heading">why you need a <span> Referral Contest.</span></h2>
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-icon">
+                                <span class="fas fa-microphone-alt"></span>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Raise Brand <br>Awareness.</h4>
+                                <p>It’s no secret that people today spend a great deal of their time online, which indicates that the internet is not a place to miss if you’re looking to raise brand awareness.</p>
+                            </div>
+                        </div>
+                        <!-- end of card -->
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-icon green">
+                                <span class="fas fa-chart-area"></span>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Attract more contacts <br>at a low cost.</h4>
+                                <p>Referral programs encourage your current customers to spread the word about your business with the promise of a reward.</p>
+                            </div>
+                        </div>
+                        <!-- end of card -->
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-icon blue">
+                                <span class="far fa-comments"></span>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Engage your existing <br>audience.</h4>
+                                <p>Referral contest helps to effectively engage your customers, helps you attract and delight them at every turn in the customer journey.</p>
+                            </div>
+                        </div>
+                        <!-- end of card -->
+
+                    </div> <!-- end of col -->
+
+                </div> <!-- end of row -->
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-icon">
+                                <span class="fas fa-wallet"></span>
+                            </div>
+                            <div class="card-body">
+
+                                <h4 class="card-title">Bring in high <br>Quality customers.</h4>
+                                <p>Referral contest helps to effectively engage your customers helps you attract and delight them at every turn in the customer journey.</p>
+                            </div>
+                        </div>
+                        <!-- end of card -->
+
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-icon blue">
+                                <span class="fas fa-check-double"></span>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Has a proven track <br>record of success.</h4>
+                                <p>Some of the most popular businesses have seen success thanks to a strong referral program.</p>
+                            </div>
+                        </div>
+                        <!-- end of card -->
+
+                    </div> <!-- end of col -->
+
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </div> <!-- end of cards-1 -->
+        <!-- end of services -->
+
+
+        <!-- Details 1 -->
+        <div id="details" class="basic-1 bg-gray">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-xl-5">
+                        <div class="text-container">
+                            <h2>Create a WhatsApp referral campaign in minutes! </h2>
+                            <p>With a referral contest, you can use the power of social marketing to effectively grow your brand, promote a new product, engage your customers, and make more sales.</p>
+                            <a class="btn-solid-reg" href="/">Modal</a>
+                        </div> <!-- end of text-container -->
+                    </div> <!-- end of col -->
+                    <div class="col-lg-6 col-xl-7">
+                        <div class="image-container">
+                            <img class="img-fluid" src="{% static 'images/details-1.svg' %}" alt="alternative">
+                        </div> <!-- end of image-container -->
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </div> <!-- end of basic-1 -->
+        <!-- end of details 1 -->
+
+
+        <!-- Details Modal -->
+        <div id="staticBackdrop" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="row">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="col-lg-8">
+                            <div class="image-container">
+                                <img class="img-fluid" src="{% static 'images/details-modal.jpg' %}" alt="alternative">
+                            </div> <!-- end of image-container -->
+                        </div> <!-- end of col -->
+                        <div class="col-lg-4">
+                            <h3>Goals Setting</h3>
+                            <hr>
+                            <p>In gravida at nunc sodales pretium. Vivamus semper, odio vitae mattis auctor, elit elit semper magna ac tum nico vela spider</p>
+                            <h4>User Feedback</h4>
+                            <p>Sapien vitae eros. Praesent ut erat a tellus posuere nisi more thico cursus pharetra finibus posuere nisi. Vivamus feugiat</p>
+                            <ul class="list-unstyled li-space-lg">
+                                <li class="d-flex">
+                                    <i class="fas fa-chevron-right"></i>
+                                    <div class="flex-grow-1">Tincidunt sem vel brita bet mala</div>
+                                </li>
+                                <li class="d-flex">
+                                    <i class="fas fa-chevron-right"></i>
+                                    <div class="flex-grow-1">Sapien condimentum sacoz sil necr</div>
+                                </li>
+                                <li class="d-flex">
+                                    <i class="fas fa-chevron-right"></i>
+                                    <div class="flex-grow-1">Fusce interdum nec ravon fro urna</div>
+                                </li>
+                                <li class="d-flex">
+                                    <i class="fas fa-chevron-right"></i>
+                                    <div class="flex-grow-1">Integer pulvinar biolot bat tortor</div>
+                                </li>
+                                <li class="d-flex">
+                                    <i class="fas fa-chevron-right"></i>
+                                    <div class="flex-grow-1">Id ultricies fringilla fangor raq trinit</div>
+                                </li>
+                            </ul>
+                            <a id="modalCtaBtn" class="btn-solid-reg" href="#your-link">Details</a>
+                            <button type="button" class="btn-outline-reg" data-bs-dismiss="modal">Close</button>
+                        </div> <!-- end of col -->
+                    </div> <!-- end of row -->
+                </div> <!-- end of modal-content -->
+            </div> <!-- end of modal-dialog -->
+        </div> <!-- end of modal -->
+        <!-- end of details modal -->
+
+
+        <!-- Details 2 -->
+        <div class="basic-2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="image-container">
+                            <img class="img-fluid" src="{% static 'images/details-2.png' %}" alt="alternative">
+                        </div> <!-- end of image-container -->
+                    </div> <!-- end of col -->
+                    <div class="col-lg-6">
+                        <div class="text-container">
+                            <h2>Anyone can start using this website in <span style="color:#f25c05">3  simple steps.</span></h2>
+                            <ul class="list-unstyled li-space-lg">
+                                <li class="d-flex">
+                                    <div class="flex-grow-1">1. Create an Account as a Business Owner.</div>
+                                </li>
+                                <li class="d-flex">
+                                    <div class="flex-grow-1">2. Share your Referral Contest on WhatsApp.</div>
+                                </li>
+                                <li class="d-flex">
+                                    <div class="flex-grow-1">3. We automatically handle the rest.</div>
+                                </li>
+                            </ul>
+                        </div> <!-- end of text-container -->
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </div> <!-- end of basic-2 -->
+        <!-- end of details 2 -->
+
+
+        <!-- Invitation -->
+        <div class="basic-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>We will change the way you think about <span style="color:#f25c05;">Referral Contest</span> with our advanced tools and integrated functionalities.</h4>
+                        <a class="btn-outline-lg page-scroll" href="sign-up.html">Get started for free</a>
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </div> <!-- end of basic-3 -->
+        <!-- end of invitation -->
+{% endblock %}

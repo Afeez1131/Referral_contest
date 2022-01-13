@@ -1,0 +1,62 @@
+{% extends 'base_app/base.html' %}
+
+{% block content %}
+
+     <!-- Header -->
+        <header class="ex-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-10 offset-xl-1">
+                        <h1 class="text-center">Business Owner Page<span></span></h1>
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </header> <!-- end of ex-header -->
+
+    <div class="container">
+
+Welcome to the Business Owner page
+    <h1>Business Owner</h1>
+    <h3>Name of Business: {{ business.business_name }}</h3>
+    <p>Your Phone Number: {{ business.phone_number }}</p>
+    <p>Business Shortcode: {{ business.shortcode }}</p>
+    <p>Total Number of Referrals: {{ business.refer.all.count }}</p>
+{#    <p>Total Registered Referral: {{ business.refer.count }}</p>#}
+
+    <h3>Become a referral for {{ business.business_name }}</h3>
+    <form method="post">
+    {% csrf_token %}
+        {% if form2.non_field_errors %}
+            {% for error in form2.non_field_errors %}
+               <b>{{ error }}</b>
+            {% endfor %}
+
+        {% endif %}
+
+    {{ form.as_p }}
+{#    <p>{{ form2.refer_name }}</p>#}
+{#    <p>{{ form2.phone_number }}</p>#}
+
+
+        <input type="submit" Value="Create Referral">
+    </form>
+
+    <h2>Referral</h2>
+    {% if business.refer %}
+        {% for ref in business.refer.all %}
+            <p><h3>{{ forloop.counter }}. Referral name: {{ ref.refer_name }} </h3></p>
+        Phone Number: {{ ref.phone_number }} <br>
+        Referral ID: {{ ref.ref_shortcode }} <br>
+        No. of votes {{ ref.refer_name }}: {{ ref.guest_referral.count }}
+        <p><a href="{{ ref.get_absolute_url }}">Visit Guest Page</a></p>
+
+        <p>-------------------------------------</p>
+
+        {% empty %}
+        <h2>No one has joined your referral context yet</h2>
+    {% endfor %}
+    {% endif %}
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% block title %}
+  Sign Out Page
+{% endblock title %}
+  
+
+{% block content %}
+<h1>Sign Out</h1>
+
+<p>{% trans 'Are you sure you want to sign out?' %}</p>
+<form action="" method="post">
+  {% csrf_token %}
+  <input type="submit" value="Log out" class="btn btn-primary">
+</form>
+
+{% endblock %}
