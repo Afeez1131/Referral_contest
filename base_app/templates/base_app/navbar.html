@@ -26,9 +26,16 @@
                             <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
                         </li>
                     </ul>
-                    <span class="nav-item">
-                        <a class="btn-outline-sm" href="log-in.html">Log in</a>
+                    {% if request.user.is_authenticated %}
+                        <span class="nav-item">
+                        <a class="btn-outline-sm" href="{% url 'account_logout' %}">Log Out</a>
                     </span>
+                    {% else %}
+                        <span class="nav-item">
+                        <a class="btn-outline-sm" href="{% url 'account_login' %}">Log in</a>
+                    </span>
+                    {% endif %}
+
                 </div> <!-- end of navbar-collapse -->
             </div> <!-- end of container -->
         </nav> <!-- end of navbar -->

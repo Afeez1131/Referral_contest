@@ -19,11 +19,6 @@ class GuestAdmin(admin.TabularInline):
     extra = 1
 
 
-class BusinessOwnerAdmin(admin.ModelAdmin):
-    list_display = ["business_name", "phone_number", "shortcode"]
-    inlines = [AdminRefer]
-
-
 class ReferAdmin(admin.ModelAdmin):
     list_display = [
         "refer_name",
@@ -35,5 +30,4 @@ class ReferAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Guest, AdminGuest)
-admin.site.register(BusinessOwner, BusinessOwnerAdmin)
 admin.site.register(Referral, ReferAdmin)

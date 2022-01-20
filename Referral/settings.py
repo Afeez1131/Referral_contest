@@ -17,7 +17,6 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -34,17 +33,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "auth_app.apps.AuthAppConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "base_app",
     "Owner",
     "Individual",
     "Analytic",
-    "authentication",
+    # authentications
+    "crispy_forms",
 ]
 
 MIDDLEWARE = [
@@ -70,10 +72,19 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # `allauth` needs this from django
+                "django.template.context_processors.request",
             ],
         },
     },
 ]
+
+# AUTHENTICATION_BACKENDS = [
+#     "django.contrib.auth.backends.ModelBackend",
+#     "allauth.account.auth_backends.AuthenticationBackend",
+# ]
+
+SITE_ID = 1
 
 WSGI_APPLICATION = "Referral.wsgi.application"
 
@@ -135,3 +146,22 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# ACCOUNT_FORMS = {
+#     # "signup": "auth_app.forms.CustomSignupForm",
+#     # "login": "auth_app.forms.CustomLoginForm",
+# }
+
+# LOGIN_REDIRECT_URL = "index"
+AUTH_USER_MODEL = "auth_app.BusinessOwner"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+# ACCOUNT_SIGNUP_REDIRECT_URL = "account_login"
+# ACCOUNT_EMAIL_REQUIRED = False
+# ACCOUNT_LOGOUT_REDIRECT_URL = "account_login"
+# ACCOUNT_SESSION_REMEMBER = True
+# ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+# ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_USERNAME_REQUIRED = True
+# ACCOUNT_AUTHENTICATION_METHOD = "username"

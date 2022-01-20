@@ -4,6 +4,9 @@ from django.urls import reverse
 from autoslug import AutoSlugField
 from .utils import create_shortcode
 
+# from auth_app.models import BusinessOwner
+from django.conf import settings
+
 
 class BusinessOwner(models.Model):
     business_name = models.CharField(max_length=100)
@@ -31,7 +34,7 @@ class BusinessOwner(models.Model):
 
 class Referral(models.Model):
     business_owner = models.ForeignKey(
-        BusinessOwner, on_delete=models.CASCADE, related_name="refer"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="refer"
     )
     refer_name = models.CharField(max_length=20)
     phoneNumberRegex = RegexValidator(
@@ -88,7 +91,9 @@ class Guest(models.Model):
         Referral, related_name="guest_referral", on_delete=models.CASCADE
     )
     business = models.ForeignKey(
-        BusinessOwner, related_name="guest_business", on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL,
+        related_name="guest_business",
+        on_delete=models.CASCADE,
     )
     ip = models.GenericIPAddressField(null=True, blank=True)
     guest_name = models.CharField(max_length=100, null=True)
@@ -129,21 +134,3 @@ class Guest(models.Model):
 
     class Meta:
         ordering = ("-id",)
-
-
-# class Guest(models.Model):
-#     referer = models.ForeignKey(
-#         Referral, on_delete=models.CASCADE, related_name="refer_invited"
-#     )
-#     name = models.CharField(max_length=100)
-#     phoneNumberRegex = RegexValidator(
-#         regex=r"^0\d{10}$",
-#         message="Phone number must be entered in the format: '08105506070'. Up to 11 "
-#         "digits allowed.",
-#     )
-#     phone_number = models.CharField(
-#         validators=[phoneNumberRegex], max_length=11, unique=True
-#     )
-#
-#     def __str__(self):
-#         return str(self.referer) + " referred " + str(self.name)

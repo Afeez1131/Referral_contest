@@ -34,3 +34,8 @@ def contact(request):
 
 def about(request):
     return render(request, "base_app/about.html", {})
+
+
+def profile(request):
+
+    return render(request, "base_app/profile.html", {})
