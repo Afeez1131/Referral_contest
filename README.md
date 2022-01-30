@@ -33,12 +33,13 @@ Project is created with
 - HTML, CSS, BOOTSTRAP and JS
 
 ## LICENSE
-MIT
+[![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)
+
+## OPERATING SYSTEM
+
+[![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg)
 
 ## CONNECT WITH ME
+> LinkedIn [@lawal-afeez](https://www.linkedin.com/in/lawal-afeez/)
 
-[//]: # (> LinkedIn [@lawal-afeez]&#40;https://www.linkedin.com/in/lawal-afeez/&#41;)
-> 
-> ![LinkedIn](https://img.shields.io/badge/linkedin-lawal-afeez%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)
-
-> ![Twitter](https://img.shields.io/badge/lawal_afeez1-%231DA1F2.svg?style=for-the-badge&logo=Twitter&logoColor=white) 
+> Twitter [lawal_afeez1](https://twitter.com/lawal_afeez1)
