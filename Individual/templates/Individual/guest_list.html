@@ -1,0 +1,25 @@
+{% if referral %}
+<table class="table table-sm table-hover">
+    <thead class="text-center">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Voter</th>
+            <th scope="col">Phone Number</th>
+            {#                        <th scope="col">Add a vote</th>#}
+        </tr>
+    </thead>
+    {% for guest in referral.guest_referral.all %}
+    <tbody class="text-center">
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ guest.guest_name }}</td>
+            <td>{{ guest.phone_number }}</td>
+            {#                        <td>{{ ref.guest_referral.count }}</td>#}
+            {#                        <td><a class="btn btn-sm btn-primary" href="{{ ref.get_absolute_url }}">Vote</a></td>#}
+        </tr>
+    </tbody>
+    {% empty %}
+    <h2>No one has joined your referral context yet</h2>
+    {% endfor %}
+</table>
+{% endif %}

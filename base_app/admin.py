@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import BusinessOwner, Referral, Guest
-
+from .models import Referral, Guest
+from auth_app.models import BusinessOwner
 
 # Register your models here.
 class AdminRefer(admin.TabularInline):

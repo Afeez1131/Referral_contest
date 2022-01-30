@@ -1,60 +1,64 @@
 {% extends 'base_app/base.html' %}
 
 {% block content %}
- <!-- Header -->
-        <header class="ex-header">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-10 offset-xl-1">
-                        <h1 class="text-center">Get in touch with <span> Us.</span></h1>
-                    </div> <!-- end of col -->
-                </div> <!-- end of row -->
-            </div> <!-- end of container -->
-        </header> <!-- end of ex-header -->
-        <!-- end of header
+<!-- Header -->
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 class="text-center">Get in touch with <span> Us.</span></h1>
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+<!-- end of header
 
 <-- Features -->
-        <div id="features" class="cards-1">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
+<div id="features" class="cards-1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
 
-                        <!-- Basic -->
-        <div class="ex-form-1 pt-1 pb-1">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6 offset-xl-3">
-                        <div class="text-box mt-5 mb-1">
+                <!-- Basic -->
+                <div class="ex-form-1 pt-1 pb-1">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-6 offset-xl-3">
+                                <div class="text-box mt-5 mb-1">
 
-                            <!-- Log In Form -->
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="mb-4 form-floating">
-                                    <input type="text" name='phone_number' class="form-control" id="floatingInput" placeholder="08105505055">
-                                    <label for="floatingInput">WhatsApp Number...</label>
-                                </div>
-                                <div class="mb-4 form-floating">
-                                    <input type="text" name='name' class="form-control" id="floatingPassword" placeholder="Your name...">
-                                    <label for="floatingPassword">Your name...</label>
-                                </div>
-                                <div class="mb-4 form-floating">
-                                    <textarea rows="4" cols="50" name='message' class="form-control" id="floatingPassword" placeholder="Your name..." ></textarea>
-                                    <label for="floatingPassword">Your message...</label>
-                                </div>
-                                <button type="submit" class="form-control-submit-button">Send Us a Message.</button>
-                            </form>
-                            <!-- end of log in form -->
+                                    <!-- Log In Form -->
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <div class="mb-4 form-floating">
+                                            <input type="text" name='phone_number' class="form-control"
+                                                id="floatingInput" placeholder="08105505055">
+                                            <label for="floatingInput">WhatsApp Number...</label>
+                                        </div>
+                                        <div class="mb-4 form-floating">
+                                            <input type="text" name='name' class="form-control" id="floatingPassword"
+                                                placeholder="Your name...">
+                                            <label for="floatingPassword">Your name...</label>
+                                        </div>
+                                        <div class="mb-4 form-floating">
+                                            <textarea rows="4" cols="50" name='message' class="form-control"
+                                                id="floatingPassword" placeholder="Your name..."></textarea>
+                                            <label for="floatingPassword">Your message...</label>
+                                        </div>
+                                        <button type="submit" class="form-control-submit-button">Send Us a
+                                            Message.</button>
+                                    </form>
+                                    <!-- end of log in form -->
 
-                        </div> <!-- end of text-box -->
-                    </div> <!-- end of col -->
-                </div> <!-- end of row -->
-            </div> <!-- end of container -->
-        </div> <!-- end of ex-basic-1 -->
-        <!-- end of basic -->
+                                </div> <!-- end of text-box -->
+                            </div> <!-- end of col -->
+                        </div> <!-- end of row -->
+                    </div> <!-- end of container -->
+                </div> <!-- end of ex-basic-1 -->
+                <!-- end of basic -->
 
-                    </div> <!-- end of col -->
-                </div> <!-- end of row -->
-            </div> <!-- end of container -->
-        </div> <!-- end of cards-1 -->
-        <!-- end of services -->
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</div> <!-- end of cards-1 -->
+<!-- end of services -->
 {% endblock %}

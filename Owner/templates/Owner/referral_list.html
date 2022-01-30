@@ -1,0 +1,97 @@
+{% extends 'base_app/base.html' %}
+{% block content %}
+<!-- Header -->
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 class="text-center">All Referral for {{ business }}<span></span></h1>
+
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+
+<div class="container mt-3">
+
+    <div class="col-md-6 offset-md-3 mt-5">
+
+        {% if referral and request.user.is_authenticated and request.user.username == business.username %}
+        {#            {% if referral %}#}
+        <table class="table table-sm table-hover">
+            <thead class="text-center">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Shortcode</th>
+                    <th scope="col">Vote Count</th>
+                    <th scope="col">Add a vote</th>
+                </tr>
+            </thead>
+            {% for ref in referral %}
+            <tbody class="text-center">
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ ref.refer_name }}</td>
+                    <td>{{ ref.ref_shortcode }}</td>
+                    <td>{{ ref.guest_referral.count }}</td>
+                    <td><a class="btn btn-sm btn-primary" href="{{ ref.get_absolute_url }}">Vote</a></td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+        {#            {% else %}#}
+        {#                <h2>Become a Referral</h2>#}
+        {#                {{ referral.refer }}#}
+        {#                <a href="{% url 'referral_register' business.shortcode %}">Add a Referral</a>#}
+        {#            {% endif %}#}
+        {% else %}
+
+        {% if messages %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+            <b>{{ message }}</b>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {% for error in form.non_field_errors %}
+            <b>{{ error }}</b>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% if form.phone_number.errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {% for error in form.phone_number.errors %}
+            Phone Number Error! <b>{{ error }}</b>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% if form.refer_name.errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {% for error in form.refer_name.errors %}
+            Referral Name Error! <b>{{ error }}</b>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            {#                <p><input type="text" name="refer_name" class="form-control" placeholder="referral name.."></p>#}
+            {#                <p><input type="text" name="phone_number" class="form-control" placeholder="phone number..." maxlength="11"></p>#}
+            <p>{{ form.refer_name }}</p>
+            <p>{{ form.phone_number }}</p>
+
+            <div class="mt-2 mb-3 text-center">
+                <input class="btn btn-primary profile-button " type="submit" value="Become Referral">
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base_app/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 class="text-center">{% trans "Sign In" %}</h1>
+
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+
+
+<!-- Basic -->
+<div class="ex-form-1 pt-5 pb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 offset-xl-3">
+                {% if form.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {% for error in form.errors %}
+                    <b>{{ error }}</b>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                {% if messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                    <b>{{ message }}</b>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                <div class="text-box mt-5 mb-5">
+                    <p class="mb-4">You don't have a password? Then please <a class="blue"
+                            href="{% url 'account_signup' %}">Sign Up</a></p>
+                    <hr>
+                    <!-- Log In Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-4 form-floating">
+                            {{ form.login }}
+                            {#                                    <input type="text" name="login" class="form-control">#}
+                            <label for="floatingInput">Username or Phone Number</label>
+                        </div>
+                        <div class="mb-4 form-floating">
+                            {#                             <input type="password" name="password" class="form-control">#}
+
+                            {{ form.password }}
+                            <label for="floatingPassword">Password</label>
+                        </div>
+                        <input type="hidden" name="next" value="{{ next }}" />
+                        <input type="submit" class="form-control-submit-button" value="Log in">
+                    </form>
+                    <!-- end of log in form -->
+
+                </div> <!-- end of text-box -->
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</div> <!-- end of ex-basic-1 -->
+<!-- end of basic -->
+{% endblock %}

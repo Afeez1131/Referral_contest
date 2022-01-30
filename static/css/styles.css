@@ -344,6 +344,7 @@ a:hover {
 	line-height: 0.875rem;
 }
 
+
 .navbar .navbar-brand {
 	padding-top: 0.25rem;
 	padding-bottom: 0.25rem;
@@ -403,7 +404,12 @@ a:hover {
 	color: #f25c05;
 }
 
-/* Dropdown Menu */
+.navbar-collapse, .navbar-collapse.collapse {
+		overflow: visible;}
+.navbar-toggle {
+display: none;}
+
+ Dropdown Menu
 .navbar .dropdown .dropdown-menu {
 	animation: fadeDropdown 0.2s; /* required for the fade animation */
 }
@@ -1543,4 +1549,4 @@ a:hover {
     background: #BA68C8;
     color: #fff;
     cursor: pointer;
-    border: solid 1px #BA68C8
+    border: solid 1px #BA68C8}

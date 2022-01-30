@@ -1,0 +1,28 @@
+<div class="mb-3">
+        <div class="p-3 py-5">
+                <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">Business Name</label><input type="text"
+                                        class="form-control" placeholder="{{ referral.business_owner }}"
+                                        value="{{ referral.business_owner }}" readonly></div>
+
+                        <div class="col-md-6"><label class="labels">Referral Name</label><input type="text"
+                                        class="form-control" value="{{ referral.refer_name }}"
+                                        placeholder="{{ referral.refer_name }}" readonly></div>
+                </div>
+                <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text"
+                                        class="form-control" placeholder="enter phone number"
+                                        value="{{ referral.phone_number }}" readonly></div>
+
+                        <div class="col-md-12"><label class="labels">Number of Guest Referred</label><input type="text"
+                                        class="form-control" placeholder="enter address line 1"
+                                        value="{{ referral.guest_referral.count }} Referral" readonly></div>
+
+                        <div class="col-md-12"><label class="labels">Referral ID</label><input type="text"
+                                        class="form-control" placeholder="{{ referral.ref_shortcode }}"
+                                        value="{{ referral.ref_shortcode }}" readonly></div>
+                </div>
+
+
+        </div>
+</div>

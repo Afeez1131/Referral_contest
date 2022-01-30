@@ -1,0 +1,98 @@
+<div class="col-md-6 offset-md-3 mt-3">
+  {% if messages %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {% for message in messages %}
+    <b>{{ message }}</b>
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+  {% if form.non_field_errors %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {% for error in form.non_field_errors %}
+    <b>{{ error }}</b>
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+  {% if form.phone_number.errors %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {% for error in form.phone_number.errors %}
+    <b>Phone Number Error! {{ error }}</b>
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+  {% if form.refer_name.errors %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {% for error in form.refer_name.errors %}
+    <b>Referral Name Error! {{ error }}</b>
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+</div>
+{#End of the form errors and message alert #}
+{#{% if request.user.username == business.username %}#}
+
+<div class="container rounded bg-white mt-5 mb-5">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+
+      <table class="table table-sm">
+        <tbody>
+          <tr>
+            <th scope="row">Business Name</th>
+            <td>{{ business.business_name }}</td>
+          </tr>
+
+          <tr>
+            <th scope="row">Full Name</th>
+            <td>{{ business.full_name }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Username</th>
+            <td>{{ business.username }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Phone Number</th>
+            <td>{{ business.phone_number }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Referral Count</th>
+            <td>{{ business.refer.all.count }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Shortcode</th>
+            <td>{{ business.shortcode }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Reward Type</th>
+            <td>{{ business.reward_type }}</td>
+          </tr>
+          <tr>
+            <th scope="row">All Referral</th>
+            <td> <a class="btn btn-sm btn-solid-sm"
+                href="{% url 'referral_register' business.shortcode %}">Referrals</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div class="col-md-6 offset-md-3 mt-1">
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="exampleFormControlTextarea1">Message </label>
+        <textarea class="form-control" id="exampleFormControlTextarea1"
+          rows="3">{{ business.business_message }}</textarea>
+        <div class="mt-2 mb-3 text-center">
+          <input class="btn btn-primary profile-button " type="submit" value="Share on WhatsApp">
+        </div>
+    </form>
+
+  </div>
+</div>
+</div>

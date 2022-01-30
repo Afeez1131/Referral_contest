@@ -1,0 +1,68 @@
+{% extends 'base_app/base.html' %}
+
+{% block content %}
+<!-- Header -->
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 class="text-center">Vote for Referral "{{referral.refer_name}}"<span></span></h1>
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+
+<div class="col-md-6 offset-md-3 mt-3">
+    {#        {% include 'Individual/guest_profile.html' %}#}
+    {% if messages %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+        <strong>Error!</strong> {{ message }}
+        {% endfor %}
+        <hr>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <div class="container">
+        <div class="border-right mt-5">
+            <h2 class='text-center'>Vote</h2>
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {% for error in form.non_field_errors %}
+                <b>{{ error }}</b>
+                {% endfor %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            {% if form.phone_number.errors %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {% for error in form.phone_number.errors %}
+
+                <strong>Phone Number Error!</strong> {{ error }}
+                <hr>
+                {% endfor %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <p>{{form.guest_name}}</p>
+                <p>{{form.phone_number}}</p>
+
+                <div class="mt-2 text-center">
+                    <input class="btn btn-primary profile-button " type="submit" value="Vote"></div>
+            </form>
+        </div>
+        {% if referral.guest_referral %}
+        <h2 class="text-center mt-5 mb-3">Total Votes</h2>
+        <h2 class='text-center'>
+            {{referral.guest_referral.all.count}} Vote{{referral.guest_referral.all.count|pluralize}}
+        </h2>
+
+        {% endif %}
+        {% include 'Individual/guest_list.html' %}
+    </div>
+</div>
+{% endblock %}

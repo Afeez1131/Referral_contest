@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import BusinessOwner
+from auth_app.models import BusinessOwner
 import urllib.parse
 
 # Create your views here.
@@ -34,8 +34,3 @@ def contact(request):
 
 def about(request):
     return render(request, "base_app/about.html", {})
-
-
-def profile(request):
-
-    return render(request, "base_app/profile.html", {})

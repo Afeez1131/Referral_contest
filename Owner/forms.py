@@ -1,33 +1,67 @@
 from django import forms
-from base_app.models import Referral, BusinessOwner
-from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
-from django.db.utils import IntegrityError
+from base_app.models import Referral
+from auth_app.models import BusinessOwner
+from django.core.validators import RegexValidator
 
 
 class BusinessRegistrationForm(forms.ModelForm):
-    refer_name = forms.CharField(max_length=50)
-    phone_number = forms.CharField(max_length=11)
+    # refer_name = forms.CharField(max_length=50)
+    # phoneNumberRegex = RegexValidator(
+    #     regex=r"^0\d{10}$",
+    #     message="Phone number must be entered in the format: '08105506070'. Up to 11 "
+    #             "digits allowed.",
+    # )
+    # phone_number = forms.CharField(validators=[phoneNumberRegex], max_length=11)
 
     class Meta:
-        model = BusinessOwner
-        # fields = "__all__"
-        fields = ("business_name",)
+        model = Referral
+        fields = ("refer_name", "phone_number")
 
-    def clean(self):
-        refer_name = self.cleaned_data["refer_name"]
-        phone_number = self.cleaned_data["phone_number"]
-        business_name = self.cleaned_data["business_name"]
+    def __init__(self, *args, **kwargs):
+        super(BusinessRegistrationForm, self).__init__(*args, **kwargs)
 
-        business = BusinessOwner.objects.get(business_name=business_name)
-        print("Business :", business)
-        qs = Referral.objects.filter(
-            business_owner=business,
-            refer_name=refer_name,
-            phone_number=phone_number,
-        )
-        print("QS ", qs)
-        if qs.exists():
-            print("Qs exist: ")
-            raise forms.ValidationError("ERROR: Ref " + refer_name + " already exists!")
-        else:
-            return self.cleaned_data
+        self.fields["refer_name"].label = ""
+        self.fields[
+            "refer_name"
+        ].help_text = "<small>Enter the name of the Referral</small>"
+        self.fields["refer_name"].widget.attrs = {
+            "class": "form-control",
+            "placeholder": "Your name...",
+        }
+
+        self.fields["phone_number"].label = ""
+        self.fields[
+            "phone_number"
+        ].help_text = "<small>Enter your WhatsApp Number...</small>"
+        self.fields["phone_number"].widget.attrs = {
+            "class": "form-control",
+            "placeholder": "Your Whatsapp No...",
+        }
+
+
+class ReferralRegistration(forms.ModelForm):
+    # phoneNumberRegex = RegexValidator(
+    #     regex=r"^0\d{10}$",
+    #     message="Phone number must be entered in the format: '08105506070'. Up to 11 "
+    #     "digits allowed.",
+    # )
+    # phone_number = forms.CharField(max_length=11)
+
+    class Meta:
+        model = Referral
+        fields = ("refer_name", "phone_number")
+
+    def __init__(self, *args, **kwargs):
+        super(ReferralRegistration, self).__init__(*args, **kwargs)
+
+        self.fields["refer_name"].label = ""
+        self.fields["refer_name"].widget.attrs = {
+            "class": "form-control",
+            "placeholder": "Your name...",
+        }
+
+        self.fields["phone_number"].label = ""
+        self.fields["phone_number"].widget.attrs = {
+            "class": "form-control",
+            "placeholder": "Your Whatsapp No...",
+        }

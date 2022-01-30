@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "Individual",
     "Analytic",
     # authentications
+    "allauth",
+    "allauth.account",
     "crispy_forms",
 ]
 
@@ -79,10 +81,11 @@ TEMPLATES = [
     },
 ]
 
-# AUTHENTICATION_BACKENDS = [
-#     "django.contrib.auth.backends.ModelBackend",
-#     "allauth.account.auth_backends.AuthenticationBackend",
-# ]
+AUTHENTICATION_BACKENDS = [
+    "auth_app.backends.CustomUserBackend",
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
 
 SITE_ID = 1
 
@@ -147,21 +150,21 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# ACCOUNT_FORMS = {
-#     # "signup": "auth_app.forms.CustomSignupForm",
-#     # "login": "auth_app.forms.CustomLoginForm",
-# }
+ACCOUNT_FORMS = {
+    "signup": "auth_app.forms.UserRegistrationForm",
+    "login": "auth_app.forms.CustomLoginForm",
+}
 
-# LOGIN_REDIRECT_URL = "index"
+LOGIN_REDIRECT_URL = "index"
 AUTH_USER_MODEL = "auth_app.BusinessOwner"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+# LOGIN_REDIRECT_URL = "home"
 
-# ACCOUNT_SIGNUP_REDIRECT_URL = "account_login"
-# ACCOUNT_EMAIL_REQUIRED = False
-# ACCOUNT_LOGOUT_REDIRECT_URL = "account_login"
-# ACCOUNT_SESSION_REMEMBER = True
-# ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-# ACCOUNT_UNIQUE_EMAIL = True
-# ACCOUNT_USERNAME_REQUIRED = True
-# ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_SIGNUP_REDIRECT_URL = "account_login"
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_LOGOUT_REDIRECT_URL = "account_login"
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "username"

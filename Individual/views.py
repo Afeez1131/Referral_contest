@@ -10,25 +10,29 @@ from django.shortcuts import (
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
-from .forms import GuestForm
-from base_app.forms import GuestRegisterForm
-from base_app.models import BusinessOwner, Referral, Guest
+from Individual.forms import GuestRegisterForm
+from base_app.models import Referral, Guest
+from auth_app.models import BusinessOwner
 from .utils import get_ip_address
 from django.contrib import messages
-
 
 # Create your views here.
 
 
-def ReferralHome(request, shortcode, ref_shortcode):
+def VoteReferral(request, shortcode, ref_shortcode):
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
+    # get the Business Owner instance using the Business Owner Shortcode args
     referral = Referral.objects.get(
         business_owner=business, ref_shortcode=ref_shortcode
     )
+    # get the instance of the referral using the referral shortcode
+    # and business Owner instance
     g_ip = get_ip_address(request)
+    # get the IP of the current person
 
     if request.method == "POST":
         form = GuestRegisterForm(request.POST)
+        # while trying to vote
         if form.is_valid():
             guest_instance = form.save(commit=False)
             guest_instance.referral = referral
@@ -37,16 +41,22 @@ def ReferralHome(request, shortcode, ref_shortcode):
 
             try:
                 guest = Guest.objects.get(business=business, referral=referral, ip=g_ip)
+                # try getting a Guest with the business instance,
+                # for the referral using the ref_shortcode, and for the current IP
 
             except ObjectDoesNotExist:
-
+                # if it does not exist
                 guest_instance = form.save(commit=False)
                 guest_instance.referral = referral
                 guest_instance.business = business
                 guest_instance.ip = get_ip_address(request)
+                # guest_instance.guest_count += 1
+                # guest_instance.guest_count increment on save of guest in the model.
                 guest_instance.save()
+                # save the guest
                 return HttpResponseRedirect(guest_instance.guest_url)
             else:
+                # if it exist, send a message notification
                 messages.warning(
                     request,
                     "IP ["
@@ -62,7 +72,7 @@ def ReferralHome(request, shortcode, ref_shortcode):
 
     return render(
         request,
-        "Individual/homepage.html",
+        "Individual/guest_vote.html",
         {
             "referral": referral,
             "business": business,
@@ -73,7 +83,9 @@ def ReferralHome(request, shortcode, ref_shortcode):
 
 def ReferRedirect(request, shortcode, ref_shortcode):
     referral = Referral.objects.get(ref_shortcode=ref_shortcode)
+    # get the referral instance using the referral shortcode
     business = BusinessOwner.objects.get(shortcode=shortcode)
+    # get the business Owner using the shortcode args
     ip = get_ip_address(request)
     # will get the ip address of the current guest
 

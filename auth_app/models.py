@@ -14,6 +14,7 @@ class CustomAccountManager(BaseUserManager):
     def create_superuser(self, username, full_name, password, **other_fields):
         other_fields.setdefault("is_staff", True)
         other_fields.setdefault("is_superuser", True)
+        other_fields.setdefault("is_business_owner", True)
 
         if other_fields.get("is_staff") is not True:
             raise ValueError("Superuser must be given a Staff status")
@@ -27,7 +28,7 @@ class CustomAccountManager(BaseUserManager):
         # email = self.normalize_email(email)
         # if not email:
         #     raise ValueError('You must provide an E-mail address.')
-
+        other_fields.setdefault("is_referral", True)
         if not full_name:
             raise ValueError("You must provide your full name.")
 
@@ -40,19 +41,29 @@ class CustomAccountManager(BaseUserManager):
         return user
 
 
+REWARD_CHOICE = (
+    ("Cash", "Cash"),
+    ("Product", "Product"),
+)
+
+
 class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(verbose_name="username", max_length=150, unique=True)
     business_name = models.CharField(verbose_name="business name", max_length=150)
+    business_message = models.TextField(blank=True, null=True)
     phone_regex = RegexValidator(
         regex="^[0]\d{10}$", message="Phone number should be in the format: 08105506606"
     )
     phone_number = models.CharField(
         max_length=11, validators=[phone_regex], unique=True
     )
+    reward_type = models.CharField(max_length=20, choices=REWARD_CHOICE, default="Cash")
     full_name = models.CharField(max_length=150)
     shortcode = AutoSlugField(populate_from="business_name")
     start_date = models.DateTimeField(default=timezone.now)
     is_staff = models.BooleanField(default=False)
+    is_business_owner = models.BooleanField(default=False)
+    is_referral = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
 
@@ -64,11 +75,15 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.business_name
 
+    def save(self, *args, **kwargs):
+        # self.business_message =
+        super(BusinessOwner, self).save(*args, **kwargs)
+
     class Meta:
         ordering = ("-id",)
 
     def get_absolute_url(self):
-        return reverse("owner_home", kwargs={"shortcode": self.shortcode})
+        return reverse("business_owner_profile", kwargs={"shortcode": self.shortcode})
 
     def has_perm(self, perm, obj=None):
         return True

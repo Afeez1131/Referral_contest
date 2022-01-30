@@ -1,0 +1,99 @@
+{% extends "base_app/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign Up" %}{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 class="text-center">{% trans "Sign Up" %}</h1>
+
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+
+
+<!-- Basic -->
+<div class="ex-form-1 pt-5 pb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 offset-xl-3">
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {% for error in form.non_field_errors %}
+                    <b>{{ error }}</b>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                {% if form.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {% for key, value in form.errors.items %}
+                    <b>{{ value }}</b>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+
+                {% if messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                    <b>{{ message }}</b>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                <div class="text-box mt-5 mb-5">
+                    <p class="mb-4">You already have an Account? Then please <a class="blue"
+                            href="{% url 'account_login' %}">Log In</a></p>
+                    <hr>
+                    <!-- Log In Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        {#                                {{ form.as_p }}#}
+                        <div class="mb-4 form-floating">
+                            {{ form.username }}
+                            <label for="floatingInput">Username...</label>
+                        </div>
+                        <div class="mb-4 form-floating">
+                            {{ form.business_name }}
+                            <label for="floatingInput">Business Name...</label>
+                        </div>
+                        <div class="mb-4 form-floating">
+                            {{ form.phone_number }}
+                            <label for="floatingInput">Phone Number</label>
+                        </div>
+
+                        <div class="mb-4 form-floating">
+                            {{ form.full_name }}
+                            <label for="floatingInput">Full Name</label>
+                        </div>
+                        <div class="mb-4">
+                            {{ form.reward_type }}
+                            <small style="color:#272556;"><strong>Cash Price or Product reward for the
+                                    winner</strong></small>
+                        </div>
+                        <div class="mb-4 form-floating">
+                            {{ form.password1 }}
+                            <label for="floatingInput">Password</label>
+                        </div>
+                        <div class="mb-4 form-floating">
+                            {{ form.password2 }}
+                            <label for="floatingInput">Confirm Password</label>
+                        </div>
+                        <input type="submit" class="form-control-submit-button" value="Sign Up">
+                    </form>
+                    <!-- end of log in form -->
+
+                </div> <!-- end of text-box -->
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</div> <!-- end of ex-basic-1 -->
+<!-- end of basic -->
+{% endblock %}

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from auth_app import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -23,6 +23,8 @@ urlpatterns = [
     path("", include("Owner.urls")),
     path("", include("Individual.urls")),
     path("", include("Analytic.urls")),
-    # path("accounts/", include("allauth.urls")),
-    path("accounts/", include("django.contrib.auth.urls")),
+    path("", include("auth_app.urls")),
+    path("accounts/", include("allauth.urls")),
+    # path("accounts/referral/login/", views.login_referral, name="referral_login"),
+    # path("accounts/referral/signup/", views.register_referral, name="referral_signup"),
 ]

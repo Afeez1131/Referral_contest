@@ -8,30 +8,6 @@ from .utils import create_shortcode
 from django.conf import settings
 
 
-class BusinessOwner(models.Model):
-    business_name = models.CharField(max_length=100)
-    phoneNumberRegex = RegexValidator(
-        regex=r"^0\d{10}$",
-        message="Phone number must be entered in the format: '08105506070'. Up to 11 "
-        "digits allowed.",
-    )
-    phone_number = models.CharField(
-        validators=[phoneNumberRegex],
-        max_length=11,
-    )
-    shortcode = AutoSlugField(populate_from="business_name")
-    broadcast_message = models.TextField(null=True)
-
-    def __str__(self):
-        return self.business_name
-
-    class Meta:
-        ordering = ("-id",)
-
-    def get_absolute_url(self):
-        return reverse("owner_home", kwargs={"shortcode": self.shortcode})
-
-
 class Referral(models.Model):
     business_owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="refer"
@@ -42,10 +18,7 @@ class Referral(models.Model):
         message="Phone number must be entered in the format: '08105506070'. Up to 11 "
         "digits allowed.",
     )
-    phone_number = models.CharField(
-        validators=[phoneNumberRegex],
-        max_length=11,
-    )
+    phone_number = models.CharField(validators=[phoneNumberRegex], max_length=11)
     ref_shortcode = models.CharField(
         max_length=10,
         blank=True,
@@ -65,14 +38,14 @@ class Referral(models.Model):
         unique_together = ("business_owner", "refer_name", "phone_number")
 
     def save(self, *args, **kwargs):
-        self.refer_message = self.refer_message + " " + self.refer_name
+        self.refer_message = str(self.refer_message) + " " + str(self.refer_name)
         if not self.ref_shortcode:
             self.ref_shortcode = create_shortcode(self)
         else:
             self.ref_shortcode = self.ref_shortcode
 
         self.referral_url = (
-            "https://wa.me/" + self.phone_number + "?text=" + self.refer_message
+            "https://wa.me/" + str(self.phone_number) + "?text=" + self.refer_message
         )
         super(Referral, self).save(*args, **kwargs)
 
@@ -110,9 +83,7 @@ class Guest(models.Model):
     guest_message = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return (
-            "Referral-" + str(self.referral) + ": Business Name -" + str(self.business)
-        )
+        return self.guest_name
 
     def save(self, *args, **kwargs):
         self.guest_count += 1
@@ -125,7 +96,7 @@ class Guest(models.Model):
         )
         self.guest_url = (
             "https://wa.me/"
-            + self.business.phone_number
+            + str(self.business.phone_number)
             + "?text="
             + self.guest_message
         )
