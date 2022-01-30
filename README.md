@@ -36,6 +36,6 @@ Project is created with
 MIT
 
 ## CONNECT WITH ME
-![https://www.linkedin.com/in/lawal-afeez/](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)
+> LinkedIn [@lawal-afeez](https://www.linkedin.com/in/lawal-afeez/)
 
-![https://twitter.com/lawal_afeez1](https://img.shields.io/badge/<handle>-%231DA1F2.svg?style=for-the-badge&logo=Twitter&logoColor=white)
+> Twitter [lawal_afeez1](https://twitter.com/lawal_afeez1)
