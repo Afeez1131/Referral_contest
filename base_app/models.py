@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from autoslug import AutoSlugField
 from .utils import create_shortcode
+import re
 
 # from auth_app.models import BusinessOwner
 from django.conf import settings
@@ -14,21 +15,12 @@ class Referral(models.Model):
     )
     refer_name = models.CharField(max_length=20)
     phoneNumberRegex = RegexValidator(
-        regex=r"^0\d{10}$",
-        message="Phone number must be entered in the format: '08105506070'. Up to 11 "
+        regex=r"^[+]\d{13}$",
+        message="Phone number must be entered in the format: '+2348105506070'. Up to 14 "
         "digits allowed.",
     )
-    phone_number = models.CharField(validators=[phoneNumberRegex], max_length=11)
-    ref_shortcode = models.CharField(
-        max_length=10,
-        blank=True,
-        unique=True,
-    )
-    refer_message = models.CharField(
-        max_length=100,
-        default="Hello, i just signed up as a referral in your Referral Context, My name is ",
-    )
-    referral_url = models.CharField(max_length=200, null=True, blank=True)
+    phone_number = models.CharField(validators=[phoneNumberRegex], max_length=14)
+    ref_shortcode = models.CharField(max_length=15, blank=True, unique=True)
 
     def __str__(self):
         return self.ref_shortcode
@@ -38,15 +30,13 @@ class Referral(models.Model):
         unique_together = ("business_owner", "refer_name", "phone_number")
 
     def save(self, *args, **kwargs):
-        self.refer_message = str(self.refer_message) + " " + str(self.refer_name)
+        # self.refer_message = str(self.refer_message) + " " + self.get_absolute_url()
         if not self.ref_shortcode:
             self.ref_shortcode = create_shortcode(self)
-        else:
-            self.ref_shortcode = self.ref_shortcode
 
-        self.referral_url = (
-            "https://wa.me/" + str(self.phone_number) + "?text=" + self.refer_message
-        )
+        # self.referral_url = (
+        #     "https://wa.me/" + str(self.phone_number) + "?text=" + self.refer_message
+        # )
         super(Referral, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -71,12 +61,12 @@ class Guest(models.Model):
     ip = models.GenericIPAddressField(null=True, blank=True)
     guest_name = models.CharField(max_length=100, null=True)
     phoneNumberRegex = RegexValidator(
-        regex=r"^0\d{10}$",
+        regex=r"^[+]\d{13}$",
         message="Phone number must be entered in the format: '08105506070'. Up to 11 "
         "digits allowed.",
     )
     phone_number = models.CharField(
-        validators=[phoneNumberRegex], max_length=11, null=True
+        validators=[phoneNumberRegex], max_length=14, null=True
     )
     guest_count = models.IntegerField(default=0)
     guest_url = models.CharField(max_length=200, blank=True)

@@ -11,7 +11,9 @@ from django.urls import reverse
 
 
 class CustomAccountManager(BaseUserManager):
-    def create_superuser(self, username, full_name, password, **other_fields):
+    def create_superuser(
+        self, username, full_name, password, cash_price, **other_fields
+    ):
         other_fields.setdefault("is_staff", True)
         other_fields.setdefault("is_superuser", True)
         other_fields.setdefault("is_business_owner", True)
@@ -22,9 +24,11 @@ class CustomAccountManager(BaseUserManager):
         if other_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must be given a superuser status")
         # email = self.normalize_email(email)
-        return self.create_user(username, full_name, password, **other_fields)
+        return self.create_user(
+            username, full_name, password, cash_price, **other_fields
+        )
 
-    def create_user(self, username, full_name, password, **other_fields):
+    def create_user(self, username, full_name, password, cash_price, **other_fields):
         # email = self.normalize_email(email)
         # if not email:
         #     raise ValueError('You must provide an E-mail address.')
@@ -33,7 +37,11 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError("You must provide your full name.")
 
         user = self.model(
-            username=username, full_name=full_name, password=password, **other_fields
+            username=username,
+            full_name=full_name,
+            password=password,
+            cash_price=cash_price,
+            **other_fields
         )
 
         user.set_password(password)
@@ -41,23 +49,20 @@ class CustomAccountManager(BaseUserManager):
         return user
 
 
-REWARD_CHOICE = (
-    ("Cash", "Cash"),
-    ("Product", "Product"),
-)
-
-
 class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(verbose_name="username", max_length=150, unique=True)
-    business_name = models.CharField(verbose_name="business name", max_length=150)
+    business_name = models.CharField(
+        verbose_name="business name", max_length=150, unique=True
+    )
     business_message = models.TextField(blank=True, null=True)
     phone_regex = RegexValidator(
-        regex="^[0]\d{10}$", message="Phone number should be in the format: 08105506606"
+        regex=r"^[+]\d{13}$",
+        message="Phone number should be in the format: 08105506606",
     )
     phone_number = models.CharField(
-        max_length=11, validators=[phone_regex], unique=True
+        max_length=14, validators=[phone_regex], unique=True
     )
-    reward_type = models.CharField(max_length=20, choices=REWARD_CHOICE, default="Cash")
+    cash_price = models.IntegerField()
     full_name = models.CharField(max_length=150)
     shortcode = AutoSlugField(populate_from="business_name")
     start_date = models.DateTimeField(default=timezone.now)
@@ -70,7 +75,7 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     objects = CustomAccountManager()
 
     USERNAME_FIELD = "phone_number"
-    REQUIRED_FIELDS = ["username", "full_name", "business_name"]
+    REQUIRED_FIELDS = ["username", "full_name", "business_name", "cash_price"]
 
     def __str__(self):
         return self.business_name

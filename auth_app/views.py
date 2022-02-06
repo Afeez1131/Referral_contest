@@ -16,15 +16,16 @@ from django.db.models import Q
 def register_view(request):
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
-        print(form)
         if form.is_valid():
             form.save()
+            messages.success(request, "Registration Successfull, Login Below")
             return redirect("account_login")
         # after registration, redirect to the login page
         # else:
         #     print("Invalid FOrm :", form)
         #     messages.error(request, "Unsuccessful registration. Invalid information.")
-    form = UserRegistrationForm()
+    else:
+        form = UserRegistrationForm()
 
     return render(request, "account/signup.html", {"form": form})
 
@@ -34,15 +35,14 @@ def register_view(request):
 #         form = ReferralRegistration(request.POST)
 #         if form.is_valid():
 #             form.save()
+#             return redirect("account_login")
+#         # else:
+#         #     print("Invalid FOrm :", form)
+#         #     messages.error(request, "Unsuccessful registration. Invalid information.")
+#     else:
+#         form = ReferralRegistration()
 #
-#             return redirect("referral_login")
-#         else:
-#             print("Invalid FOrm :", form)
-#             messages.error(request, "Unsuccessful registration. Invalid information.")
-#
-#     form = ReferralRegistration()
-#
-#     return render(request, "account/registration.html", {"form": form})
+#     return render(request, "account/signup.html", {"form": form})
 
 
 # def login_referral(request):
@@ -77,7 +77,6 @@ def login_user(request):
             # get a business owner with the
             # next = business.get_absolute_url()
             login(request, user)
-            print("Login")
             return redirect("business_owner_profile", business.shortcode)
         else:
             messages.warning(request, "Incorrect login details provided")

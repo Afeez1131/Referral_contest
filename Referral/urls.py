@@ -24,7 +24,7 @@ urlpatterns = [
     path("", include("Individual.urls")),
     path("", include("Analytic.urls")),
     path("", include("auth_app.urls")),
-    path("accounts/", include("allauth.urls")),
+    # path("accounts/", include("allauth.urls")),
     # path("accounts/referral/login/", views.login_referral, name="referral_login"),
     # path("accounts/referral/signup/", views.register_referral, name="referral_signup"),
 ]

@@ -26,10 +26,9 @@ class GuestRegisterForm(forms.ModelForm):
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data["phone_number"]
-        phoneNumberRegex = RegexValidator(
-            regex=r"^0\d{10}$",
-            message="Phone number must be entered in the format: '08105506070'. Up to 11 "
-            "digits allowed.",
-        )
-        phoneNumberRegex(phone_number)
-        return phone_number
+        if str(phone_number).startswith("0"):
+            phone_number_list = list(phone_number)
+            phone_number_list[0] = "+234"
+            p = "".join([str(elem) for elem in phone_number_list])
+            print(p)
+        return p

@@ -1,5 +1,11 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
+from django.shortcuts import (
+    render,
+    HttpResponse,
+    redirect,
+    get_object_or_404,
+    get_list_or_404,
+)
 from django.urls import reverse
 from django.contrib import messages
 from auth_app.models import BusinessOwner
@@ -9,19 +15,42 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 import re
+from base_app.utils import create_shortcode
+import urllib.parse
 
 
 @login_required(login_url="account_login")
 def ReferralHomeView(request, shortcode):
     business = BusinessOwner.objects.filter(shortcode=shortcode)[0]
     # get the instance of the business owner using shortcode
+
     if request.user.username == business.username:
         # test if the login user is equal to the user Business Owner
+        share_message = (
+            "Stand a chance of winning a cash price of #"
+            + str(business.cash_price)
+            + " by "
+            "referring people to " + business.business_name + ".\n Get started here: "
+        )
+
+        signup_url = request.build_absolute_uri(
+            reverse("referral_register", args=(business.shortcode,))
+        )
+
+        if request.method == "POST":
+            link = (
+                "https://wa.me/?text="
+                + urllib.parse.quote(share_message)
+                + urllib.parse.quote(signup_url)
+            )
+            return HttpResponseRedirect(link)
         return render(
             request,
-            "Owner/homepage.html",
+            "Owner/referral_homepage.html",
             {
                 "business": business,
+                "share_message": share_message,
+                "signup_url": signup_url,
             },
         )
     else:
@@ -29,10 +58,29 @@ def ReferralHomeView(request, shortcode):
         return redirect("index")
 
 
+def ReferralList(request, shortcode):
+    business = get_object_or_404(BusinessOwner, shortcode=shortcode)
+    # get a business owner with the shortcode passed as args
+    # obj_list = get_list_or_404(Referral, business_owner=business)
+    referral = Referral.objects.filter(business_owner=business)
+
+    # referral = obj_list[0]
+    # get the referral associated with the Business Owner
+    return render(
+        request,
+        "Owner/referral_list.html",
+        {"referral": referral, "business": business},
+    )
+
+
+# @login_required(login_url="account_login")
 def RegisterRefer(request, shortcode):
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
     # get a business owner with the shortcode passed as args
+    # obj_list = get_list_or_404(Referral, business_owner=business)
     referral = Referral.objects.filter(business_owner=business)
+
+    # referral = obj_list[0]
     # get the referral associated with the Business Owner
 
     if request.method == "POST":
@@ -44,6 +92,7 @@ def RegisterRefer(request, shortcode):
             # get the refer_name and phone number from the post request
             try:
                 # try to get the referral with the provided details
+                # referral = Referral.objects.filter(business_owner=business)
                 referral_instance = Referral.objects.get(
                     business_owner=business,
                     refer_name=refer_name,
@@ -51,15 +100,27 @@ def RegisterRefer(request, shortcode):
                 )
             except Exception as ObjectDoesNotExist:
                 # does not exist, create such referral
+                # referral = Referral.objects.filter(business_owner=business)
                 referral_instance = Referral(
                     business_owner=business,
                     refer_name=refer_name,
                     phone_number=phone_number,
                 )
+                shortcode = create_shortcode(referral_instance, size=4)
+                referral_instance.ref_shortcode = shortcode
+                print(
+                    referral_instance.business_owner,
+                    referral_instance,
+                    referral_instance.ref_shortcode,
+                )
                 referral_instance.save()
+                print("1 ", referral_instance)
+                # pass
                 # save
                 return redirect(
-                    "referral_home", business.shortcode, referral_instance.ref_shortcode
+                    "referral_profile",
+                    business.shortcode,
+                    referral_instance.ref_shortcode,
                 )
                 # return HttpResponseRedirect(referral.referral_url)
             else:
@@ -70,11 +131,10 @@ def RegisterRefer(request, shortcode):
                     + referral_instance.refer_name
                     + " exists, try again with a different Referral name",
                 )
-    else:
-        form = ReferralRegistration()
+    form = ReferralRegistration()
     return render(
         request,
-        "Owner/referral_list.html",
+        "Owner/referral_register.html",
         {
             "form": form,
             "business": business,
@@ -88,6 +148,22 @@ def ReferralProfile(request, shortcode, ref_shortcode):
     # get a busines Owner instance using the shortcode args
     referral = Referral.objects.get(ref_shortcode=ref_shortcode)
     # get the referral with the referral shortcode passed as args also
+    vote_url = request.build_absolute_uri(
+        reverse("referral_home", args=(business.shortcode, referral.ref_shortcode))
+    )
+    referral_message = (
+        "Hello, i am participating in a referral contest, the person with the highest "
+        "vote wins the Cash price. kindly vote for me here:\n"
+    )
+    if request.method == "POST":
+        link = (
+            "https://wa.me/?text="
+            + urllib.parse.quote(referral_message + vote_url)
+            # + urllib.parse.quote(vote_url)
+            # + urllib.parse.quote(signup_url)
+        )
+        # will handle the sharing of the message on whatsapp
+        return HttpResponseRedirect(link)
 
     return render(
         request,
@@ -95,5 +171,7 @@ def ReferralProfile(request, shortcode, ref_shortcode):
         {
             "business": business,
             "referral": referral,
+            "vote_url": vote_url,
+            "referral_message": referral_message,
         },
     )

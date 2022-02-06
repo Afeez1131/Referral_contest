@@ -11,7 +11,7 @@
         </div> <!-- end of row -->
     </div> <!-- end of container -->
 </header> <!-- end of ex-header -->
-
+<div class="container mt-3">
 <div class="col-md-6 offset-md-3 mt-3">
     {#        {% include 'Individual/guest_profile.html' %}#}
     {% if messages %}
@@ -55,14 +55,15 @@
                     <input class="btn btn-primary profile-button " type="submit" value="Vote"></div>
             </form>
         </div>
+        <hr>
         {% if referral.guest_referral %}
         <h2 class="text-center mt-5 mb-3">Total Votes</h2>
-        <h2 class='text-center'>
+        <h1 class='text-center'>
             {{referral.guest_referral.all.count}} Vote{{referral.guest_referral.all.count|pluralize}}
-        </h2>
-
+        </h1>
         {% endif %}
-        {% include 'Individual/guest_list.html' %}
+{#        {% include 'Individual/guest_list.html' %}#}
     </div>
+</div>
 </div>
 {% endblock %}

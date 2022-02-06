@@ -1,10 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from auth_app.models import BusinessOwner
-from base_app.models import Referral
-from allauth.account.forms import SignupForm, LoginForm
 from allauth.account.forms import LoginForm
 from django import forms
-from django.core.validators import RegexValidator
 
 
 class CustomLoginForm(LoginForm):
@@ -30,15 +27,6 @@ class CustomLoginForm(LoginForm):
             del self.fields["remember"]
 
 
-#
-# <input type="text" class="form-control" name="username" placeholder="08105505505" autocomplete="False">#}
-# {#                                    <label for="floatingInput">Username or Phone Number</label>#}
-# {#                                </div>#}
-# {#                                <div class="mb-4 form-floating">#}
-# {#                                    <input type="password" class="form-control" name="password" placeholder="Password">#}
-# {#                                    <label for="floatingPassword">Password</label>#}
-
-
 class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = BusinessOwner
@@ -47,15 +35,10 @@ class UserRegistrationForm(UserCreationForm):
             "phone_number",
             "full_name",
             "business_name",
-            "reward_type",
+            "cash_price",
             "password1",
             "password2",
         )
-        # widgets = {
-        #     "region": forms.ChoiceField(
-        #         widget=forms.Select(attrs={"class": "dropdown-menu"})
-        #     ),
-        # }
 
     def __init__(self, *args, **kwargs):
         # self.request = kwargs.pop('request', None)
@@ -68,24 +51,33 @@ class UserRegistrationForm(UserCreationForm):
         self.fields["username"].widget.attrs["class"] = "form-control"
 
         self.fields["full_name"].widget.attrs["class"] = "form-control"
+        self.fields["full_name"].widget.attrs["placeholder"] = "your Full name..."
 
         self.fields["phone_number"].widget.attrs["class"] = "form-control"
+        self.fields["phone_number"].widget.attrs["placeholder"] = "Phone Number..."
 
         self.fields["business_name"].widget.attrs["class"] = "form-control"
+        self.fields["business_name"].widget.attrs["placeholder"] = "Business Name..."
 
         self.fields["password1"].widget = forms.PasswordInput()
-
         self.fields["password1"].widget.attrs["class"] = "form-control"
+        self.fields["password1"].widget.attrs["placeholder"] = "Password..."
 
         self.fields["password2"].widget = forms.PasswordInput()
-
         self.fields["password2"].widget.attrs["class"] = "form-control"
+        self.fields["password2"].widget.attrs["placeholder"] = "Confirm Password..."
 
         # self.fields["password2"].widget = forms.PasswordInput()
-        # self.fields["password2"].widget.attrs[
-        #     "placeholder"
-        # ] = "Enter your username or phone number"
-        self.fields["reward_type"].widget.attrs["class"] = "dropdown"
-        self.fields[
-            "reward_type"
-        ].help_text = "Type of reward to give the winner of your contest"
+        self.fields["cash_price"].widget.attrs[
+            "placeholder"
+        ] = "Enter the amount you wish to spend on the contest"
+        self.fields["cash_price"].widget.attrs["class"] = "form-control"
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data["phone_number"]
+        if str(phone_number).startswith("0"):
+            phone_number_list = list(phone_number)
+            phone_number_list[0] = "+234"
+            p = "".join([str(elem) for elem in phone_number_list])
+            print(p)
+        return p

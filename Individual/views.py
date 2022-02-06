@@ -15,6 +15,7 @@ from base_app.models import Referral, Guest
 from auth_app.models import BusinessOwner
 from .utils import get_ip_address
 from django.contrib import messages
+import urllib.parse
 
 # Create your views here.
 
@@ -34,6 +35,7 @@ def VoteReferral(request, shortcode, ref_shortcode):
         form = GuestRegisterForm(request.POST)
         # while trying to vote
         if form.is_valid():
+            guest_name = request.POST["guest_name"]
             guest_instance = form.save(commit=False)
             guest_instance.referral = referral
             guest_instance.business = business
@@ -54,6 +56,16 @@ def VoteReferral(request, shortcode, ref_shortcode):
                 # guest_instance.guest_count increment on save of guest in the model.
                 guest_instance.save()
                 # save the guest
+                guest_message = (
+                    r'Hello, I was referred by Referral ID: "5Hxh" my name is'
+                    + guest_name
+                )
+                link = (
+                    "https://wa.me/?text="
+                    + urllib.parse.quote(guest_message)
+                    # + urllib.parse.quote(vote_url)
+                    # + urllib.parse.quote(signup_url)
+                )
                 return HttpResponseRedirect(guest_instance.guest_url)
             else:
                 # if it exist, send a message notification
@@ -118,87 +130,3 @@ def ReferRedirect(request, shortcode, ref_shortcode):
         # increment guest count by 1
         guest.save()
         return HttpResponseRedirect(guest.guest_url)
-
-
-# crystaldesigns / VuVx
-# def ReferRedirect(request, shortcode, ref_shortcode):
-#     # b = BusinessOwner.objects.get(shortcode=shortcode)
-#     # referral = Referral.objects.get(
-#     #     ref_shortcode=ref_shortcode,
-#     # business_owner=BusinessOwner.objects.get(shortcode=shortcode))
-#
-#     r = Referral.objects.get(ref_shortcode=ref_shortcode)
-#     b = BusinessOwner.objects.get(shortcode=shortcode)
-#     # print(type(request.META["REMOTE_ADDR"]))
-#     try:
-#         ip = get_ip_address(request)
-#         print("IP Address :", ip)
-#         qs = get_object_or_404(
-#             Guest,
-#             referral=r,
-#             business=b,
-#             ip=ip,
-#             # get the ip address from the request, displays 127.0.0.1 locally
-#             # guest_name=
-#         )
-#     except ObjectDoesNotExist:
-#         qs = Guest(
-#             referral=r,
-#             business=b,
-#             ip=ip,
-#         )
-#         qs.guest_count = qs.guest_count + 1
-#         qs.save()
-#         return HttpResponseRedirect(r.referral_url)
-#
-#     else:
-#
-#         return reverse("referral_home", args=(b.shortcode, r.ref_shortcode))
-
-
-# def ReferRedirect(request, shortcode, ref_shortcode):
-#     ref_shortcode = ref_shortcode
-#     business = BusinessOwner.objects.get(shortcode=shortcode)
-#     referral = Referral.objects.get(
-#         ref_shortcode=ref_shortcode,
-#         business_owner=business,
-#     )
-#
-#     if request.method == "POST":
-#         form = GuestForm(request.POST)
-#
-#         if form.is_valid():
-#             guest_name = form.get("guest_name")
-#             phone_number = form.get("phone_number")
-#
-#         try:
-#             guest = Guest.objects.get(
-#                 referral=referral,
-#                 business=referral.business_owner,
-#                 guest_name=guest_name,
-#                 phone_number=phone_number,
-#             )
-#         except ObjectDoesNotExist:
-#             guest = Guest(
-#                 referral=referral,
-#                 business=referral.business_owner,
-#                 guest_name=guest_name,
-#                 phone_number=phone_number,
-#             )
-#             guest.guest_count += 1
-#             guest.save()
-#             return HttpResponseRedirect(referral.referral_url)
-#
-#         else:
-#             print("Guest : ", guest.guest_name, "exist before")
-#             print("Shortcode :", business.shortcode)
-#             print(BusinessOwner.objects.get(shortcode=business.shortcode))
-#             return reverse("referral_home", args=(business.shortcode, ref_shortcode))
-#     else:
-#         form = GuestForm
-#         return render(request, '')
-#         # return reverse(
-#         #     "referral_home",
-#         #     shortcode=BusinessOwner.objects.get(shortcode=shortcode),
-#         #     ref_shortcode=referral.ref_shortcode,
-#         # )

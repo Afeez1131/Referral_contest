@@ -2,41 +2,50 @@
 
 {% block content %}
 
-<div class="col-md-6 offset-md-3 mt-3">
-    {% if messages %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {% for message in messages %}
-        <b>{{ message }}</b>
-        {% endfor %}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endif %}
-    {% if form.non_field_errors %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {% for error in form.non_field_errors %}
-        <b>{{ error }}</b>
-        {% endfor %}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endif %}
-    {% if form.phone_number.errors %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {% for error in form.phone_number.errors %}
-        <b>Phone Number Error! {{ error }}</b>
-        {% endfor %}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endif %}
-    {% if form.refer_name.errors %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {% for error in form.refer_name.errors %}
-        <b>Referral Name Error! {{ error }}</b>
-        {% endfor %}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endif %}
-</div>
-
+{#<div class="col-md-6 offset-md-3 mt-3">#}
+{#    {% if messages %}#}
+{#    <div class="alert alert-danger alert-dismissible fade show" role="alert">#}
+{#        {% for message in messages %}#}
+{#        <b>{{ message }}</b>#}
+{#        {% endfor %}#}
+{#        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#    </div>#}
+{#    {% endif %}#}
+{#    {% if form.non_field_errors %}#}
+{#    <div class="alert alert-danger alert-dismissible fade show" role="alert">#}
+{#        {% for error in form.non_field_errors %}#}
+{#        <b>{{ error }}</b>#}
+{#        {% endfor %}#}
+{#        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#    </div>#}
+{#    {% endif %}#}
+{#    {% if form.phone_number.errors %}#}
+{#    <div class="alert alert-danger alert-dismissible fade show" role="alert">#}
+{#        {% for error in form.phone_number.errors %}#}
+{#        <b>Phone Number Error! {{ error }}</b>#}
+{#        {% endfor %}#}
+{#        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#    </div>#}
+{#    {% endif %}#}
+{#    {% if form.refer_name.errors %}#}
+{#    <div class="alert alert-danger alert-dismissible fade show" role="alert">#}
+{#        {% for error in form.refer_name.errors %}#}
+{#        <b>Referral Name Error! {{ error }}</b>#}
+{#        {% endfor %}#}
+{#        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#    </div>#}
+{#    {% endif %}#}
+{#</div>#}
+<!-- Header -->
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 class="text-center">Referral "{{referral.refer_name}}"<span></span></h1>
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
 <div class="container rounded bg-white mt-5 mb-5">
     <div class="row mt-3">
         <div class="col-md-6 offset-md-3">
@@ -65,7 +74,7 @@
                         <th scope="row">Referral ID</th>
                         <td>{{ referral.ref_shortcode }}</td>
                     </tr>
-                    {{ referral.get_absolute_url }}
+{#                    {{ referral.get_absolute_url }}#}
                 </tbody>
             </table>
 
@@ -76,14 +85,22 @@
     <div class="col-md-6 offset-md-3 mt-1">
         <form method="post">
             {% csrf_token %}
+{#            `<div class="form-group">#}
+{#                <label for="exampleFormControlTextarea1">Message </label>#}
+{#                <textarea class="form-control" id="exampleFormControlTextarea1"#}
+{#                    rows="3">{{ referral.refer_message }}</textarea>#}
+{#                <div class="mt-2 mb-3 text-center">#}
+{#                    <input class="btn btn-primary profile-button " type="submit" value="Share on WhatsApp">#}
+{#            </div>`#}
+
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Message </label>
                 <textarea class="form-control" id="exampleFormControlTextarea1"
-                    rows="3">{{ referral.refer_message }}</textarea>
+                    rows="3">{{ referral_message }}{{ vote_url }} </textarea>
                 <div class="mt-2 mb-3 text-center">
                     <input class="btn btn-primary profile-button " type="submit" value="Share on WhatsApp">
                 </div>
-
+            </div>
         </form>
     </div>
 </div>
