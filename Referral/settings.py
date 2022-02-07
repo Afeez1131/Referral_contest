@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os.path
 from pathlib import Path
 import environ
+import django_heroku
+import dj_database_url
 
 env = environ.Env()
 environ.Env.read_env()
@@ -46,8 +48,8 @@ INSTALLED_APPS = [
     "Individual",
     "Analytic",
     # authentications
-    "allauth",
-    "allauth.account",
+    # "allauth",
+    # "allauth.account",
     "crispy_forms",
 ]
 
@@ -168,3 +170,19 @@ ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "username"
+
+
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = "DENY"
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True  # new
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")  # new
+# SECURE_HSTS_SECONDS = 31536000
+
+
+django_heroku.settings(locals())
