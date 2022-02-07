@@ -56,13 +56,13 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     )
     business_message = models.TextField(blank=True, null=True)
     phone_regex = RegexValidator(
-        regex=r"^[+]\d{13}$",
-        message="Phone number should be in the format: 08105506606",
+        regex=r"^234\d{10}$",
+        message="Phone number should be in the format: 2348105506606",
     )
     phone_number = models.CharField(
-        max_length=14, validators=[phone_regex], unique=True
+        max_length=13, validators=[phone_regex], unique=True
     )
-    cash_price = models.IntegerField()
+    cash_price = models.DecimalField(max_digits=5, decimal_places=0)
     full_name = models.CharField(max_length=150)
     shortcode = AutoSlugField(populate_from="business_name")
     start_date = models.DateTimeField(default=timezone.now)
@@ -82,6 +82,7 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         # self.business_message =
+
         super(BusinessOwner, self).save(*args, **kwargs)
 
     class Meta:

@@ -5,14 +5,6 @@ from django.core.validators import RegexValidator
 
 
 class BusinessRegistrationForm(forms.ModelForm):
-    # refer_name = forms.CharField(max_length=50)
-    # phoneNumberRegex = RegexValidator(
-    #     regex=r"^0\d{10}$",
-    #     message="Phone number must be entered in the format: '08105506070'. Up to 11 "
-    #             "digits allowed.",
-    # )
-    # phone_number = forms.CharField(validators=[phoneNumberRegex], max_length=11)
-
     class Meta:
         model = Referral
         fields = ("refer_name", "phone_number")
@@ -40,13 +32,6 @@ class BusinessRegistrationForm(forms.ModelForm):
 
 
 class ReferralRegistration(forms.ModelForm):
-    # phoneNumberRegex = RegexValidator(
-    #     regex=r"^0\d{10}$",
-    #     message="Phone number must be entered in the format: '08105506070'. Up to 11 "
-    #     "digits allowed.",
-    # )
-    # phone_number = forms.CharField(max_length=11)
-
     class Meta:
         model = Referral
         fields = ("refer_name", "phone_number")
@@ -70,7 +55,7 @@ class ReferralRegistration(forms.ModelForm):
         phone_number = self.cleaned_data["phone_number"]
         if str(phone_number).startswith("0"):
             phone_number_list = list(phone_number)
-            phone_number_list[0] = "+234"
+            phone_number_list[0] = "234"
             p = "".join([str(elem) for elem in phone_number_list])
             print(p)
         return p

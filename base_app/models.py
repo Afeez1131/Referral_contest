@@ -15,11 +15,11 @@ class Referral(models.Model):
     )
     refer_name = models.CharField(max_length=20)
     phoneNumberRegex = RegexValidator(
-        regex=r"^[+]\d{13}$",
+        regex=r"^234\d{10}$",
         message="Phone number must be entered in the format: '+2348105506070'. Up to 14 "
         "digits allowed.",
     )
-    phone_number = models.CharField(validators=[phoneNumberRegex], max_length=14)
+    phone_number = models.CharField(validators=[phoneNumberRegex], max_length=13)
     ref_shortcode = models.CharField(max_length=15, blank=True, unique=True)
 
     def __str__(self):
@@ -61,12 +61,12 @@ class Guest(models.Model):
     ip = models.GenericIPAddressField(null=True, blank=True)
     guest_name = models.CharField(max_length=100, null=True)
     phoneNumberRegex = RegexValidator(
-        regex=r"^[+]\d{13}$",
+        regex=r"^234\d{10}$",
         message="Phone number must be entered in the format: '08105506070'. Up to 11 "
         "digits allowed.",
     )
     phone_number = models.CharField(
-        validators=[phoneNumberRegex], max_length=14, null=True
+        validators=[phoneNumberRegex], max_length=13, null=True
     )
     guest_count = models.IntegerField(default=0)
     guest_url = models.CharField(max_length=200, blank=True)
