@@ -349,10 +349,14 @@ a:hover {
 	padding-top: 0.25rem;
 	padding-bottom: 0.25rem;
 }
-
+/*.navbar-header img {*/
+/*  height: 40px;*/
+/*  margin: 5px;*/
+/*}*/
 .navbar .logo-image img {
-    width: 132px;
-	height: 30px;
+    /*width: 132px;*/
+	height: 40px;
+	margin:5px;
 }
 
 .navbar .logo-text {
@@ -1341,6 +1345,7 @@ display: none;}
 		display: inline-block;
 		width: 320px;
 		margin-right: 1.75rem;
+		text-align: right;
 		vertical-align: top;
 	}
 	
