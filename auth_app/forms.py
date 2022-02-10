@@ -70,7 +70,7 @@ class UserRegistrationForm(UserCreationForm):
         # self.fields["password2"].widget = forms.PasswordInput()
         self.fields["cash_price"].widget.attrs[
             "placeholder"
-        ] = "Enter the amount you wish to spend on the contest"
+        ] = "Enter the amount to spend on the contest"
         self.fields["cash_price"].widget.attrs["class"] = "form-control"
 
     def clean_phone_number(self):

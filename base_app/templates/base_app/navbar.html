@@ -13,7 +13,7 @@
     <a class="navbar-brand logo-image" href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}" alt="alternative"></a>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link {% if request.path == index %} active {% endif %}" aria-current="page" href="{% url 'index' %}">Home</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {% if request.path == about %} active {% endif %}" href="{% url 'about' %}">About</a>
