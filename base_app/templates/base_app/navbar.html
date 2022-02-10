@@ -28,18 +28,17 @@
             <li class="nav-item">
                 <a class="nav-link {% if request.path == contact %} active {% endif %}" href="{% url 'contact' %}">Contact Us</a>
             </li>
-        </ul>
-        {% if request.user.is_authenticated %}
-        <span class="nav-item">
-            <a class="nav-link {% if request.path == login %} active {% endif %}" href="{% url 'account_logout' %}">Log Out</a>
-        </span>
 
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+            <a class="nav-link {% if request.path == logout %} active {% endif %}" href="{% url 'account_logout' %}">Log Out</a>
+            </li>
         {% else %}
-        <span class="nav-item">
+        <li class="nav-item">
             <a class="nav-link {% if request.path == login %} active {% endif %}" href="{% url 'account_login' %}">Log in</a>
-
-        </span>
+        </li>
         {% endif %}
+        </ul>
 
     </div> <!-- end of container -->
 </nav> <!-- end of navbar -->
