@@ -1,19 +1,25 @@
 from django.shortcuts import render
 from auth_app.models import BusinessOwner
 import urllib.parse
+from django.template import RequestContext
+
 
 # Create your views here.
 
 
+def error_404(request, exception):
+    data = {}
+    return render(request, "base_app/404.html", data)
+
+
+def error_500(request, exception):
+    data = {}
+    return render(request, "base_app/500.html", data)
+
+
 def index(request):
-    business = BusinessOwner.objects.all()
-    return render(
-        request,
-        "base_app/index.html",
-        {
-            "business": business,
-        },
-    )
+    # business = BusinessOwner.objects.all()
+    return render(request, "base_app/index.html", {})
 
 
 def contact(request):

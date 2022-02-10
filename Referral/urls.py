@@ -28,3 +28,7 @@ urlpatterns = [
     # path("accounts/referral/login/", views.login_referral, name="referral_login"),
     # path("accounts/referral/signup/", views.register_referral, name="referral_signup"),
 ]
+handler404 = "base_app.views.error_404"
+# handler500 = "base_app.views.error_500"
+# handler403 = "base_app.views.error_403"
+# handler400 = "base_app.views.error_400"

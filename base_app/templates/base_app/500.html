@@ -1,0 +1,14 @@
+{% extends 'base_app/base.html' %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="text-center">
+        <p>ooops..</p>
+        <h1 class="error mx-auto font-weight-bold" data-text="404">Error 500</h1>
+        <p class="lead text-gray-300 mb-5">We are sorry, the page you requested for was not found.</p>
+        <a href="{% url 'index' %}">&larr; Back to Home</a>
+    </div>
+
+</div>
+{% endblock content %}

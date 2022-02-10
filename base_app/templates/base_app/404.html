@@ -1,0 +1,24 @@
+{% extends 'base_app/base.html' %}
+
+
+{% block content %}
+    <!-- Header -->
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 class="text-center">Error !</h1>
+
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+<div class="container-fluid mt-3 mb-3">
+    <div class="text-center">
+        <p>ooops..</p>
+        <h1 class="error mx-auto font-weight-bold" data-text="404">404</h1>
+        <p class="lead text-gray-300 mb-5">We are sorry, the page you requested for was not found.</p>
+        <a href="{% url 'index' %}">&larr; Back to Home</a>
+    </div>
+</div>
+{% endblock %}
