@@ -80,7 +80,7 @@ class Guest(models.Model):
         self.guest_message = (
             "Hello, I "
             + "was referred by "
-            + str(self.referral)
+            + str(self.referral.refer_name)
             + " my name is "
             + str(self.guest_name)
         )
