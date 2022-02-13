@@ -84,6 +84,9 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return reverse("business_owner_profile", kwargs={"shortcode": self.shortcode})
 
+    def get_referral_list(self):
+        return reverse("referral_list", kwargs={"shortcode": self.shortcode})
+
     def has_perm(self, perm, obj=None):
         return True
 

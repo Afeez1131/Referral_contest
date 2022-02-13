@@ -13,36 +13,35 @@
 </header> <!-- end of ex-header -->
 
 <div class="container mt-3">
-
     <div class="col-md-6 offset-md-3 mt-5">
-            {% if request.user.is_authenticated and request.user.username == business.username %}
-                {% if referral %}
-                    <table class="table table-sm table-hover">
-                        <thead class="text-center">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Referral</th>
-                                <th scope="col">ID</th>
-                                <th scope="col">Votes</th>
-                                <th scope="col">+ Vote</th>
-                            </tr>
-                        </thead>
-                        {% for ref in referral %}
-                        <tbody class="text-center">
-                            <tr>
-                                <th scope="row">{{ forloop.counter }}</th>
-                                <td>{{ ref.refer_name }}</td>
-                                <td>{{ ref.ref_shortcode }}</td>
-                                <td>{{ ref.guest_referral.count }}</td>
-                                <td><a class="btn btn-sm btn-primary" href="{{ ref.get_absolute_url }}">Vote</a></td>
-                            </tr>
-                        </tbody>
-                        {% endfor %}
-                    </table>
-                {% else %}
-                    <h2 class="text-center">No referral currently</h2>
-                    <a href="{% url 'referral_register' business.shortcode %}">Add a Referral</a>
-                {% endif %}
+        {% if request.user.is_authenticated and request.user.username == business.username %}
+        {% if referral %}
+        <table class="table table-sm table-hover">
+            <thead class="text-center">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Referral</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Votes</th>
+                    <th scope="col">+ Vote</th>
+                </tr>
+            </thead>
+            {% for ref in referral %}
+            <tbody class="text-center">
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ ref.refer_name }}</td>
+                    <td>{{ ref.ref_shortcode }}</td>
+                    <td>{{ ref.guest_referral.count }}</td>
+                    <td><a class="btn btn-sm btn-primary" href="{{ ref.get_absolute_url }}">Vote</a></td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+        {% else %}
+        <h2 class="text-center">No referral currently</h2>
+        <a href="{% url 'referral_register' business.shortcode %}">Add a Referral</a>
+        {% endif %}
         {% endif %}
     </div>
 </div>

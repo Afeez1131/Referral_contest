@@ -71,7 +71,6 @@ def VoteReferral(request, shortcode, ref_shortcode):
                     # + urllib.parse.quote(vote_url)
                     # + urllib.parse.quote(signup_url)
                 )
-                print("Link :", whatsapp_link)
                 return HttpResponseRedirect(whatsapp_link)
             else:
                 # if it exist, send a message notification

@@ -57,6 +57,7 @@ def ReferralHomeView(request, shortcode):
         return redirect("index")
 
 
+@login_required(login_url="account_login")
 def ReferralList(request, shortcode):
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
     # get a business owner with the shortcode passed as args
