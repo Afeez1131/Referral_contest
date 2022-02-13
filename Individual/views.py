@@ -13,9 +13,10 @@ from django.urls import reverse
 from Individual.forms import GuestRegisterForm
 from base_app.models import Referral, Guest
 from auth_app.models import BusinessOwner
-from .utils import get_ip_address
+from .utils import get_ip_address, phone_num_val
 from django.contrib import messages
 import urllib.parse
+
 
 # Create your views here.
 
@@ -57,25 +58,28 @@ def VoteReferral(request, shortcode, ref_shortcode):
                 guest_instance.save()
                 # save the guest
                 guest_message = (
-                    r'Hello, I was referred by Referral ID: "5Hxh" my name is'
+                    r"Hello, I was referred by Referral "
+                    + referral.refer_name
+                    + " my name is "
                     + guest_name
                 )
-                link = (
-                    "https://wa.me/?text="
+                whatsapp_link = (
+                    "https://wa.me/"
+                    + str(phone_num_val(business.phone_number))
+                    + "?text="
                     + urllib.parse.quote(guest_message)
                     # + urllib.parse.quote(vote_url)
                     # + urllib.parse.quote(signup_url)
                 )
-                return HttpResponseRedirect(guest_instance.guest_url)
+                print("Link :", whatsapp_link)
+                return HttpResponseRedirect(whatsapp_link)
             else:
                 # if it exist, send a message notification
                 messages.warning(
                     request,
-                    "IP ["
-                    + guest.ip
-                    + "] voted for "
+                    "you already voted for "
                     + referral.refer_name
-                    + " Already. Multiple Votes not allowed",
+                    + ". Multiple Votes not allowed",
                 )
                 return redirect(referral.get_absolute_url())
 

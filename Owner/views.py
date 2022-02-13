@@ -9,7 +9,7 @@ from django.shortcuts import (
 from django.urls import reverse
 from django.contrib import messages
 from auth_app.models import BusinessOwner
-from base_app.models import Referral
+from base_app.models import Referral, Guest
 from .forms import BusinessRegistrationForm, ReferralRegistration
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -27,7 +27,7 @@ def ReferralHomeView(request, shortcode):
     if request.user.username == business.username:
         # test if the login user is equal to the user Business Owner
         share_message = (
-            "Stand a chance of winning a cash price of #"
+            "Stand a chance of winning a cash/product of #"
             + str(business.cash_price)
             + " by "
             "referring people to " + business.business_name + ".\n Get started here: "
@@ -38,11 +38,10 @@ def ReferralHomeView(request, shortcode):
         )
 
         if request.method == "POST":
-            link = (
-                "https://wa.me/?text="
-                + urllib.parse.quote(share_message)
-                + urllib.parse.quote(signup_url)
+            link = "https://wa.me/?text=" + urllib.parse.quote(
+                share_message + signup_url
             )
+            print("Link: ", link)
             return HttpResponseRedirect(link)
         return render(
             request,
@@ -63,7 +62,6 @@ def ReferralList(request, shortcode):
     # get a business owner with the shortcode passed as args
     # obj_list = get_list_or_404(Referral, business_owner=business)
     referral = Referral.objects.filter(business_owner=business)
-
     # referral = obj_list[0]
     # get the referral associated with the Business Owner
     return render(
@@ -114,8 +112,6 @@ def RegisterRefer(request, shortcode):
                     referral_instance.ref_shortcode,
                 )
                 referral_instance.save()
-                print("1 ", referral_instance)
-                # pass
                 # save
                 return redirect(
                     "referral_profile",
@@ -153,17 +149,16 @@ def ReferralProfile(request, shortcode, ref_shortcode):
     )
     referral_message = (
         "Hello, i am participating in a referral contest, the person with the highest "
-        "vote wins the Cash price. kindly vote for me here:\n"
+        "vote wins the Cash/Gift price. kindly vote for me here:\n"
     )
     if request.method == "POST":
-        link = (
-            "https://wa.me/?text="
-            + urllib.parse.quote(referral_message + vote_url)
-            # + urllib.parse.quote(vote_url)
-            # + urllib.parse.quote(signup_url)
+        referral_link = "https://wa.me/?text=" + urllib.parse.quote(
+            referral_message + vote_url
         )
+        # will encode the text and url to avoid errors
+
         # will handle the sharing of the message on whatsapp
-        return HttpResponseRedirect(link)
+        return HttpResponseRedirect(referral_link)
 
     return render(
         request,

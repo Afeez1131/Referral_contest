@@ -85,24 +85,18 @@
     <div class="col-md-6 offset-md-3 mt-1">
         <form method="post">
             {% csrf_token %}
-{#            `<div class="form-group">#}
-{#                <label for="exampleFormControlTextarea1">Message </label>#}
-{#                <textarea class="form-control" id="exampleFormControlTextarea1"#}
-{#                    rows="3">{{ referral.refer_message }}</textarea>#}
-{#                <div class="mt-2 mb-3 text-center">#}
-{#                    <input class="btn btn-primary profile-button " type="submit" value="Share on WhatsApp">#}
-{#            </div>`#}
 
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Message </label>
                 <textarea class="form-control" id="exampleFormControlTextarea1"
                     rows="3">{{ referral_message }}{{ vote_url }} </textarea>
                 <div class="mt-2 mb-3 text-center">
+                    <small id="floatingInput" class="form-text text-muted">Share on your status and with friends by clicking on the SHARE button below.</small>
+
                     <input class="btn btn-primary profile-button " type="submit" value="Share on WhatsApp">
                 </div>
             </div>
         </form>
     </div>
-</div>
 </div>
 {% endblock %}

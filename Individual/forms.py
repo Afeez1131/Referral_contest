@@ -24,11 +24,11 @@ class GuestRegisterForm(forms.ModelForm):
             "placeholder": "Enter phone number...",
         }
 
-    def clean_phone_number(self):
-        phone_number = self.cleaned_data["phone_number"]
-        if str(phone_number).startswith("0"):
-            phone_number_list = list(phone_number)
-            phone_number_list[0] = "234"
-            p = "".join([str(elem) for elem in phone_number_list])
-            print(p)
-        return p
+    # def clean_phone_number(self):
+    #     phone_number = self.cleaned_data["phone_number"]
+    #     if str(phone_number).startswith("0"):
+    #         phone_number_list = list(phone_number)
+    #         phone_number_list[0] = "234"
+    #         p = "".join([str(elem) for elem in phone_number_list])
+    #         print(p)
+    #     return p

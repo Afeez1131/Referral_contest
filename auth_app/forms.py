@@ -2,6 +2,8 @@ from django.contrib.auth.forms import UserCreationForm
 from auth_app.models import BusinessOwner
 from allauth.account.forms import LoginForm
 from django import forms
+from django.forms import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomLoginForm(LoginForm):
@@ -55,6 +57,7 @@ class UserRegistrationForm(UserCreationForm):
 
         self.fields["phone_number"].widget.attrs["class"] = "form-control"
         self.fields["phone_number"].widget.attrs["placeholder"] = "Phone Number..."
+        self.fields["phone_number"].help_text = "Enter your 11 digit phone number"
 
         self.fields["business_name"].widget.attrs["class"] = "form-control"
         self.fields["business_name"].widget.attrs["placeholder"] = "Business Name..."
@@ -67,7 +70,6 @@ class UserRegistrationForm(UserCreationForm):
         self.fields["password2"].widget.attrs["class"] = "form-control"
         self.fields["password2"].widget.attrs["placeholder"] = "Confirm Password..."
 
-        # self.fields["password2"].widget = forms.PasswordInput()
         self.fields["cash_price"].widget.attrs[
             "placeholder"
         ] = "Enter the amount to spend on the contest"
@@ -75,9 +77,15 @@ class UserRegistrationForm(UserCreationForm):
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data["phone_number"]
-        if str(phone_number).startswith("0"):
+        if str(phone_number).startswith("0") and len(str(phone_number)) == 11:
             phone_number_list = list(phone_number)
             phone_number_list[0] = "234"
             p = "".join([str(elem) for elem in phone_number_list])
-            print(p)
-        return p
+            return p
+
+        else:
+            raise ValidationError(
+                _(
+                    "Incorrect Phone Number entered check the phone number and try again. e.g 08035221111"
+                )
+            )

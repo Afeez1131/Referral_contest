@@ -6,3 +6,10 @@ def get_ip_address(request):
     else:
         ip = request.META.get("REMOTE_ADDR")  ### Real IP address of client Machine
     return ip
+
+
+def phone_num_val(phone_number):
+    phone_number_list = list(phone_number)
+    phone_number_list[0] = "234"
+    p = "".join([str(elem) for elem in phone_number_list])
+    return p

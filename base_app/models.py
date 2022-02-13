@@ -15,11 +15,11 @@ class Referral(models.Model):
     )
     refer_name = models.CharField(max_length=20)
     phoneNumberRegex = RegexValidator(
-        regex=r"^234\d{10}$",
-        message="Phone number must be entered in the format: '+2348105506070'. Up to 13"
+        regex=r"^0\d{10}$",
+        message="Phone number must be entered in the format: '08105506070'. Up to 13"
         "digits allowed.",
     )
-    phone_number = models.CharField(validators=[phoneNumberRegex], max_length=13)
+    phone_number = models.CharField(validators=[phoneNumberRegex], max_length=11)
     ref_shortcode = models.CharField(max_length=15, blank=True, unique=True)
 
     def __str__(self):
@@ -33,10 +33,6 @@ class Referral(models.Model):
         # self.refer_message = str(self.refer_message) + " " + self.get_absolute_url()
         if not self.ref_shortcode:
             self.ref_shortcode = create_shortcode(self)
-
-        # self.referral_url = (
-        #     "https://wa.me/" + str(self.phone_number) + "?text=" + self.refer_message
-        # )
         super(Referral, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -61,37 +57,23 @@ class Guest(models.Model):
     ip = models.GenericIPAddressField(null=True, blank=True)
     guest_name = models.CharField(max_length=100, null=True)
     phoneNumberRegex = RegexValidator(
-        regex=r"^234\d{10}$",
-        message="Phone number must be entered in the format: '2348105506070'. Up to 13 "
+        regex=r"^0\d{10}$",
+        message="Phone number must be entered in the format: '08105506070'. Up to 11 "
         "digits allowed.",
     )
     phone_number = models.CharField(
-        validators=[phoneNumberRegex], max_length=13, null=True
+        validators=[phoneNumberRegex], max_length=11, null=True
     )
     guest_count = models.IntegerField(default=0)
     guest_url = models.CharField(max_length=200, blank=True)
-    guest_message = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return self.guest_name
 
     def save(self, *args, **kwargs):
         self.guest_count += 1
-        self.guest_message = (
-            "Hello, I "
-            + "was referred by "
-            + str(self.referral.refer_name)
-            + " my name is "
-            + str(self.guest_name)
-        )
-        self.guest_url = (
-            "https://wa.me/"
-            + str(self.business.phone_number)
-            + "?text="
-            + self.guest_message
-        )
 
         super(Guest, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = ("-id",)
+        ordering = ("-guest_count",)

@@ -64,6 +64,7 @@ def login_user(request):
         form = CustomLoginForm(request.POST)  # login form
         login_field = request.POST["login"]
         password = request.POST["password"]
+        print(type(login_field))
         # since it is a login form, and we are not saving to the DB
         # got the username and password using request.POST and the name of the field
         user = authenticate(request, username=login_field, password=password)

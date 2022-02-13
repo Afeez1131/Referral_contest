@@ -16,7 +16,6 @@ class CustomAccountManager(BaseUserManager):
     ):
         other_fields.setdefault("is_staff", True)
         other_fields.setdefault("is_superuser", True)
-        other_fields.setdefault("is_business_owner", True)
 
         if other_fields.get("is_staff") is not True:
             raise ValueError("Superuser must be given a Staff status")
@@ -32,7 +31,6 @@ class CustomAccountManager(BaseUserManager):
         # email = self.normalize_email(email)
         # if not email:
         #     raise ValueError('You must provide an E-mail address.')
-        other_fields.setdefault("is_referral", True)
         if not full_name:
             raise ValueError("You must provide your full name.")
 
@@ -56,19 +54,19 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     )
     business_message = models.TextField(blank=True, null=True)
     phone_regex = RegexValidator(
-        regex=r"^234\d{10}$",
+        regex=r"^0\d{10}$",
         message="Phone number should be in the format: 2348105506606",
     )
     phone_number = models.CharField(
-        max_length=13, validators=[phone_regex], unique=True
+        max_length=11, validators=[phone_regex], unique=True
     )
     cash_price = models.DecimalField(max_digits=5, decimal_places=0)
     full_name = models.CharField(max_length=150)
     shortcode = AutoSlugField(populate_from="business_name")
+
+    # not visible in the form
     start_date = models.DateTimeField(default=timezone.now)
     is_staff = models.BooleanField(default=False)
-    is_business_owner = models.BooleanField(default=False)
-    is_referral = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
 
@@ -79,11 +77,6 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.business_name
-
-    def save(self, *args, **kwargs):
-        # self.business_message =
-
-        super(BusinessOwner, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ("-id",)
@@ -96,3 +89,15 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return True
+
+
+# >>> datetime.datetime.now()
+# datetime.datetime(2022, 2, 13, 15, 18, 48, 947463)
+# >>> d = datetime.datetime.now()
+# >>> d
+# datetime.datetime(2022, 2, 13, 15, 18, 57, 760093)
+# >>> from datetime import timedelta
+# >>> d += timedelta(days=1)
+# >>> d
+# datetime.datetime(2022, 2, 14, 15, 18, 57, 760093)
+# >>>
