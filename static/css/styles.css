@@ -339,15 +339,16 @@ a:hover {
 /**********************/
 .navbar {
 	background-color: #fff2dc;
-	font-weight: 600;
+	font-weight: 1000;
 	font-size: 0.875rem;
 	line-height: 0.875rem;
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
-
 .navbar .navbar-brand {
-	padding-top: 0.25rem;
-	padding-bottom: 0.25rem;
+	padding-top: 0rem;
+	padding-bottom: 0rem;
 }
 /*.navbar-header img {*/
 /*  height: 40px;*/
@@ -367,21 +368,6 @@ a:hover {
 	text-decoration: none;
 }
 
-.offcanvas-collapse {
-	position: fixed;
-	top: 3.25rem; /* adjusts the height between the top of the page and the offcanvas menu */
-	bottom: 0;
-	left: 100%;
-	width: 100%;
-	padding-right: 1rem;
-	padding-left: 1rem;
-	overflow-y: auto;
-	visibility: hidden;
-	background-color: #fff2dc;
-	transition: visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
-	transition: transform .3s ease-in-out, visibility .3s ease-in-out;
-	transition: transform .3s ease-in-out, visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
-}
 
 .offcanvas-collapse.open {
 	visibility: visible;
@@ -1021,18 +1007,18 @@ display: none;}
 /*     Back To Top Button     */
 /******************************/
 #myBtn {
-	position: fixed; 
-  	z-index: 99; 
-	bottom: 20px; 
-	right: 20px; 
-	display: none; 
+	position: fixed;
+  	z-index: 99;
+	bottom: 20px;
+	right: 20px;
+	display: none;
 	width: 52px;
 	height: 52px;
-	border: none; 
-	border-radius: 50%; 
-	outline: none; 
-	background-color: #44434a; 
-	cursor: pointer; 
+	border: none;
+	border-radius: 50%;
+	outline: none;
+	background-color: #44434a;
+	cursor: pointer;
 }
 
 #myBtn:hover {
@@ -1101,7 +1087,7 @@ display: none;}
 
 /*************************/
 /*     Media Queries     */
-/*************************/	
+/*************************/
 /* Min-width 768px */
 @media (min-width: 768px) {
 
@@ -1128,7 +1114,7 @@ display: none;}
 
 /* Min-width 992px */
 @media (min-width: 992px) {
-	
+
 	/* General Styles */
 	.h2-heading {
 		width: 33rem;
@@ -1184,7 +1170,7 @@ display: none;}
 		margin-top: 0;
 		margin-bottom: 0;
 	}
-	
+
 	.navbar .nav-item .nav-link {
 		padding-right: 0.75rem;
 		padding-left: 0.75rem;
@@ -1231,7 +1217,7 @@ display: none;}
 		width: 286px;
 		vertical-align: top;
 	}
-	
+
 	.cards-1 .card:nth-of-type(3n+2) {
 		margin-right: 2rem;
 		margin-left: 2rem;
@@ -1245,7 +1231,7 @@ display: none;}
 	}
 	/* end of details 1 */
 
-	
+
 	/* Details Modal */
 	/* Stops body and navbar shift on modal open */
 	body.modal-open {
@@ -1267,7 +1253,7 @@ display: none;}
 		margin-right: auto;
 		margin-left: auto;
 	}
-	
+
 	.modal-content .image-container {
 		margin-bottom: 0;
 	}
@@ -1295,7 +1281,7 @@ display: none;}
 		width: 22px;
 		background-size: 22px 34px;
 	}
-	
+
 	.slider-1 .swiper-button-next {
 		right: -16px;
 		width: 22px;
@@ -1319,7 +1305,7 @@ display: none;}
 		width: 298px;
 		vertical-align: top;
 	}
-	
+
 	.cards-2 .card:nth-of-type(3n+2) {
 		margin-right: 1rem;
 		margin-left: 1rem;
@@ -1334,8 +1320,8 @@ display: none;}
 		margin-left: auto;
 	}
 	/* end of questions */
-	
-	
+
+
 	/* Footer */
 	.footer .footer-col {
 		margin-bottom: 2rem;
@@ -1348,14 +1334,14 @@ display: none;}
 		text-align: right;
 		vertical-align: top;
 	}
-	
+
 	.footer .footer-col.second {
 		display: inline-block;
 		width: 320px;
 		margin-right: 1.75rem;
 		vertical-align: top;
 	}
-	
+
 	.footer .footer-col.third {
 		display: inline-block;
 		width: 224px;
@@ -1388,13 +1374,13 @@ display: none;}
 
 /* Min-width 1200px */
 @media (min-width: 1200px) {
-	
+
 	/* General Styles */
 	.container {
 		max-width: 1140px;
 	}
 	/* end of general styles */
-	
+
 
 	/* Header */
 	.header {
@@ -1406,7 +1392,7 @@ display: none;}
 	.header .image-container {
 		position: relative;
 	}
-	
+
 	.header .image-container img {
 		position: absolute;
 		top: -180px;
@@ -1421,7 +1407,7 @@ display: none;}
 	.cards-1 .card {
 		width: 310px;
 	}
-	
+
 	.cards-1 .card:nth-of-type(3n+2) {
 		margin-right: 5.5rem;
 		margin-left: 5.5rem;
@@ -1468,7 +1454,7 @@ display: none;}
 	.slider-1 .swiper-button-prev {
 		left: -28px;
 	}
-	
+
 	.slider-1 .swiper-button-next {
 		right: -28px;
 	}
@@ -1479,7 +1465,7 @@ display: none;}
 	.cards-2 .card {
 		width: 342px;
 	}
-	
+
 	.cards-2 .card:nth-of-type(3n+2) {
 		margin-right: 2.5rem;
 		margin-left: 2.5rem;
@@ -1492,11 +1478,11 @@ display: none;}
 		width: 352px;
 		margin-right: 6rem;
 	}
-	
+
 	.footer .footer-col.second {
 		margin-right: 6.5rem;
 	}
-	
+
 	.footer .footer-col.third {
 		text-align: right;
 	}
@@ -1547,7 +1533,8 @@ display: none;}
 }
 
 .labels {
-    font-size: 11px
+    font-size: 11
+px
 }
 
 .add-experience:hover {
@@ -1555,3 +1542,4 @@ display: none;}
     color: #fff;
     cursor: pointer;
     border: solid 1px #BA68C8}
+
