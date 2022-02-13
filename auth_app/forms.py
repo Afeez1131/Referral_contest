@@ -75,17 +75,17 @@ class UserRegistrationForm(UserCreationForm):
         ] = "Enter the amount to spend on the contest"
         self.fields["cash_price"].widget.attrs["class"] = "form-control"
 
-    def clean_phone_number(self):
-        phone_number = self.cleaned_data["phone_number"]
-        if str(phone_number).startswith("0") and len(str(phone_number)) == 11:
-            phone_number_list = list(phone_number)
-            phone_number_list[0] = "234"
-            p = "".join([str(elem) for elem in phone_number_list])
-            return p
-
-        else:
-            raise ValidationError(
-                _(
-                    "Incorrect Phone Number entered check the phone number and try again. e.g 08035221111"
-                )
-            )
+    # def clean_phone_number(self):
+    #     phone_number = self.cleaned_data["phone_number"]
+    #     if str(phone_number).startswith("0") and len(str(phone_number)) == 11:
+    #         phone_number_list = list(phone_number)
+    #         phone_number_list[0] = "234"
+    #         p = "".join([str(elem) for elem in phone_number_list])
+    #         return p
+    #
+    #     else:
+    #         raise ValidationError(
+    #             _(
+    #                 "Incorrect Phone Number entered check the phone number and try again. e.g 08035221111"
+    #             )
+    #         )
