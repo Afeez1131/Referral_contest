@@ -204,8 +204,8 @@ def export_all_contact(request, shortcode):
             g.guest_name = g.guest_name + "-" + str(c)
             name_phone[g.guest_name] = g.phone_number
 
-    for number, name in name_phone.items():
-        vcard = make_vcard(name, number)
+    for name, number in name_phone.items():
+        vcard = make_vcard(name + "-" + str(business.shortcode), number)
         # convert the k, v into vcard object
         vcard_list.append(vcard)
     # append the vcard obj to a list
