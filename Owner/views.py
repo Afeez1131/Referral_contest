@@ -17,6 +17,7 @@ from django.contrib.auth.decorators import login_required
 import re
 from base_app.utils import create_shortcode
 import urllib.parse
+from .utils import make_vcard, write_vcard
 
 
 @login_required(login_url="account_login")
@@ -172,3 +173,45 @@ def ReferralProfile(request, shortcode, ref_shortcode):
             "referral_message": referral_message,
         },
     )
+
+
+def export_all_contact(request, shortcode):
+    business = BusinessOwner.objects.get(shortcode=shortcode)
+    referral = Referral.objects.filter(business_owner=business)
+    guest = Guest.objects.filter(business=business)
+
+    file_name = str(business.shortcode) + "-contact.vcf"
+    response = HttpResponse(content_type="text/x-vCard")
+    response["Content-Disposition"] = 'attachment; filename="%s"' % file_name
+
+    name_phone = dict()  # the dictionary for the name and phone number
+    vcard_list = list()  # the vcard obj dict.
+    c = 0
+
+    for ref in referral:
+        if ref.refer_name not in name_phone.keys():
+            name_phone[ref.refer_name] = ref.phone_number
+        else:
+            c += 1
+            ref.refer_name = ref.refer_name + "-" + str(c)
+            name_phone[ref.refer_name] = ref.phone_number
+
+    for g in guest:
+        if g.guest_name not in name_phone.keys():
+            name_phone[g.guest_name] = g.phone_number
+        else:
+            c += 1
+            g.guest_name = g.guest_name + "-" + str(c)
+            name_phone[g.guest_name] = g.phone_number
+
+    for number, name in name_phone.items():
+        vcard = make_vcard(name, number)
+        # convert the k, v into vcard object
+        vcard_list.append(vcard)
+    # append the vcard obj to a list
+
+    for line in vcard_list:
+        # get the first list
+        response.writelines([l + "\n" for l in line])
+
+    return response

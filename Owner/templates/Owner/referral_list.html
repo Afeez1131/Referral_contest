@@ -12,7 +12,14 @@
     </div> <!-- end of container -->
 </header> <!-- end of ex-header -->
 
+
+
 <div class="container mt-3">
+<div class="col-12 text-center mt-3">
+        <a href="{% url 'export_all_contact' business.shortcode %}" class="btn btn-solid-sm">
+          Export all Contact as VCF <i class="fas fa-address-card"></i>
+        </a><br>
+</div>
     <div class="col-md-6 offset-md-3 mt-5">
         {% if request.user.is_authenticated and request.user.username == business.username %}
         {% if referral %}

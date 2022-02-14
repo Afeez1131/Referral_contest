@@ -10,4 +10,5 @@ urlpatterns = [
         views.ReferralProfile,
         name="referral_profile",
     ),
+    path("export/<shortcode>/", views.export_all_contact, name="export_all_contact"),
 ]
