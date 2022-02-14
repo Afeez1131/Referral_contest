@@ -21,7 +21,8 @@ import urllib.parse
 
 @login_required(login_url="account_login")
 def ReferralHomeView(request, shortcode):
-    business = BusinessOwner.objects.filter(shortcode=shortcode)[0]
+    business = BusinessOwner.objects.get(shortcode=shortcode)
+    print("business", business)
     # get the instance of the business owner using shortcode
 
     if request.user.username == business.username:

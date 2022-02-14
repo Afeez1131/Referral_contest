@@ -103,7 +103,11 @@
                     <h2>Create a WhatsApp referral campaign in minutes! </h2>
                     <p>With a referral contest, you can use the power of social marketing to effectively grow your
                         brand, promote a new product, engage your customers, and make more sales.</p>
+                    {% if request.user.is_authenticated %}
+                        <a class="btn-solid-reg" href="{{ request.user.get_absolute_url }}">Get Started</a>
+                    {% else %}
                     <a class="btn-solid-reg" href="{% url 'account_signup' %}">Get Started</a>
+                    {% endif %}
                 </div> <!-- end of text-container -->
             </div> <!-- end of col -->
             <div class="col-lg-6 col-xl-7">
