@@ -67,11 +67,11 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                     # initialize guest
 
                     if Guest.objects.filter(
-                        Q(guest_name=guest.guest_name)
+                        Q(business_owner=guest.business_owner)
+                        & Q(referral=guest.referral)
+                        | Q(guest_name=guest.guest_name)
                         | Q(ip=guest.ip)
                         | Q(phone_number=guest.phone_number)
-                        & Q(business_owner=guest.business_owner)
-                        & Q(referral=guest.referral)
                     ).exists():
                         """check to see if there is a referral and business owner with the same
                         phone number or ip address or guest name with the one we just want to save"""
