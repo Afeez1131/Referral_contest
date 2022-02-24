@@ -64,6 +64,7 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                         guest_name=guest_name,
                         phone_number=guest_phone,
                     )
+                    guest = guest.save(commit=False)
                     # initialize guest
                     if guest.get(
                         Q(ip=guest.ip)
