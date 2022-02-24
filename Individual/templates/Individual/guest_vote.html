@@ -46,11 +46,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endif %}
+
+         {% if form.ip.errors %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {% for error in form.ip.errors %}
+
+                <strong>Error!</strong> {{ error }}
+                <hr>
+                {% endfor %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
             <form method="POST">
                 {% csrf_token %}
                 <p>{{form.guest_name}}</p>
                 <p>{{form.phone_number}}</p>
-
+{#                    {{ form.as_p }}#}
                 <div class="mt-2 text-center">
                     <input class="btn btn-primary profile-button " type="submit" value="Vote"></div>
             </form>

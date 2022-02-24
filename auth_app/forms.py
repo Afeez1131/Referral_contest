@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
-from auth_app.models import BusinessOwner
+from auth_app.models import BusinessOwner, Contest
 from allauth.account.forms import LoginForm
 from django import forms
 from django.forms import ValidationError
@@ -37,7 +37,7 @@ class UserRegistrationForm(UserCreationForm):
             "phone_number",
             "full_name",
             "business_name",
-            "cash_price",
+            # "cash_price",
             "password1",
             "password2",
         )
@@ -69,11 +69,6 @@ class UserRegistrationForm(UserCreationForm):
         self.fields["password2"].widget = forms.PasswordInput()
         self.fields["password2"].widget.attrs["class"] = "form-control"
         self.fields["password2"].widget.attrs["placeholder"] = "Confirm Password..."
-
-        self.fields["cash_price"].widget.attrs[
-            "placeholder"
-        ] = "Enter the amount to spend on the contest"
-        self.fields["cash_price"].widget.attrs["class"] = "form-control"
 
     # def clean_phone_number(self):
     #     phone_number = self.cleaned_data["phone_number"]

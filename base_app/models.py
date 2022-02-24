@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 from autoslug import AutoSlugField
 from .utils import create_shortcode
-import re
+from auth_app.models import Contest
 
 # from auth_app.models import BusinessOwner
 from django.conf import settings
@@ -11,13 +11,16 @@ from django.conf import settings
 
 class Referral(models.Model):
     business_owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="refer"
+        Contest,
+        on_delete=models.CASCADE,
+        related_name="referral_contest",
+        null=True,
+        blank=True,
     )
     refer_name = models.CharField(max_length=20)
     phoneNumberRegex = RegexValidator(
         regex=r"^0\d{10}$",
-        message="Phone number must be entered in the format: '08105506070'. Up to 13"
-        "digits allowed.",
+        message="Phone Number should be digits of 11 characters e.g. 08100550044",
     )
     phone_number = models.CharField(validators=[phoneNumberRegex], max_length=11)
     ref_shortcode = models.CharField(max_length=15, blank=True, unique=True)
@@ -37,10 +40,11 @@ class Referral(models.Model):
 
     def get_absolute_url(self):
         return reverse(
-            "referral_home",
+            "referral_vote",
             kwargs={
-                "shortcode": self.business_owner.shortcode,
+                "shortcode": self.business_owner.business_owner.shortcode,
                 "ref_shortcode": self.ref_shortcode,
+                "contest_id": self.business_owner.id,
             },
         )
 
@@ -49,17 +53,18 @@ class Guest(models.Model):
     referral = models.ForeignKey(
         Referral, related_name="guest_referral", on_delete=models.CASCADE
     )
-    business = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        related_name="guest_business",
+    business_owner = models.ForeignKey(
+        Contest,
+        related_name="contest_guest",
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
-    ip = models.GenericIPAddressField(null=True, blank=True)
+    ip = models.GenericIPAddressField(null=True)
     guest_name = models.CharField(max_length=100, null=True)
     phoneNumberRegex = RegexValidator(
         regex=r"^0\d{10}$",
-        message="Phone number must be entered in the format: '08105506070'. Up to 11 "
-        "digits allowed.",
+        message="Phone Number should be digits of 11 characters e.g. 08100550044",
     )
     phone_number = models.CharField(
         validators=[phoneNumberRegex], max_length=11, null=True
@@ -68,7 +73,7 @@ class Guest(models.Model):
     guest_url = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
-        return self.guest_name
+        return str(self.guest_name)
 
     def save(self, *args, **kwargs):
         self.guest_count += 1

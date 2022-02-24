@@ -60,7 +60,7 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(
         max_length=11, validators=[phone_regex], unique=True
     )
-    cash_price = models.DecimalField(max_digits=5, decimal_places=0)
+    # cash_price = models.DecimalField(max_digits=5, decimal_places=0)
     full_name = models.CharField(max_length=150)
     shortcode = AutoSlugField(populate_from="business_name")
 
@@ -94,13 +94,28 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
         return True
 
 
-# >>> datetime.datetime.now()
-# datetime.datetime(2022, 2, 13, 15, 18, 48, 947463)
-# >>> d = datetime.datetime.now()
-# >>> d
-# datetime.datetime(2022, 2, 13, 15, 18, 57, 760093)
-# >>> from datetime import timedelta
-# >>> d += timedelta(days=1)
-# >>> d
-# datetime.datetime(2022, 2, 14, 15, 18, 57, 760093)
-# >>>
+from datetime import datetime, timedelta
+from django.utils import timezone
+
+
+class Contest(models.Model):
+    business_owner = models.ForeignKey(
+        BusinessOwner, on_delete=models.CASCADE, related_name="contest_owner"
+    )
+    cash_price = models.DecimalField(max_digits=5, decimal_places=0)
+    starting_date = models.DateTimeField(default=timezone.now, blank=True)
+    duration = models.IntegerField()
+    ending_date = models.DateTimeField(blank=True)
+
+    def save(self, *args, **kwargs):
+        self.ending_date = self.starting_date + timedelta(days=self.duration)
+        super(Contest, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.business_owner) + " contest " + str(self.id)
+
+    class Meta:
+        ordering = ("-id",)
+
+    def get_absolute_url(self):
+        return reverse("contest_detail", args=[str(self.id)])

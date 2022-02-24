@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Referral, Guest
 from auth_app.models import BusinessOwner
 
+
 # Register your models here.
 class AdminRefer(admin.TabularInline):
     model = Referral
@@ -10,7 +11,7 @@ class AdminRefer(admin.TabularInline):
 
 
 class AdminGuest(admin.ModelAdmin):
-    list_display = ["referral", "business", "guest_name", "ip", "guest_count"]
+    list_display = ["referral", "business_owner", "guest_name", "ip", "guest_count"]
 
 
 class GuestAdmin(admin.TabularInline):

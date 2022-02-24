@@ -1,37 +1,4 @@
-<div class="col-md-6 offset-md-3 mt-3">
-  {% if messages %}
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {% for message in messages %}
-    <b>{{ message }}</b>
-    {% endfor %}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-  {% endif %}
-  {% if form.non_field_errors %}
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {% for error in form.non_field_errors %}
-    <b>{{ error }}</b>
-    {% endfor %}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-  {% endif %}
-  {% if form.phone_number.errors %}
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {% for error in form.phone_number.errors %}
-    <b>Phone Number Error! {{ error }}</b>
-    {% endfor %}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-  {% endif %}
-  {% if form.refer_name.errors %}
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {% for error in form.refer_name.errors %}
-    <b>Referral Name Error! {{ error }}</b>
-    {% endfor %}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-  {% endif %}
-</div>
+
 {#End of the form errors and message alert #}
 {#{% if request.user.username == business.username %}#}
 
@@ -59,39 +26,84 @@
             <td>{{ business.phone_number }}</td>
           </tr>
           <tr>
-            <th scope="row">Referral Count</th>
-            <td>{{ business.refer.all.count }}</td>
-          </tr>
-          <tr>
             <th scope="row">Shortcode</th>
             <td>{{ business.shortcode }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Cash Price</th>
-            <td>#{{ business.cash_price }}</td>
-          </tr>
-          <tr>
-            <th scope="row">All Referral</th>
-            <td> <a class="btn btn-sm btn-solid-sm"
-                href="{% url 'referral_list' business.shortcode %}">Referrals</a>
-            </td>
           </tr>
         </tbody>
       </table>
     </div>
-
   </div>
-  <div class="col-md-6 offset-md-3 mt-1">
+
+    <div class="col-md-6 offset-md-3 mt-1">
+{% if contests %}
+<h3 class="text-center">All Contests.</h3>
+<table class="table table-sm table-bordered">
+        <thead class="text-center">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Cash Price</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">#</th>
+                </tr>
+            </thead>
+        {% for contest in contests %}
+
+        <tr>
+            <td>{{ contest.id }}</td>
+            <td>{{ contest.business_owner }}</td>
+            <td>{{ contest.cash_price }}</td>
+            <td>{{ contest.duration }} day{{ contest.duration |pluralize }}</td>
+            <td><a href="{% url 'contest_detail' business.shortcode contest.id %}"> Visit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+        <hr>
+<h3 class="text-center">Create a New Contest</h3>
+
     <form method="post">
+  {% if form.non_field_errors %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {% for error in form.non_field_errors %}
+    <b>{{ error }}</b>
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+
+  {% if form.duration.errors %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {% for error in form.duration.errors %}
+    <b>Phone Number Error! {{ error }}</b>
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+
+  {% if form.cash_price.errors %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {% for error in form.cash_price.errors %}
+    <b>Cash Price Error! {{ error }}</b>
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+
       {% csrf_token %}
-      <div class="form-group">
-                <label for="exampleFormControlTextarea1">Message </label>
-                <textarea class="form-control" id="exampleFormControlTextarea1"
-                    rows="3">{{ share_message }} {{ signup_url }}</textarea>
-                <div class="mt-2 mb-3 text-center">
-                    <input class="btn btn-primary profile-button " type="submit" value="Share on WhatsApp">
-                </div>
-            </div>
+         <div class="mb-4 form-floating">
+            {{ form.cash_price }}
+            <label for="floatingInput">The total worth of the Cash/Product.</label>
+        </div>
+        <div class="mb-4 form-floating">
+            {{ form.duration }}
+            <label for="floatingInput2">Duration of the contest in days</label>
+            <small id="floatingInput" class="form-text text-muted">e.g 1, 2, 3 e.t.c.</small>
+        </div>
+
+        <input class="btn btn-primary profile-button " type="submit" value="Create Contest">
+
     </form>
 
   </div>

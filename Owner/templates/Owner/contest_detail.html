@@ -1,0 +1,86 @@
+{% extends 'base_app/base.html' %}
+{#End of the form errors and message alert #}
+{#{% if request.user.username == business.username %}#}
+{% block content %}
+<!-- Header -->
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 class="text-center">Contest HomePage<span></span></h1>
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+
+<div class="container rounded bg-white mt-5 mb-5">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+
+      <table class="table table-sm">
+        <tbody>
+          <tr>
+            <th scope="row">Business Name</th>
+            <td>{{ business.business_name }}</td>
+          </tr>
+
+          <tr>
+            <th scope="row">Full Name</th>
+            <td>{{ business.full_name }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Username</th>
+            <td>{{ business.username }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Phone Number</th>
+            <td>{{ business.phone_number }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Referral Count</th>
+            <td>{{ contest.referral_contest.all.count }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Shortcode</th>
+            <td>{{ business.shortcode }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Cash Price</th>
+            <td>#{{ contest.cash_price }}</td>
+          </tr>
+        <tr>
+            <th scope="row">Starting Date</th>
+            <td>{{ contest.starting_date }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Ending Date</th>
+            <td>{{ contest.ending_date }}</td>
+          </tr>
+        <tr>
+            <th scope="row">All Referral</th>
+            <td> <a class="btn btn-sm btn-solid-sm"
+                href="{% url 'referral_list' business.shortcode contest.id %}">Referrals</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+    <div class="col-md-6 offset-md-3 mt-1">
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+                <label for="exampleFormControlTextarea1">Message </label>
+                <textarea class="form-control" id="exampleFormControlTextarea1"
+                    rows="3">{{ share_message }} {{ signup_url }}</textarea>
+                <div class="mt-2 mb-3 text-center">
+                    <input class="btn btn-primary profile-button " type="submit" value="Share on WhatsApp">
+                </div>
+            </div>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

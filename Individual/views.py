@@ -12,75 +12,111 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from Individual.forms import GuestRegisterForm
 from base_app.models import Referral, Guest
-from auth_app.models import BusinessOwner
+from auth_app.models import BusinessOwner, Contest
 from .utils import get_ip_address, phone_num_val
 from django.contrib import messages
 import urllib.parse
-
+from django.db.models import Q
 
 # Create your views here.
 
+from django.utils import timezone
 
-def VoteReferral(request, shortcode, ref_shortcode):
+
+def VoteReferral(request, shortcode, contest_id, ref_shortcode):
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
     # get the Business Owner instance using the Business Owner Shortcode args
-    referral = Referral.objects.get(
-        business_owner=business, ref_shortcode=ref_shortcode
-    )
+    contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
+    # get the contest using the id, and business_owner
+    referral = Referral.objects.get(business_owner=contest, ref_shortcode=ref_shortcode)
     # get the instance of the referral using the referral shortcode
     # and business Owner instance
     g_ip = get_ip_address(request)
     # get the IP of the current person
+    ending_date = contest.ending_date
+    # the date and time to end the contest
 
     if request.method == "POST":
         form = GuestRegisterForm(request.POST)
         # while trying to vote
-        if form.is_valid():
-            guest_name = request.POST["guest_name"]
-            guest_instance = form.save(commit=False)
-            guest_instance.referral = referral
-            guest_instance.business = business
-            guest_instance.ip = get_ip_address(request)
+        if form.is_valid():  # check if the form is valid
+            guest_name = form.cleaned_data["guest_name"]  # get the guest_name
+            guest_phone = form.cleaned_data["phone_number"]  # get the phone_number
+            guest_ip = get_ip_address(request)
 
-            try:
-                guest = Guest.objects.get(business=business, referral=referral, ip=g_ip)
-                # try getting a Guest with the business instance,
-                # for the referral using the ref_shortcode, and for the current IP
+            try:  # try and see if the same guest with all above fields exist
+                guest = Guest.objects.get(
+                    business_owner=contest,
+                    referral=referral,
+                    ip=guest_ip,
+                    guest_name=guest_name,
+                    phone_number=guest_phone,
+                )
 
-            except ObjectDoesNotExist:
-                # if it does not exist
-                guest_instance = form.save(commit=False)
-                guest_instance.referral = referral
-                guest_instance.business = business
-                guest_instance.ip = get_ip_address(request)
-                # guest_instance.guest_count += 1
-                # guest_instance.guest_count increment on save of guest in the model.
-                guest_instance.save()
-                # save the guest
-                guest_message = (
-                    r"Hello, I was referred by Referral "
-                    + referral.refer_name
-                    + " my name is "
-                    + guest_name
-                )
-                whatsapp_link = (
-                    "https://wa.me/"
-                    + str(phone_num_val(business.phone_number))
-                    + "?text="
-                    + urllib.parse.quote(guest_message)
-                    # + urllib.parse.quote(vote_url)
-                    # + urllib.parse.quote(signup_url)
-                )
-                return HttpResponseRedirect(whatsapp_link)
-            else:
-                # if it exist, send a message notification
+            except Exception as DoesNotExist:
+                # if the object does not exist
+                guest = None  # set guest to None
+
+            if guest:  # if it exist, Then there is exactly the above guest in the db
+                # print("Guest exists")
                 messages.warning(
                     request,
-                    "you already voted for "
-                    + referral.refer_name
-                    + ". Multiple Votes not allowed",
+                    "Multiple vote not allowed",
                 )
-                return redirect(referral.get_absolute_url())
+            else:  # if the exact guest does not exist
+                if timezone.now() < ending_date:
+                    # and current  time is < ending time of vote
+                    guest = Guest(
+                        business_owner=contest,
+                        referral=referral,
+                        ip=guest_ip,
+                        guest_name=guest_name,
+                        phone_number=guest_phone,
+                    )
+                    # initialize guest
+
+                    if Guest.objects.filter(
+                        Q(guest_name=guest.guest_name)
+                        | Q(ip=guest.ip)
+                        | Q(phone_number=guest.phone_number),
+                        business_owner=guest.business_owner,
+                        referral=guest.referral,
+                    ).exists():
+                        """check to see if there is a referral and business owner with the same
+                        phone number or ip address or guest name with the one we just want to save"""
+                        messages.warning(
+                            request,
+                            "Multiple vote not allowed",
+                        )
+                        # print("Either name, phone number or ip exists")
+                    else:
+                        """if it does not exist, save the guest"""
+                        guest.save()
+                        guest_message = (
+                            r"Hello, I was referred by Referral "
+                            + referral.refer_name
+                            + " my name is "
+                            + guest_name
+                        )
+                        whatsapp_link = (
+                            "https://wa.me/"
+                            + str(phone_num_val(business.phone_number))
+                            + "?text="
+                            + urllib.parse.quote(guest_message)
+                            # + urllib.parse.quote(vote_url)
+                            # + urllib.parse.quote(signup_url)
+                        )
+                        return HttpResponseRedirect(whatsapp_link)
+                else:
+                    """if the time for ending vote has reached"""
+                    messages.warning(
+                        request,
+                        "You can no longer join this contest has it ended on %s by %s"
+                        % (
+                            ending_date.strftime("%Y-%m-%d"),
+                            ending_date.strftime("%H:%M:%S"),
+                        ),
+                    )
 
     else:
         form = GuestRegisterForm()
@@ -94,42 +130,3 @@ def VoteReferral(request, shortcode, ref_shortcode):
             "form": form,
         },
     )
-
-
-def ReferRedirect(request, shortcode, ref_shortcode):
-    referral = Referral.objects.get(ref_shortcode=ref_shortcode)
-    # get the referral instance using the referral shortcode
-    business = BusinessOwner.objects.get(shortcode=shortcode)
-    # get the business Owner using the shortcode args
-    ip = get_ip_address(request)
-    # will get the ip address of the current guest
-
-    try:
-        # guest = get_object_or_404(Guest, referral=referral, business=business)
-        guest = Guest.objects.get(referral=referral, business=business)
-        # check if we have a guest with referral and business passed from url arguments
-        if ip == guest.ip:
-            # check if the ip address of the current guest == ip address of a voted guest already
-            return redirect(
-                reverse(
-                    "referral_home", args=(business.shortcode, referral.ref_shortcode)
-                )
-            )
-        else:
-            # if the ip of the current user is not an already voted guest for this referral, increment vote
-            # count by 1
-            guest.guest_count += 1
-            guest.save()
-            return HttpResponseRedirect(referral.referral_url)
-
-    except ObjectDoesNotExist:
-        # if guest does not exist before, create a new instance of guest
-        guest = Guest(
-            referral=referral,
-            business=business,
-            ip=ip,
-        )
-        guest.guest_count += 1
-        # increment guest count by 1
-        guest.save()
-        return HttpResponseRedirect(guest.guest_url)

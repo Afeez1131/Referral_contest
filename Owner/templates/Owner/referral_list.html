@@ -16,7 +16,7 @@
 
 <div class="container mt-3">
 <div class="col-12 text-center mt-3">
-        <a href="{% url 'export_all_contact' business.shortcode %}" class="btn btn-solid-sm">
+        <a href="{% url 'export_all_contact' business.shortcode contest.id %}" class="btn btn-solid-sm">
           Export all Contact as VCF <i class="fas fa-address-card"></i>
         </a><br>
 </div>
@@ -46,8 +46,11 @@
             {% endfor %}
         </table>
         {% else %}
-        <h2 class="text-center">No referral currently</h2>
-        <a href="{% url 'referral_register' business.shortcode %}">Add a Referral</a>
+        <h2 class="text-center">No referral currently</h2><br>
+
+            <p class="text-center"><a href="{% url 'referral_register' business.shortcode contest.id %}" class="btn
+            btn-solid-sm">
+          Add a Referral</a></p>
         {% endif %}
         {% endif %}
     </div>

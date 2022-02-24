@@ -1,7 +1,8 @@
 from django import forms
 from base_app.models import Referral
-from auth_app.models import BusinessOwner
+from auth_app.models import BusinessOwner, Contest
 from django.core.validators import RegexValidator
+from django.forms import ValidationError
 
 
 class BusinessRegistrationForm(forms.ModelForm):
@@ -52,11 +53,38 @@ class ReferralRegistration(forms.ModelForm):
         }
 
     #
-    # def clean_phone_number(self):
-    #     phone_number = self.cleaned_data["phone_number"]
-    #     if str(phone_number).startswith("0"):
-    #         phone_number_list = list(phone_number)
-    #         phone_number_list[0] = "234"
-    #         p = "".join([str(elem) for elem in phone_number_list])
-    #         print(p)
-    #     return p
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data["phone_number"]
+        print(phone_number)
+        return phone_number
+
+
+class NewContestForm(forms.ModelForm):
+    class Meta:
+        model = Contest
+        fields = ("cash_price", "duration")
+
+    def __init__(self, *args, **kwargs):
+        # self.request = kwargs.pop('request', None)
+        super(NewContestForm, self).__init__(*args, **kwargs)
+
+        # self.fields["username"] = forms.CharField(label='Phone Number', max_length=100)
+        self.fields["cash_price"].widget.attrs[
+            "placeholder"
+        ] = "The total worth of the Cash/Product."
+        self.fields["cash_price"].widget.attrs["class"] = "form-control"
+
+        self.fields["duration"].widget.attrs["class"] = "form-control"
+        self.fields["duration"].widget.attrs[
+            "placeholder"
+        ] = "Duration of the contest in days"
+
+    def clean_cash_price(self):
+        cash_price = self.cleaned_data["cash_price"]
+        print("Cash :", cash_price)
+        if len(str(cash_price)) < 6:
+            return cash_price
+        else:
+            raise ValidationError(
+                "Ensure that there are no more than 5 digits in total."
+            )

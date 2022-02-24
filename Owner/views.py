@@ -8,9 +8,9 @@ from django.shortcuts import (
 )
 from django.urls import reverse
 from django.contrib import messages
-from auth_app.models import BusinessOwner
+from auth_app.models import BusinessOwner, Contest
 from base_app.models import Referral, Guest
-from .forms import BusinessRegistrationForm, ReferralRegistration
+from .forms import BusinessRegistrationForm, ReferralRegistration, NewContestForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -20,70 +20,136 @@ import urllib.parse
 from .utils import make_vcard, write_vcard
 
 
+# @login_required(login_url="account_login")
+# def ReferralHomeView(request, shortcode):
+#     business = BusinessOwner.objects.get(shortcode=shortcode)
+#     print("business", business)
+#     # get the instance of the business owner using shortcode
+#
+#     if request.user.username == business.username:
+#         # test if the login user is equal to the user Business Owner
+#         share_message = (
+#             "Stand a chance of winning a cash/product of #"
+#             + str(business.cash_price)
+#             + " by "
+#             "referring people to " + business.business_name + ".\n Get started here: "
+#         )
+#
+#         signup_url = request.build_absolute_uri(
+#             reverse("referral_register", args=(business.shortcode,))
+#         )
+#
+#         if request.method == "POST":
+#             link = "https://wa.me/?text=" + urllib.parse.quote(
+#                 share_message + signup_url
+#             )
+#             print("Link: ", link)
+#             return HttpResponseRedirect(link)
+#         return render(
+#             request,
+#             "Owner/referral_homepage.html",
+#             {
+#                 "business": business,
+#                 "share_message": share_message,
+#                 "signup_url": signup_url,
+#             },
+#         )
+#     else:
+#         # messages.warning(request, "You do not have access to this page")
+#         return redirect("index")
+
+
 @login_required(login_url="account_login")
 def ReferralHomeView(request, shortcode):
-    business = BusinessOwner.objects.get(shortcode=shortcode)
-    print("business", business)
-    # get the instance of the business owner using shortcode
-
-    if request.user.username == business.username:
-        # test if the login user is equal to the user Business Owner
-        share_message = (
-            "Stand a chance of winning a cash/product of #"
-            + str(business.cash_price)
-            + " by "
-            "referring people to " + business.business_name + ".\n Get started here: "
-        )
-
-        signup_url = request.build_absolute_uri(
-            reverse("referral_register", args=(business.shortcode,))
-        )
-
-        if request.method == "POST":
-            link = "https://wa.me/?text=" + urllib.parse.quote(
-                share_message + signup_url
-            )
-            print("Link: ", link)
-            return HttpResponseRedirect(link)
-        return render(
-            request,
-            "Owner/referral_homepage.html",
-            {
-                "business": business,
-                "share_message": share_message,
-                "signup_url": signup_url,
-            },
-        )
+    business = get_object_or_404(BusinessOwner, shortcode=shortcode)
+    # get the business or 404 using shortcode
+    contests = Contest.objects.filter(business_owner=business)
+    if request.method == "POST":
+        form = NewContestForm(request.POST)
+        if form.is_valid():
+            contest = form.save(commit=False)
+            contest.business_owner = business
+            contest.save()
+            return redirect("contest_detail", business.shortcode, contest.id)
     else:
-        # messages.warning(request, "You do not have access to this page")
-        return redirect("index")
+        form = NewContestForm()
+    return render(
+        request,
+        "Owner/referral_homepage.html",
+        {
+            "business": business,
+            "form": form,
+            "contests": contests,
+            # "share_message": share_message,
+            # "signup_url": signup_url,
+        },
+    )
 
 
 @login_required(login_url="account_login")
-def ReferralList(request, shortcode):
+def ContestDetail(request, shortcode, contest_id):
+    # get the instance of the business owner using shortcode
+    business = BusinessOwner.objects.get(shortcode=shortcode)
+    contest = get_object_or_404(Contest, business_owner=business, id=contest_id)
+    share_message = (
+        "Stand a chance of winning a cash/product of #"
+        + str(contest.cash_price)
+        + " by "
+        "referring people to " + business.business_name + ".\n Get started here: "
+    )
+
+    signup_url = request.build_absolute_uri(
+        reverse("referral_register", args=(business.shortcode, contest.id))
+    )
+
+    if request.method == "POST":
+        link = "https://wa.me/?text=" + urllib.parse.quote(share_message + signup_url)
+        return HttpResponseRedirect(link)
+    return render(
+        request,
+        "Owner/contest_detail.html",
+        {
+            "business": business,
+            "contest": contest,
+            "share_message": share_message,
+            "signup_url": signup_url,
+        },
+    )
+
+
+@login_required(login_url="account_login")
+def ReferralList(request, shortcode, contest_id):
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
+    contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
     # get a business owner with the shortcode passed as args
     # obj_list = get_list_or_404(Referral, business_owner=business)
-    referral = Referral.objects.filter(business_owner=business)
+    referral = Referral.objects.filter(business_owner=contest)
     # referral = obj_list[0]
     # get the referral associated with the Business Owner
     return render(
         request,
         "Owner/referral_list.html",
-        {"referral": referral, "business": business},
+        {
+            "referral": referral,
+            "business": business,
+            "contest": contest,
+        },
     )
 
 
+from django.utils import timezone
+
+
 # @login_required(login_url="account_login")
-def RegisterRefer(request, shortcode):
+def RegisterRefer(request, shortcode, contest_id):
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
     # get a business owner with the shortcode passed as args
     # obj_list = get_list_or_404(Referral, business_owner=business)
-    referral = Referral.objects.filter(business_owner=business)
-
+    contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
+    referral = Referral.objects.filter(business_owner=contest)
+    ending_date = contest.ending_date
     # referral = obj_list[0]
     # get the referral associated with the Business Owner
-
     if request.method == "POST":
         form = ReferralRegistration(request.POST)
         # the registration form
@@ -95,32 +161,41 @@ def RegisterRefer(request, shortcode):
                 # try to get the referral with the provided details
                 # referral = Referral.objects.filter(business_owner=business)
                 referral_instance = Referral.objects.get(
-                    business_owner=business,
+                    business_owner=contest,
                     refer_name=refer_name,
                     phone_number=phone_number,
                 )
             except Exception as ObjectDoesNotExist:
-                # does not exist, create such referral
-                # referral = Referral.objects.filter(business_owner=business)
-                referral_instance = Referral(
-                    business_owner=business,
-                    refer_name=refer_name,
-                    phone_number=phone_number,
-                )
-                shortcode = create_shortcode(referral_instance, size=4)
-                referral_instance.ref_shortcode = shortcode
-                print(
-                    referral_instance.business_owner,
-                    referral_instance,
-                    referral_instance.ref_shortcode,
-                )
-                referral_instance.save()
-                # save
-                return redirect(
-                    "referral_profile",
-                    business.shortcode,
-                    referral_instance.ref_shortcode,
-                )
+                if timezone.now() < ending_date:
+                    # if object does not exist, check if the ending date is
+                    # not yet reached
+                    # does not exist, create such referral
+                    # referral = Referral.objects.filter(business_owner=business)
+                    referral_instance = Referral(
+                        business_owner=contest,
+                        refer_name=refer_name,
+                        phone_number=phone_number,
+                    )
+                    shortcode = create_shortcode(referral_instance, size=4)
+                    referral_instance.ref_shortcode = shortcode
+                    referral_instance.save()
+                    # save
+                    return redirect(
+                        "referral_profile",
+                        contest.business_owner.shortcode,
+                        contest.id,
+                        referral_instance.ref_shortcode,
+                    )
+                else:
+                    # if the current time == the ending time
+                    messages.warning(
+                        request,
+                        "You can no longer join this contest has it ended on %s by %s"
+                        % (
+                            ending_date.strftime("%Y-%m-%d"),
+                            ending_date.strftime("%H:%M:%S"),
+                        ),
+                    )
                 # return HttpResponseRedirect(referral.referral_url)
             else:
                 # if the referral exist, message notification
@@ -130,7 +205,8 @@ def RegisterRefer(request, shortcode):
                     + referral_instance.refer_name
                     + " exists, try again with a different Referral name",
                 )
-    form = ReferralRegistration()
+    else:
+        form = ReferralRegistration()
     return render(
         request,
         "Owner/referral_register.html",
@@ -142,13 +218,19 @@ def RegisterRefer(request, shortcode):
     )
 
 
-def ReferralProfile(request, shortcode, ref_shortcode):
+def ReferralProfile(request, shortcode, contest_id, ref_shortcode):
     business = BusinessOwner.objects.get(shortcode=shortcode)
     # get a busines Owner instance using the shortcode args
-    referral = Referral.objects.get(ref_shortcode=ref_shortcode)
+    contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
+    # get the contest using the contest id, and business owner
+    referral = Referral.objects.get(ref_shortcode=ref_shortcode, business_owner=contest)
     # get the referral with the referral shortcode passed as args also
+
     vote_url = request.build_absolute_uri(
-        reverse("referral_home", args=(business.shortcode, referral.ref_shortcode))
+        reverse(
+            "referral_vote",
+            args=(business.shortcode, contest.id, referral.ref_shortcode),
+        )
     )
     referral_message = (
         "Hello, i am participating in a referral contest, the person with the highest "
@@ -175,10 +257,11 @@ def ReferralProfile(request, shortcode, ref_shortcode):
     )
 
 
-def export_all_contact(request, shortcode):
+def export_all_contact(request, shortcode, contest_id):
     business = BusinessOwner.objects.get(shortcode=shortcode)
-    referral = Referral.objects.filter(business_owner=business)
-    guest = Guest.objects.filter(business=business)
+    contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
+    referral = Referral.objects.filter(business_owner=contest)
+    guest = Guest.objects.filter(business_owner=contest)
 
     file_name = str(business.shortcode) + "-contact.vcf"
     response = HttpResponse(content_type="text/x-vCard")
