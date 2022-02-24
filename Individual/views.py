@@ -53,7 +53,7 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                     referral=referral,
                 )
 
-            except Exception as DoesNotExist:
+            except ObjectDoesNotExist:
                 # if the object does not exist
                 if timezone.now() < ending_date:
                     # and current  time is < ending time of vote
