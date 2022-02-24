@@ -55,15 +55,6 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
 
             except Exception as DoesNotExist:
                 # if the object does not exist
-                guest = None  # set guest to None
-
-            if guest:  # if it exist, Then there is exactly the above guest in the db
-                # print("Guest exists")
-                messages.warning(
-                    request,
-                    "Multiple vote not allowed",
-                )
-            else:  # if the exact guest does not exist
                 if timezone.now() < ending_date:
                     # and current  time is < ending time of vote
                     guest = Guest(
@@ -78,9 +69,9 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                     if Guest.objects.filter(
                         Q(guest_name=guest.guest_name)
                         | Q(ip=guest.ip)
-                        | Q(phone_number=guest.phone_number),
-                        business_owner=guest.business_owner,
-                        referral=guest.referral,
+                        | Q(phone_number=guest.phone_number)
+                        & Q(business_owner=guest.business_owner)
+                        & Q(referral=guest.referral)
                     ).exists():
                         """check to see if there is a referral and business owner with the same
                         phone number or ip address or guest name with the one we just want to save"""
@@ -118,6 +109,13 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                         ),
                     )
 
+            if guest:  # if it exist, Then there is exactly the above guest in the db
+                # print("Guest exists")
+                messages.warning(
+                    request,
+                    "Multiple vote not allowed",
+                )
+
     else:
         form = GuestRegisterForm()
 
@@ -130,3 +128,9 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
             "form": form,
         },
     )
+
+
+""" gname = guest3
+ref_shortcode=9r2d
+phone_number= 08105506601
+"""
