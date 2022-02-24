@@ -46,11 +46,11 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
 
             try:  # try and see if the same guest with all above fields exist
                 guest = Guest.objects.get(
-                    business_owner=contest,
-                    referral=referral,
-                    ip=guest_ip,
-                    guest_name=guest_name,
-                    phone_number=guest_phone,
+                    Q(ip=guest_ip)
+                    | Q(guest_name=guest_name)
+                    | Q(phone_number=guest_phone)
+                    & Q(business_owner=contest)
+                    & Q(referral=referral)
                 )
 
             except Exception as DoesNotExist:
@@ -66,38 +66,24 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                     )
                     # initialize guest
 
-                    if Guest.objects.filter(
-                        Q(business_owner=guest.business_owner)
-                        & Q(referral=guest.referral)
-                        | Q(guest_name=guest.guest_name)
-                        | Q(ip=guest.ip)
-                        | Q(phone_number=guest.phone_number)
-                    ).exists():
-                        """check to see if there is a referral and business owner with the same
-                        phone number or ip address or guest name with the one we just want to save"""
-                        messages.warning(
-                            request,
-                            "Multiple vote not allowed",
-                        )
-                        # print("Either name, phone number or ip exists")
-                    else:
-                        """if it does not exist, save the guest"""
-                        guest.save()
-                        guest_message = (
-                            r"Hello, I was referred by Referral "
-                            + referral.refer_name
-                            + " my name is "
-                            + guest_name
-                        )
-                        whatsapp_link = (
-                            "https://wa.me/"
-                            + str(phone_num_val(business.phone_number))
-                            + "?text="
-                            + urllib.parse.quote(guest_message)
-                            # + urllib.parse.quote(vote_url)
-                            # + urllib.parse.quote(signup_url)
-                        )
-                        return HttpResponseRedirect(whatsapp_link)
+                    """if it does not exist, save the guest"""
+                    guest.save()
+
+                    guest_message = (
+                        r"Hello, I was referred by Referral "
+                        + referral.refer_name
+                        + " my name is "
+                        + guest_name
+                    )
+                    whatsapp_link = (
+                        "https://wa.me/"
+                        + str(phone_num_val(business.phone_number))
+                        + "?text="
+                        + urllib.parse.quote(guest_message)
+                        # + urllib.parse.quote(vote_url)
+                        # + urllib.parse.quote(signup_url)
+                    )
+                    return HttpResponseRedirect(whatsapp_link)
                 else:
                     """if the time for ending vote has reached"""
                     messages.warning(
@@ -134,3 +120,18 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
 ref_shortcode=9r2d
 phone_number= 08105506601
 """
+
+
+'''                    if guest.filter(
+                        Q(guest_name=guest.guest_name)
+                        | Q(ip=guest.ip)
+                        | Q(phone_number=guest.phone_number)
+                    ).exists():
+                        """check to see if there is a referral and business owner with the same
+                        phone number or ip address or guest name with the one we just want to save"""
+                        messages.warning(
+                            request,
+                            "Multiple vote not allowed",
+                        )
+                        # print("Either name, phone number or ip exists")
+                    else:'''
