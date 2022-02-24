@@ -64,16 +64,19 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                         guest_name=guest_name,
                         phone_number=guest_phone,
                     )
-                    guest = guest.save(commit=False)
+                    guest_init = Guest.objects.get(
+                        business_owner=contest, referral=referral
+                    )
                     # initialize guest
-                    if guest.get(
+                    if guest_init.get(
                         Q(ip=guest.ip)
                         | Q(guest_name=guest.guest_name)
                         | Q(phone_number=guest.phone_number)
                     ).exists():
                         messages.warning(
                             request,
-                            "Multiple vote not allowed",
+                            "Multiple vote not allowed for either of %s %s %s"
+                            % (guest.ip, guest.guest_name, guest.phone_number),
                         )
                     else:
                         """if it does not exist, save the guest"""
@@ -130,7 +133,6 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
 ref_shortcode=9r2d
 phone_number= 08105506601
 """
-
 
 '''                    if guest.filter(
                         Q(guest_name=guest.guest_name)
