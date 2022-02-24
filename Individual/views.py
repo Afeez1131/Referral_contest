@@ -46,12 +46,12 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
 
             try:  # try and see if the same guest with all above fields exist
                 guest = Guest.objects.get(
-                    Q(ip=guest_ip)
-                    | Q(guest_name=guest_name)
-                    | Q(phone_number=guest_phone)
-                    & Q(business_owner=contest)
-                    & Q(referral=referral)
-                )
+                    ip=guest_ip,
+                    guest_name=guest_name,
+                    phone_number=guest_phone,
+                    business_owner=contest,
+                    referral=referral,
+                ).exist()
 
             except Exception as DoesNotExist:
                 # if the object does not exist
@@ -65,9 +65,18 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                         phone_number=guest_phone,
                     )
                     # initialize guest
-
-                    """if it does not exist, save the guest"""
-                    guest.save()
+                    if guest.get(
+                        Q(ip=guest.ip)
+                        | Q(guest_name=guest.guest_name)
+                        | Q(phone_number=guest.phone_number)
+                    ).exists():
+                        messages.warning(
+                            request,
+                            "Multiple vote not allowed",
+                        )
+                    else:
+                        """if it does not exist, save the guest"""
+                        guest.save()
 
                     guest_message = (
                         r"Hello, I was referred by Referral "
