@@ -31,8 +31,7 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
     referral = Referral.objects.get(business_owner=contest, ref_shortcode=ref_shortcode)
     # get the instance of the referral using the referral shortcode
     # and business Owner instance
-    g_ip = get_ip_address(request)
-    # get the IP of the current person
+
     ending_date = contest.ending_date
     # the date and time to end the contest
 
@@ -53,50 +52,43 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                     referral=referral,
                 )
 
-            except ObjectDoesNotExist:
+            except Exception as ObjectDoesNotExist:
+                guest_instance = form.save(commit=False)
+                guest_instance.business_owner = contest
+                guest_instance.referral = referral
+                guest_instance.ip = guest_ip
                 # if the object does not exist
                 if timezone.now() < ending_date:
                     # and current  time is < ending time of vote
-                    guest = Guest(
-                        business_owner=contest,
-                        referral=referral,
-                        ip=guest_ip,
-                        guest_name=guest_name,
-                        phone_number=guest_phone,
-                    )
-                    guest_init = Guest.objects.get(
-                        business_owner=contest, referral=referral
-                    )
-                    # initialize guest
-                    if guest_init.get(
-                        Q(ip=guest.ip)
-                        | Q(guest_name=guest.guest_name)
-                        | Q(phone_number=guest.phone_number)
-                    ).exists():
-                        messages.warning(
-                            request,
-                            "Multiple vote not allowed for either of %s %s %s"
-                            % (guest.ip, guest.guest_name, guest.phone_number),
+                    try:
+                        guest_init = Guest.objects.get(
+                            business_owner=contest, referral=referral
                         )
-                    else:
-                        """if it does not exist, save the guest"""
-                        guest.save()
 
-                    guest_message = (
-                        r"Hello, I was referred by Referral "
-                        + referral.refer_name
-                        + " my name is "
-                        + guest_name
-                    )
-                    whatsapp_link = (
-                        "https://wa.me/"
-                        + str(phone_num_val(business.phone_number))
-                        + "?text="
-                        + urllib.parse.quote(guest_message)
-                        # + urllib.parse.quote(vote_url)
-                        # + urllib.parse.quote(signup_url)
-                    )
-                    return HttpResponseRedirect(whatsapp_link)
+                    except Exception as ObjectDoesNotExist:
+                        guest_instance.save()
+                        guest_message = (
+                            r"Hello, I was referred by Referral "
+                            + referral.refer_name
+                            + " my name is "
+                            + guest_name
+                        )
+                        whatsapp_link = (
+                            "https://wa.me/"
+                            + str(phone_num_val(business.phone_number))
+                            + "?text="
+                            + urllib.parse.quote(guest_message)
+                            # + urllib.parse.quote(vote_url)
+                            # + urllib.parse.quote(signup_url)
+                        )
+                        return HttpResponseRedirect(whatsapp_link)
+                    # initialize guest
+                    else:
+                        messages.warning(request, "Multiple vote not allowed")
+                    # else:
+                    #     """if it does not exist, save the guest"""
+                    #     guest_instance.save()
+
                 else:
                     """if the time for ending vote has reached"""
                     messages.warning(
@@ -108,7 +100,7 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                         ),
                     )
 
-            if guest:  # if it exist, Then there is exactly the above guest in the db
+            else:  # if it exist, Then there is exactly the above guest in the db
                 # print("Guest exists")
                 messages.warning(
                     request,
