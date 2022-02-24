@@ -51,7 +51,7 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                     phone_number=guest_phone,
                     business_owner=contest,
                     referral=referral,
-                ).exists()
+                )
 
             except Exception as DoesNotExist:
                 # if the object does not exist
