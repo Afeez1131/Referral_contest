@@ -52,7 +52,7 @@
             <td>{{ contest.id }}</td>
             <td>{{ contest.business_owner }}</td>
             <td>{{ contest.cash_price }}</td>
-            <td>{{ contest.duration }} day{{ contest.duration |pluralize }}</td>
+            <td>{{ contest.duration }} hours</td>
             <td><a href="{% url 'contest_detail' business.shortcode contest.id %}"> Visit</a></td>
         </tr>
         {% endfor %}

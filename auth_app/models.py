@@ -100,12 +100,15 @@ class Contest(models.Model):
     )
     cash_price = models.DecimalField(max_digits=5, decimal_places=0)
     starting_date = models.DateTimeField()
-    # duration = models.IntegerField()
     ending_date = models.DateTimeField()
+    duration = models.PositiveIntegerField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         # self.ending_date = self.starting_date + timedelta(days=self.duration)
-        print(str(self.starting_date).split(" "))
+        if not self.duration:
+            df = self.ending_date - self.starting_date
+            seconds = df.total_seconds()
+            self.duration = int(seconds / 3600)
         super(Contest, self).save(*args, **kwargs)
 
     def __str__(self):
