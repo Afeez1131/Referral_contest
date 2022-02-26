@@ -70,7 +70,9 @@ def ReferralHomeView(request, shortcode):
             contest = form.save(commit=False)
             contest.business_owner = business
             contest.save()
+            # form.save()
             return redirect("contest_detail", business.shortcode, contest.id)
+
     else:
         form = NewContestForm()
     return render(
@@ -187,14 +189,12 @@ def RegisterRefer(request, shortcode, contest_id):
                         referral_instance.ref_shortcode,
                     )
                 else:
+
                     # if the current time == the ending time
                     messages.warning(
                         request,
-                        "You can no longer join this contest has it ended on %s by %s"
-                        % (
-                            ending_date.strftime("%Y-%m-%d"),
-                            ending_date.strftime("%H:%M:%S"),
-                        ),
+                        "You can no longer join this contest has it ended on %s"
+                        % ending_date,
                     )
                 # return HttpResponseRedirect(referral.referral_url)
             else:

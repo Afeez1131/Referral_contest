@@ -94,21 +94,18 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
         return True
 
 
-from datetime import datetime, timedelta
-from django.utils import timezone
-
-
 class Contest(models.Model):
     business_owner = models.ForeignKey(
         BusinessOwner, on_delete=models.CASCADE, related_name="contest_owner"
     )
     cash_price = models.DecimalField(max_digits=5, decimal_places=0)
-    starting_date = models.DateTimeField(default=timezone.now, blank=True)
-    duration = models.IntegerField()
-    ending_date = models.DateTimeField(blank=True)
+    starting_date = models.DateTimeField()
+    # duration = models.IntegerField()
+    ending_date = models.DateTimeField()
 
     def save(self, *args, **kwargs):
-        self.ending_date = self.starting_date + timedelta(days=self.duration)
+        # self.ending_date = self.starting_date + timedelta(days=self.duration)
+        print(str(self.starting_date).split(" "))
         super(Contest, self).save(*args, **kwargs)
 
     def __str__(self):

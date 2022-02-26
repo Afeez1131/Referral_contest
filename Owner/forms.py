@@ -3,6 +3,7 @@ from base_app.models import Referral
 from auth_app.models import BusinessOwner, Contest
 from django.core.validators import RegexValidator
 from django.forms import ValidationError
+from tempus_dominus.widgets import DateTimePicker
 
 
 class BusinessRegistrationForm(forms.ModelForm):
@@ -60,9 +61,29 @@ class ReferralRegistration(forms.ModelForm):
 
 
 class NewContestForm(forms.ModelForm):
+    starting_date = forms.DateTimeField(
+        input_formats=["%Y-%m-%d %H:%M:%S"],
+        widget=DateTimePicker(
+            attrs={
+                "append": "fa fa-calendar",
+                "icon_toggle": True,
+            },
+        ),
+    )
+
+    ending_date = forms.DateTimeField(
+        input_formats=["%Y-%m-%d %H:%M:%S"],
+        widget=DateTimePicker(
+            attrs={
+                "append": "fa fa-calendar",
+                "icon_toggle": True,
+            },
+        ),
+    )
+
     class Meta:
         model = Contest
-        fields = ("cash_price", "duration")
+        fields = ("cash_price", "starting_date", "ending_date")
 
     def __init__(self, *args, **kwargs):
         # self.request = kwargs.pop('request', None)
@@ -74,10 +95,15 @@ class NewContestForm(forms.ModelForm):
         ] = "The total worth of the Cash/Product."
         self.fields["cash_price"].widget.attrs["class"] = "form-control"
 
-        self.fields["duration"].widget.attrs["class"] = "form-control"
-        self.fields["duration"].widget.attrs[
-            "placeholder"
-        ] = "Duration of the contest in days"
+        self.fields["starting_date"].widget.attrs["class"] = "form-control"
+        # self.fields["starting_date"].widget.attrs[
+        #     "placeholder"
+        # ] = "Select starting date & time for your contest"
+
+        self.fields["ending_date"].widget.attrs["class"] = "form-control"
+        # self.fields["ending_date"].widget.attrs[
+        #     "placeholder"
+        # ] = "Select ending date & time for your contest"
 
     def clean_cash_price(self):
         cash_price = self.cleaned_data["cash_price"]

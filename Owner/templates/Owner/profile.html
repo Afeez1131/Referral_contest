@@ -1,4 +1,3 @@
-
 {#End of the form errors and message alert #}
 {#{% if request.user.username == business.username %}#}
 
@@ -81,7 +80,6 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
   {% endif %}
-
   {% if form.cash_price.errors %}
   <div class="alert alert-danger alert-dismissible fade show" role="alert">
     {% for error in form.cash_price.errors %}
@@ -91,19 +89,46 @@
   </div>
   {% endif %}
 
+     {% if form.starting_date.errors %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {% for error in form.starting_date.errors %}
+    <b>Starting Date Error! {{ error }}</b>
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+
+     {% if form.ending_date.errors %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {% for error in form.ending_date.errors %}
+    <b>Ending Date Error! {{ error }}</b>
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+
       {% csrf_token %}
          <div class="mb-4 form-floating">
             {{ form.cash_price }}
             <label for="floatingInput">The total worth of the Cash/Product.</label>
+             <small id="floatingInput" class="form-text text-muted">How much do you plan on spending on the
+                 contest.</small>
+
+
         </div>
+
         <div class="mb-4 form-floating">
-            {{ form.duration }}
-            <label for="floatingInput2">Duration of the contest in days</label>
-            <small id="floatingInput" class="form-text text-muted">e.g 1, 2, 3 e.t.c.</small>
+            {{ form.starting_date }}
+{#            <label for="floatingInput2">Starting Date & Time of the Contest</label>#}
+{#            <small id="floatingInput" class="form-text text-muted">when do you want to start the Contest</small>#}
         </div>
 
+        <div class="mb-4 form-floating">
+                    {{ form.ending_date }}
+{#            <label for="floatingInput2">Ending Date & Time of the Contest</label>#}
+            <small id="floatingInput" class="form-text text-muted">when do you want to end the Contest</small>
+        </div>
         <input class="btn btn-primary profile-button " type="submit" value="Create Contest">
-
     </form>
 
   </div>

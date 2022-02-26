@@ -46,11 +46,11 @@ INSTALLED_APPS = [
     "base_app",
     "Owner",
     "Individual",
-    "Analytic",
     # authentications
     "allauth",
     "allauth.account",
     "crispy_forms",
+    "tempus_dominus",
 ]
 
 MIDDLEWARE = [
@@ -141,6 +141,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+DATETIME_FORMAT = "%Y-%m-%d %H:%m:%s"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
