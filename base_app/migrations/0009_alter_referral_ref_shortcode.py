@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base_app', '0008_alter_referral_refer_message'),
+        ("base_app", "0008_alter_referral_refer_message"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='referral',
-            name='ref_shortcode',
+            model_name="referral",
+            name="ref_shortcode",
             field=models.CharField(blank=True, max_length=15, unique=True),
         ),
     ]

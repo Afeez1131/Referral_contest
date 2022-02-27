@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0019_auto_20220225_1131'),
+        ("auth_app", "0019_auto_20220225_1131"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='contest',
-            name='duration',
+            model_name="contest",
+            name="duration",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
     ]

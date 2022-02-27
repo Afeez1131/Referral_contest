@@ -6,22 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0018_alter_contest_starting_date'),
+        ("auth_app", "0018_alter_contest_starting_date"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='contest',
-            name='duration',
+            model_name="contest",
+            name="duration",
         ),
         migrations.AlterField(
-            model_name='contest',
-            name='ending_date',
+            model_name="contest",
+            name="ending_date",
             field=models.DateTimeField(),
         ),
         migrations.AlterField(
-            model_name='contest',
-            name='starting_date',
+            model_name="contest",
+            name="starting_date",
             field=models.DateTimeField(),
         ),
     ]

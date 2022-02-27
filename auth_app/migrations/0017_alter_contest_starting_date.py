@@ -7,13 +7,13 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0016_alter_contest_starting_date'),
+        ("auth_app", "0016_alter_contest_starting_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='contest',
-            name='starting_date',
+            model_name="contest",
+            name="starting_date",
             field=models.DateTimeField(blank=True, default=django.utils.timezone.now),
         ),
     ]

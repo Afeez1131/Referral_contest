@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0005_businessowner_reward_type'),
+        ("auth_app", "0005_businessowner_reward_type"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='businessowner',
-            name='is_business_owner',
+            model_name="businessowner",
+            name="is_business_owner",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='businessowner',
-            name='is_referral',
+            model_name="businessowner",
+            name="is_referral",
             field=models.BooleanField(default=False),
         ),
     ]

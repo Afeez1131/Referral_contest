@@ -6,13 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base_app', '0007_delete_businessowner'),
+        ("base_app", "0007_delete_businessowner"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='referral',
-            name='refer_message',
-            field=models.CharField(default='Hello, i am currently participating in a referral contest, kindly vote for me using this link ', max_length=100),
+            model_name="referral",
+            name="refer_message",
+            field=models.CharField(
+                default="Hello, i am currently participating in a referral contest, kindly vote for me using this link ",
+                max_length=100,
+            ),
         ),
     ]

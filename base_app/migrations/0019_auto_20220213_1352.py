@@ -7,22 +7,39 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base_app', '0018_alter_guest_phone_number'),
+        ("base_app", "0018_alter_guest_phone_number"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='guest',
-            options={'ordering': ('-guest_count',)},
+            name="guest",
+            options={"ordering": ("-guest_count",)},
         ),
         migrations.AlterField(
-            model_name='guest',
-            name='phone_number',
-            field=models.CharField(max_length=11, null=True, validators=[django.core.validators.RegexValidator(message="Phone number must be entered in the format: '08105506070'. Up to 11 digits allowed.", regex='^0\\d{10}$')]),
+            model_name="guest",
+            name="phone_number",
+            field=models.CharField(
+                max_length=11,
+                null=True,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Phone number must be entered in the format: '08105506070'. Up to 11 digits allowed.",
+                        regex="^0\\d{10}$",
+                    )
+                ],
+            ),
         ),
         migrations.AlterField(
-            model_name='referral',
-            name='phone_number',
-            field=models.CharField(max_length=11, validators=[django.core.validators.RegexValidator(message="Phone number must be entered in the format: '08105506070'. Up to 13digits allowed.", regex='^0\\d{10}$')]),
+            model_name="referral",
+            name="phone_number",
+            field=models.CharField(
+                max_length=11,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Phone number must be entered in the format: '08105506070'. Up to 13digits allowed.",
+                        regex="^0\\d{10}$",
+                    )
+                ],
+            ),
         ),
     ]

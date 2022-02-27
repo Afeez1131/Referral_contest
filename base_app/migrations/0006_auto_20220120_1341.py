@@ -9,18 +9,26 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('base_app', '0005_remove_businessowner_user'),
+        ("base_app", "0005_remove_businessowner_user"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='guest',
-            name='business',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='guest_business', to=settings.AUTH_USER_MODEL),
+            model_name="guest",
+            name="business",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="guest_business",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='referral',
-            name='business_owner',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='refer', to=settings.AUTH_USER_MODEL),
+            model_name="referral",
+            name="business_owner",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="refer",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0003_auto_20220120_2339'),
+        ("auth_app", "0003_auto_20220120_2339"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='businessowner',
-            name='business_message',
+            model_name="businessowner",
+            name="business_message",
             field=models.TextField(blank=True, null=True),
         ),
     ]

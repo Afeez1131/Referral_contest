@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0004_businessowner_business_message'),
+        ("auth_app", "0004_businessowner_business_message"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='businessowner',
-            name='reward_type',
-            field=models.CharField(choices=[('Cash', 'Cash'), ('Product', 'Product')], default='Cash', max_length=20),
+            model_name="businessowner",
+            name="reward_type",
+            field=models.CharField(
+                choices=[("Cash", "Cash"), ("Product", "Product")],
+                default="Cash",
+                max_length=20,
+            ),
         ),
     ]

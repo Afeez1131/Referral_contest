@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0013_auto_20220220_0137'),
+        ("auth_app", "0013_auto_20220220_0137"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='contest',
-            options={'ordering': ('-id',)},
+            name="contest",
+            options={"ordering": ("-id",)},
         ),
         migrations.AlterField(
-            model_name='contest',
-            name='ending_date',
+            model_name="contest",
+            name="ending_date",
             field=models.DateTimeField(blank=True),
         ),
     ]

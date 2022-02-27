@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0007_auto_20220203_0937'),
+        ("auth_app", "0007_auto_20220203_0937"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='businessowner',
-            name='business_name',
-            field=models.CharField(max_length=150, unique=True, verbose_name='business name'),
+            model_name="businessowner",
+            name="business_name",
+            field=models.CharField(
+                max_length=150, unique=True, verbose_name="business name"
+            ),
         ),
     ]

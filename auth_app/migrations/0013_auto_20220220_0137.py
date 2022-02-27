@@ -9,23 +9,44 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0012_auto_20220213_1917'),
+        ("auth_app", "0012_auto_20220213_1917"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='businessowner',
-            name='cash_price',
+            model_name="businessowner",
+            name="cash_price",
         ),
         migrations.CreateModel(
-            name='Contest',
+            name="Contest",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cash_price', models.DecimalField(decimal_places=0, max_digits=5)),
-                ('starting_date', models.DateTimeField(blank=True, default=datetime.datetime.now)),
-                ('duration', models.IntegerField()),
-                ('ending_date', models.DateTimeField(blank=True, default=datetime.datetime.now)),
-                ('business_owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='contest_owner', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("cash_price", models.DecimalField(decimal_places=0, max_digits=5)),
+                (
+                    "starting_date",
+                    models.DateTimeField(blank=True, default=datetime.datetime.now),
+                ),
+                ("duration", models.IntegerField()),
+                (
+                    "ending_date",
+                    models.DateTimeField(blank=True, default=datetime.datetime.now),
+                ),
+                (
+                    "business_owner",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="contest_owner",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

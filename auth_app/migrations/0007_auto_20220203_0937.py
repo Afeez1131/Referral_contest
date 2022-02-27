@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_app', '0006_auto_20220125_0934'),
+        ("auth_app", "0006_auto_20220125_0934"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='businessowner',
-            name='reward_type',
+            model_name="businessowner",
+            name="reward_type",
         ),
         migrations.AddField(
-            model_name='businessowner',
-            name='cash_price',
+            model_name="businessowner",
+            name="cash_price",
             field=models.IntegerField(default=1000),
             preserve_default=False,
         ),

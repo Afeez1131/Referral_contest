@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base_app', '0009_alter_referral_ref_shortcode'),
+        ("base_app", "0009_alter_referral_ref_shortcode"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='referral',
-            name='refer_message',
-            field=models.TextField(default='Hello, i am currently participating in a referral contest, kindly vote for me using this link '),
+            model_name="referral",
+            name="refer_message",
+            field=models.TextField(
+                default="Hello, i am currently participating in a referral contest, kindly vote for me using this link "
+            ),
         ),
     ]
