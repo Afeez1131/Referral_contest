@@ -83,9 +83,9 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                         )
                         return HttpResponseRedirect(whatsapp_link)
                     # initialize guest
-                    else:
-                        pass
-                        # messages.warning(request, "Multiple vote not allowed")
+                    # else:
+                    #     pass
+                    # messages.warning(request, "Multiple vote not allowed")
                     # else:
                     #     """if it does not exist, save the guest"""
                     #     guest_instance.save()
