@@ -33,6 +33,7 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
     # and business Owner instance
 
     ending_date = contest.ending_date
+    starting_date = contest.starting_date
     # the date and time to end the contest
 
     if request.method == "POST":
@@ -60,35 +61,26 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                 # if the object does not exist
                 if timezone.now() < ending_date:
                     # and current  time is < ending time of vote
-                    try:
-                        guest_init = Guest.objects.get(
-                            business_owner=contest, referral=referral
-                        )
-
-                    except Exception as ObjectDoesNotExist:
-                        guest_instance.save()
-                        guest_message = (
-                            r"Hello, I was referred by Referral "
-                            + referral.refer_name
-                            + " my name is "
-                            + guest_name
-                        )
-                        whatsapp_link = (
-                            "https://wa.me/"
-                            + str(phone_num_val(business.phone_number))
-                            + "?text="
-                            + urllib.parse.quote(guest_message)
-                            # + urllib.parse.quote(vote_url)
-                            # + urllib.parse.quote(signup_url)
-                        )
-                        return HttpResponseRedirect(whatsapp_link)
+                    guest_instance.save()
+                    guest_message = (
+                        r"Hello, I was referred by Referral "
+                        + referral.refer_name
+                        + " my name is "
+                        + guest_name
+                    )
+                    whatsapp_link = (
+                        "https://wa.me/"
+                        + str(phone_num_val(business.phone_number))
+                        + "?text="
+                        + urllib.parse.quote(guest_message)
+                        # + urllib.parse.quote(vote_url)
+                        # + urllib.parse.quote(signup_url)
+                    )
+                    return HttpResponseRedirect(whatsapp_link)
                     # initialize guest
                     # else:
                     #     pass
                     # messages.warning(request, "Multiple vote not allowed")
-                    # else:
-                    #     """if it does not exist, save the guest"""
-                    #     guest_instance.save()
 
                 else:
                     """if the time for ending vote has reached"""
