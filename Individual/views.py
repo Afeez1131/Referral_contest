@@ -59,31 +59,37 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                 guest_instance.referral = referral
                 guest_instance.ip = guest_ip
                 # if the object does not exist
-                if timezone.now() < ending_date:
-                    # and current  time is < ending time of vote
-                    guest_instance.save()
-                    guest_message = (
-                        r"Hello, I was referred by Referral "
-                        + referral.refer_name
-                        + " my name is "
-                        + guest_name
-                    )
-                    whatsapp_link = (
-                        "https://wa.me/"
-                        + str(phone_num_val(business.phone_number))
-                        + "?text="
-                        + urllib.parse.quote(guest_message)
-                        # + urllib.parse.quote(vote_url)
-                        # + urllib.parse.quote(signup_url)
-                    )
-                    return HttpResponseRedirect(whatsapp_link)
-                    # initialize guest
-                    # else:
-                    #     pass
-                    # messages.warning(request, "Multiple vote not allowed")
 
+                if (starting_date < timezone.now()) and (ending_date > timezone.now()):
+                    try:
+                        guest_verify = Guest.objects.get(
+                            referral=guest_instance.referral,
+                            business_owner=contest,
+                            ip=guest_instance.ip,
+                        )
+                    except Exception as ObjectDoesNotExist:
+                        guest_instance.save()
+                        guest_message = (
+                            r"Hello, I was referred by Referral "
+                            + referral.refer_name
+                            + " my name is "
+                            + guest_name
+                        )
+                        whatsapp_link = (
+                            "https://wa.me/"
+                            + str(phone_num_val(business.phone_number))
+                            + "?text="
+                            + urllib.parse.quote(guest_message)
+                            # + urllib.parse.quote(vote_url)
+                            # + urllib.parse.quote(signup_url)
+                        )
+                        return HttpResponseRedirect(whatsapp_link)
+                    else:
+                        messages.warning(
+                            request, "Multiple vote from the same device not allowed"
+                        )
                 else:
-                    """if the time for ending vote has reached"""
+                    """if the time for ending vote has reached/passed"""
                     messages.warning(
                         request,
                         "You can no longer join this contest has it ended on %s by %s"
@@ -97,7 +103,7 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                 # print("Guest exists")
                 messages.warning(
                     request,
-                    "Multiple vote not allowed",
+                    "Guest %s voted already" % guest.guest_name,
                 )
 
     else:
