@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret
 SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "whatsapp-contest.herokuapp.com"]
 
@@ -189,3 +189,8 @@ CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")  # new
 # SECURE_HSTS_SECONDS = 31536000
 django_heroku.settings(locals())
+
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+# TooManyFieldsSent at /admin/base_app/referral/98/change/
+# The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
