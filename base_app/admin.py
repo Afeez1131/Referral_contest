@@ -11,7 +11,7 @@ class AdminRefer(admin.TabularInline):
 
 
 class AdminGuest(admin.ModelAdmin):
-    list_display = ["referral", "business_owner", "guest_name", "ip", "guest_count"]
+    list_display = ["referral", "business_owner", "guest_name", "ip"]
 
 
 class GuestAdmin(admin.TabularInline):
@@ -26,6 +26,7 @@ class ReferAdmin(admin.ModelAdmin):
         "phone_number",
         "ref_shortcode",
         "business_owner",
+        "guest_count",
     ]
     inlines = [GuestAdmin]
 

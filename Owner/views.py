@@ -125,7 +125,11 @@ def ReferralList(request, shortcode, contest_id):
     contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
     # get a business owner with the shortcode passed as args
     # obj_list = get_list_or_404(Referral, business_owner=business)
-    referral = Referral.objects.filter(business_owner=contest)
+    ref_dict = {}
+    referral = Referral.objects.filter(business_owner=contest).order_by("-guest_count")
+    ref_list = Referral.objects.values_list("guest_count", flat=True)
+    print(ref_list, referral)
+
     # referral = obj_list[0]
     # get the referral associated with the Business Owner
     return render(

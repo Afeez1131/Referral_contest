@@ -24,6 +24,7 @@ class Referral(models.Model):
     )
     phone_number = models.CharField(validators=[phoneNumberRegex], max_length=11)
     ref_shortcode = models.CharField(max_length=15, blank=True, unique=True)
+    guest_count = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.ref_shortcode
@@ -33,6 +34,8 @@ class Referral(models.Model):
         unique_together = ("business_owner", "refer_name", "phone_number")
 
     def save(self, *args, **kwargs):
+        if not self.guest_count:
+            self.guest_count = self.guest_referral.count()
         # self.refer_message = str(self.refer_message) + " " + self.get_absolute_url()
         if not self.ref_shortcode:
             self.ref_shortcode = create_shortcode(self)
@@ -69,16 +72,9 @@ class Guest(models.Model):
     phone_number = models.CharField(
         validators=[phoneNumberRegex], max_length=11, null=True
     )
-    guest_count = models.IntegerField(default=0)
-    guest_url = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         return str(self.guest_name)
 
-    def save(self, *args, **kwargs):
-        self.guest_count += 1
-
-        super(Guest, self).save(*args, **kwargs)
-
     class Meta:
-        ordering = ("-guest_count",)
+        ordering = ("-id",)

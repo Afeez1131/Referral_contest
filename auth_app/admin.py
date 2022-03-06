@@ -10,7 +10,6 @@ CustomUser = get_user_model()
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ("username", "full_name", "is_active", "is_staff", "shortcode")
-
     fieldsets = (
         (None, {"fields": ("username", "full_name")}),
         ("Permissions", {"fields": ("is_staff", "is_superuser", "is_active")}),
