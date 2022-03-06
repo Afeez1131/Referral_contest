@@ -76,5 +76,9 @@ class Guest(models.Model):
     def __str__(self):
         return str(self.guest_name)
 
+    def save(self, *args, **kwargs):
+        self.referral.guest_count += 1
+        super(Guest, self).save(*args, **kwargs)
+
     class Meta:
         ordering = ("-id",)
