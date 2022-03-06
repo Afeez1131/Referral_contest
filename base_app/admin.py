@@ -28,7 +28,7 @@ class ReferAdmin(admin.ModelAdmin):
         "business_owner",
         "guest_count",
     ]
-    inlines = [GuestAdmin]
+    # inlines = [GuestAdmin]
 
 
 admin.site.register(Guest, AdminGuest)
