@@ -96,14 +96,14 @@ class NewContestForm(forms.ModelForm):
         self.fields["cash_price"].widget.attrs["class"] = "form-control"
 
         self.fields["starting_date"].widget.attrs["class"] = "form-control"
-        # self.fields["starting_date"].widget.attrs[
-        #     "placeholder"
-        # ] = "Select starting date & time for your contest"
+        # self.fields[
+        #     "starting_date"
+        # ].help_text = "Select starting date & time for your contest"
 
         self.fields["ending_date"].widget.attrs["class"] = "form-control"
-        # self.fields["ending_date"].widget.attrs[
-        #     "placeholder"
-        # ] = "Select ending date & time for your contest"
+        # self.fields[
+        #     "ending_date"
+        # ].help_text = "Select ending date & time for your contest"
 
     def clean_cash_price(self):
         cash_price = self.cleaned_data["cash_price"]
