@@ -111,7 +111,7 @@
          <div class="mb-4 form-floating">
             {{ form.cash_price }}
             <label for="floatingInput">The total worth of the Cash/Product.</label>
-             <small id="floatingInput" class="form-text text-muted">How much do you plan on spending on the
+             <small class="form-text text-muted">How much do you plan on spending on the
                  contest.</small>
 
 
@@ -120,13 +120,15 @@
         <div class="mb-4 form-floating">
             {{ form.starting_date }}
 {#            <label for="floatingInput2">Starting Date & Time of the Contest</label>#}
-{#            <small id="floatingInput" class="form-text text-muted">when do you want to start the Contest</small>#}
+            <small id="floatingInput" class="form-text text-muted">Select the starting date and time for the
+                contest</small>
         </div>
 
         <div class="mb-4 form-floating">
                     {{ form.ending_date }}
 {#            <label for="floatingInput2">Ending Date & Time of the Contest</label>#}
-            <small id="floatingInput" class="form-text text-muted">when do you want to end the Contest</small>
+            <small id="floatingInput" class="form-text text-muted">select the ending date and time for the
+                contest</small>
         </div>
         <input class="btn btn-primary profile-button " type="submit" value="Create Contest">
     </form>
