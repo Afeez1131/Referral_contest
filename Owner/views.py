@@ -154,6 +154,7 @@ def RegisterRefer(request, shortcode, contest_id):
     contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
     referral = Referral.objects.filter(business_owner=contest)
     ending_date = contest.ending_date
+    starting_date = contest.starting_date
     # referral = obj_list[0]
     # get the referral associated with the Business Owner
     if request.method == "POST":
@@ -172,7 +173,7 @@ def RegisterRefer(request, shortcode, contest_id):
                     phone_number=phone_number,
                 )
             except Exception as ObjectDoesNotExist:
-                if timezone.now() < ending_date:
+                if (starting_date < timezone.now()) and (ending_date > timezone.now()):
                     # if object does not exist, check if the ending date is
                     # not yet reached
                     # does not exist, create such referral
@@ -192,8 +193,17 @@ def RegisterRefer(request, shortcode, contest_id):
                         contest.id,
                         referral_instance.ref_shortcode,
                     )
+                elif timezone.now() < starting_date:
+                    """if the time for ending vote has not reached"""
+                    messages.warning(
+                        request,
+                        "Voting has not started, starting by %s by %s"
+                        % (
+                            starting_date.strftime("%Y-%m-%d"),
+                            starting_date.strftime("%H:%M:%S"),
+                        ),
+                    )
                 else:
-
                     # if the current time == the ending time
                     messages.warning(
                         request,
