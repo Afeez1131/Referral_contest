@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os.path
 from pathlib import Path
-import environ
 import django_heroku
 import dj_database_url
+
+import environ
 
 env = environ.Env()
 environ.Env.read_env()

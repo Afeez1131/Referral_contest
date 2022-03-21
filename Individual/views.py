@@ -88,6 +88,16 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                         messages.warning(
                             request, "Multiple vote from the same device not allowed"
                         )
+                elif timezone.now() < starting_date:
+                    """if the time for ending vote has not reached"""
+                    messages.warning(
+                        request,
+                        "Voting has not started, starting by %s by %s"
+                        % (
+                            starting_date.strftime("%Y-%m-%d"),
+                            starting_date.strftime("%H:%M:%S"),
+                        ),
+                    )
                 else:
                     """if the time for ending vote has reached/passed"""
                     messages.warning(
