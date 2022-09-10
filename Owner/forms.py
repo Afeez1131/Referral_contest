@@ -66,7 +66,8 @@ class NewContestForm(forms.ModelForm):
         widget=DateTimePicker(
             attrs={
                 "append": "fa fa-calendar",
-                "icon_toggle": True,
+                "icon_toggle": False,
+                "placeholder": "YYYY-MM-DD hh:mm:ss"
             },
         ),
     )
@@ -76,7 +77,8 @@ class NewContestForm(forms.ModelForm):
         widget=DateTimePicker(
             attrs={
                 "append": "fa fa-calendar",
-                "icon_toggle": True,
+                "icon_toggle": False,
+                "placeholder": "YYYY-MM-DD hh:mm:ss"
             },
         ),
     )
@@ -93,24 +95,24 @@ class NewContestForm(forms.ModelForm):
         self.fields["cash_price"].widget.attrs[
             "placeholder"
         ] = "The total worth of the Cash/Product."
-        self.fields["cash_price"].widget.attrs["class"] = "form-control"
+        self.fields["cash_price"].widget.attrs["class"] = "form-control col-3"
 
-        self.fields["starting_date"].widget.attrs["class"] = "form-control"
+        self.fields["starting_date"].widget.attrs["class"] = "form-control col-3"
         # self.fields[
         #     "starting_date"
         # ].help_text = "Select starting date & time for your contest"
 
-        self.fields["ending_date"].widget.attrs["class"] = "form-control"
+        self.fields["ending_date"].widget.attrs["class"] = "form-control col-3"
         # self.fields[
         #     "ending_date"
         # ].help_text = "Select ending date & time for your contest"
-
-    def clean_cash_price(self):
-        cash_price = self.cleaned_data["cash_price"]
-        print("Cash :", cash_price)
-        if len(str(cash_price)) < 6:
-            return cash_price
-        else:
-            raise ValidationError(
-                "Ensure that there are no more than 5 digits in total."
-            )
+    #
+    # def clean_cash_price(self):
+    #     cash_price = self.cleaned_data["cash_price"]
+    #     print("Cash :", cash_price)
+    #     if len(str(cash_price)) < 6:
+    #         return cash_price
+    #     else:
+    #         raise ValidationError(
+    #             "Ensure that there are no more than 5 digits in total."
+    #         )

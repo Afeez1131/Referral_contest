@@ -2,17 +2,14 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("<shortcode>/", views.ReferralHomeView, name="business_owner_profile"),
-    path("<shortcode>/<contest_id>/", views.ContestDetail, name="contest_detail"),
+    path("<shortcode>/", views.business_owner_home, name="business_owner_profile"),
+    path("contest/<unique_id>/", views.contest_detail, name="contest_detail"),
     path(
-        "<shortcode>/<contest_id>/referral/all/",
-        views.ReferralList,
+        "<shortcode>/contest/<unique_id>/referral/all/",
+        views.referral_list,
         name="referral_list",
     ),
-    path(
-        "register/<shortcode>/<contest_id>/",
-        views.RegisterRefer,
-        name="referral_register",
+    path("register/<shortcode>/<unique_id>/", views.register_referral, name="referral_register",
     ),
     path(
         "<shortcode>/<contest_id>/referral/<ref_shortcode>/",

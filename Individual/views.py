@@ -53,7 +53,7 @@ def VoteReferral(request, shortcode, contest_id, ref_shortcode):
                     referral=referral,
                 )
 
-            except Exception as ObjectDoesNotExist:
+            except Guest.DoesNotExist:
                 guest_instance = form.save(commit=False)
                 guest_instance.business_owner = contest
                 guest_instance.referral = referral

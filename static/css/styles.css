@@ -1036,8 +1036,8 @@ display: none;}
 /***********************/
 .ex-header {
 	padding-top: 9rem;
-	padding-bottom: 5rem;
-	background-color: #fff2dc;
+	padding-bottom: 1rem;
+	/*background-color: none;*/
 }
 
 .ex-basic-1 .list-unstyled .fas {
