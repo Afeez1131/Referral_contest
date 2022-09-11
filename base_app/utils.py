@@ -15,3 +15,10 @@ def create_shortcode(instance, size=4):
         return create_shortcode(size=size)
     else:
         return new_code
+
+
+def slugify(word):
+    shortcode = word.lower().split(' ')
+    return '-'.join(shortcode)
+
+

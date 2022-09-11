@@ -7,12 +7,14 @@ from django.contrib.auth.models import (
 from django.core.validators import RegexValidator
 from autoslug import AutoSlugField
 from django.utils import timezone
+from base_app.utils import slugify
 from django.urls import reverse
+import uuid
 
 
 class CustomAccountManager(BaseUserManager):
     def create_superuser(
-        self, username, full_name, password, cash_price, **other_fields
+            self, username, full_name, password, cash_price, **other_fields
     ):
         other_fields.setdefault("is_staff", True)
         other_fields.setdefault("is_superuser", True)
@@ -50,19 +52,19 @@ class CustomAccountManager(BaseUserManager):
 class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(verbose_name="username", max_length=150, unique=True)
     business_name = models.CharField(
-        verbose_name="business name", max_length=150, unique=True
+        verbose_name="Business Name", max_length=150, unique=True
     )
     business_message = models.TextField(blank=True, null=True)
     phone_regex = RegexValidator(
         regex=r"^0\d{10}$",
-        message="Phone number should be in the format: 2348105506606",
+        message="Phone number should be in the format: 08105506606",
     )
     phone_number = models.CharField(
         max_length=11, validators=[phone_regex], unique=True
     )
     # cash_price = models.DecimalField(max_digits=5, decimal_places=0)
     full_name = models.CharField(max_length=150)
-    shortcode = AutoSlugField(populate_from="business_name")
+    shortcode = models.CharField(max_length=30, null=True, blank=True)
 
     # not visible in the form
     start_date = models.DateTimeField(default=timezone.now)
@@ -80,6 +82,11 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         ordering = ("-id",)
+
+    def save(self, *args, **kwargs):
+        shortcode = slugify(self.business_name)
+        self.shortcode = shortcode
+        return super(BusinessOwner, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("business_owner_profile", kwargs={"shortcode": self.shortcode})
@@ -102,6 +109,7 @@ class Contest(models.Model):
     starting_date = models.DateTimeField()
     ending_date = models.DateTimeField()
     duration = models.PositiveIntegerField(blank=True, null=True)
+    unique_id = models.CharField(max_length=30, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # self.ending_date = self.starting_date + timedelta(days=self.duration)
@@ -109,6 +117,12 @@ class Contest(models.Model):
             df = self.ending_date - self.starting_date
             seconds = df.total_seconds()
             self.duration = int(seconds / 3600)
+
+        unique_id = str(uuid.uuid4()).split('-')[0]
+        while Contest.objects.filter(unique_id=unique_id).exists():
+            print('ID: ', unique_id)
+            unique_id = str(uuid.uuid4()).split('-')[0]
+        self.unique_id = unique_id
         super(Contest, self).save(*args, **kwargs)
 
     def __str__(self):

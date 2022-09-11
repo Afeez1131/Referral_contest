@@ -1,58 +1,78 @@
 {% extends 'base_app/base.html' %}
+{% load static%}
+
 {% block content %}
-<!-- Header -->
-<header class="ex-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-10 offset-xl-1">
-                <h1 class="text-center">All Referral for {{ business }}<span></span></h1>
+    <!-- Header -->
+    <header class="ex-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 offset-xl-1">
+                    <h1 class="text-center">All Referral for {{ business }}<span></span></h1>
 
-            </div> <!-- end of col -->
-        </div> <!-- end of row -->
-    </div> <!-- end of container -->
-</header> <!-- end of ex-header -->
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </header> <!-- end of ex-header -->
 
 
 
-<div class="container mt-3">
-<div class="col-12 text-center mt-3">
-        <a href="{% url 'export_all_contact' business.shortcode contest.id %}" class="btn btn-solid-sm">
-          Export all Contact as VCF <i class="fas fa-address-card"></i>
-        </a><br>
-</div>
-    <div class="col-md-6 offset-md-3 mt-5">
-        {% if request.user.is_authenticated and request.user.username == business.username %}
-        {% if referral %}
-        <table class="table table-sm table-hover">
-            <thead class="text-center">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Referral</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Votes</th>
-                    <th scope="col">+ Vote</th>
-                </tr>
-            </thead>
-            {% for ref in referral %}
-            <tbody class="text-center">
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ ref.refer_name }}</td>
-                    <td>{{ ref.ref_shortcode }}</td>
-                    <td>{{ref.guest_referral.all.count}}</td>
-                    <td><a class="btn btn-sm btn-primary" href="{{ ref.get_absolute_url }}">Vote</a></td>
-                </tr>
-            </tbody>
-            {% endfor %}
-        </table>
-        {% else %}
-        <h2 class="text-center">No referral currently</h2><br>
+    <div class="container mt-5">
+        <div class="col-12 text-center mt-3">
+            <a href="{% url 'export_all_contact' business.shortcode contest.id %}" class="btn btn-solid-sm">
+                Export all Contact as VCF <i class="fas fa-address-card"></i>
+            </a><br>
+        </div>
+        <div class=" col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-sm-12 mt-5">
+            {% if request.user.is_authenticated and request.user.username == business.username %}
+                {% if referral %}
 
-            <p class="text-center"><a href="{% url 'referral_register' business.shortcode contest.id %}" class="btn
+                   <table class="table table-bordered table-hover">
+                        <thead class="bg-light">
+                            <tr>
+                                <th data-column-id="S/N">S/N</th>
+                                <th data-column-id="Referral">Referral Name</th>
+                                <th data-column-id="ID">Referral ID</th>
+                                <th data-column-id="Votes">Total Votes</th>
+                                <th data-column-id="Vote">+ Vote</th>
+                            </tr>
+                        </thead>
+                        {% for ref in referral %}
+                            <tbody>
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                      <img
+                                          src="https://dummyimage.com/640x360/fff/aaa"
+                                          alt=""
+                                          style="width: 45px; height: 45px"
+                                          class="rounded-circle"
+                                          />
+                                      <div class="ms-3">
+                                        <p class="fw-bold mb-1">{{ ref.refer_name|title }}</p>
+                                      </div>
+                                    </div>
+                                    </td>
+                                <td><p class="fw-normal mb-1">{{ ref.ref_shortcode }}</p></td>
+                                <td> <span class="btn btn-sm btn-success">{{ ref.guest_referral.all.count }} Vote{{ ref.guest_referral.all.count|pluralize }}</span></td>
+                                <td><a href="{{ ref.get_absolute_url }}"><button class="btn btn-sm btn-primary" >Vote <i class='fas fa-vote-yea'></i></button></a></td>
+                            </tr>
+                            </tbody>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <h2 class="text-center">No referral currently</h2><br>
+
+                    <p class="text-center"><a href="{% url 'referral_register' business.shortcode contest.id %}" class="btn
             btn-solid-sm">
-          Add a Referral</a></p>
-        {% endif %}
-        {% endif %}
+                        Add a Referral</a></p>
+                {% endif %}
+            {% endif %}
+        </div>
     </div>
-</div>
+
+    <script type="text/javascript">
+
+    </script>
+
 {% endblock %}

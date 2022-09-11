@@ -1,45 +1,42 @@
 # WHATSAPP REFERRAL CONTEST WEB APPLICATION
+#1. INTRODUCTION.
+According to [Statistica](https://www.statista.com/statistics/1176096/number-of-social-media-users-nigeria/), WhatsApp is the most popular platform used in Nigeria, with over 90 million users. Alot of small scale businesses are now capitalizing on this opportunity to increase their sales, since most of the people they want to sell to are now on this platform, but with a single problem, **CONTACTS**.
 
-There is a over 30 million active WhatsApp users, as a business owner, you will love to capitalize on that to make
-more sales and also get my business noticed.
+Business is a game of numbers, the higher the number of people seeing your adverts, the higher sale you are likely to make.
 
-### WHY YOU NEED A REFERRAL CONTEST.;
+One of the ways of generating massive contact list for the business owners is by using Referral marketing tactics. With a referral contest, you can use the power of social marketing to effectively grow your brand, promote a new product, engage your customers, and make more sales.
+
+
+#2. WHY BUSINESSES NEED REFERRAL CONTEST.
 1. Raise brand awareness
 2. Grow your contact list
-3. Attract more customers
+3. Attract more customers 
 4. Promote a new product or service
 5. Engage your existing audience with Viral WhatsApp referral Giveaways & Contests.
 
-### HOW IT WORKS
-1. Business Owner
-- A business Owner will signup for an account, where he will be requested to provide basic details needed to setup the contest.
-- After Signing up for an account, a slug will be generated for the Business Owner, Also a Broadcast Message to be sent on WhatsApp from the App will be auto generated.
-- After Login, Business Owner will be required to share the generated broadcast message on WhatsApp so as for people to be aware, and sign up to be a referral.
 
-2. Referral
-- Signing up to be a referral, a unique shortcode will be auto generated for the referral, which will be used by the referral to  invite people to vote for him.
-- Will be required to share a auto generated message on whatsapp or customize to fit his/her taste and then share for people to vote through.
+# 3. PROGRESS.
+After Launching the website in February, We have more than **20 business owners** who has created a contest using this applications. The application has successfully referred over **800 contacts** to different WhatsApp based SMEs from different states in Nigeria.
 
-3. Guest
-- This handle the votes.
-- A guest can vote for a referral by clicking on the referral URL.
-- On click, guest will be required to enter a name and phone number, and then vote.
-- Multiple vote his not allowed from a single device.
+#4. FUTURE PLANS.
+- Going global, the issue of SMEs taking their business to whatsApp is global, and them needing contacts is also a global issue, so there is future plan to take this global.
+- Integration with whatsApp Api to make the application much more robust.
+- Handling the disbursement of contest payment to the winners: right now, we are only hoping the business owners who create contest on our platforms will disburse rewards accordingly. In the future we plan on handling the disbursement of the payment to the winners directly.
+- Make the UI UX much more better.
 
 
-### TEHCNOLOGIES
+# TEHCNOLOGIES
 Project is created with 
 - Django 3.2 on the Backend
 - HTML, CSS, BOOTSTRAP and JS
 
-## LICENSE
+# LICENSE
 [![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)
 
-## OPERATING SYSTEM
-
+# OPERATING SYSTEM
 [![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg)
 
-## CONNECT WITH ME
+# CONNECT WITH ME
 > LinkedIn [@lawal-afeez](https://www.linkedin.com/in/lawal-afeez/)
-
+> 
 > Twitter [lawal_afeez1](https://twitter.com/lawal_afeez1)
