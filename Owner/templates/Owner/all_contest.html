@@ -1,0 +1,127 @@
+{% extends 'base_app/base.html' %}
+{% load tags %}
+{% block content %}
+    <style>
+        .pill {
+            border: none;
+            color: white;
+            padding: 1px 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            border-radius: 16px;
+        }
+
+
+
+        .success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .danger {
+            background-color: #dc3545;
+        }
+
+        .warning {
+            background-color: #ffc107;
+        }
+
+
+    </style>
+    <!-- Header -->
+    <header class="ex-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 offset-xl-1">
+                    {#                    <h1 class="text-center">All Contests for "{{ business }}"<span></span></h1>#}
+
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </header> <!-- end of ex-header -->
+
+
+    <div class=" col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-sm-12 mt-5">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">All Contests</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="bg-light">
+            <tr>
+                <th>S/N</th>
+                <th>Business Name</th>
+                <th>Cash Price</th>
+                <th>Status</th>
+                <th>Referrals</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if contests %}
+                {% for contest in contests %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img
+                                        src="https://dummyimage.com/640x360/fff/aaa"
+                                        alt=""
+                                        style="width: 45px; height: 45px"
+                                        class="rounded-circle"
+                                />
+                                <div class="ms-3">
+                                    <p class="fw-bold">{{ contest.business_owner }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td><p>&#8358; {{ contest.cash_price }}</p></td>
+                        <td>
+                            {% with contest|get_time as time %}
+                                <button class="pill {% if time == 'Active' %}success{% elif time == 'Ended' %}danger{% else %}warning{% endif %}">
+                                    <small>{{ time }}</small></button>
+                            {% endwith %}
+                        </td>
+                        <td><span
+                                {% with contest.referral_count as referral_count %}
+                                    class="btn btn-sm btn-success">
+                                        {{ referral_count }} Referral{{ referral_count|pluralize }}
+                                    </span>
+                                {% endwith %}
+                        </td>
+                        <td><a href="{% url 'contest_detail' contest.unique_id %}">
+                            <button class="btn btn-sm btn-primary">Visit</button>
+                        </a></td>
+
+                    </tr>
+
+
+                {% endfor %}
+            {% else %}
+               <tr rowspan="5">
+                        <th scope="row">No contest at the moment</th>
+                   <td><a href="{% url 'business_new_contest' %}"<button class="btn btn-primary">Start a New Contest</button></a></td>
+               </tr>
+
+
+            {% endif %}
+
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+      $(function() {
+        $('#datetimepicker1').datetimepicker({
+          language: 'pt-BR'
+        });
+      });
+</script>
+{% endblock %}

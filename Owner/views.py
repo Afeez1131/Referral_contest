@@ -70,8 +70,8 @@ def contest_detail(request, unique_id):
     business = BusinessOwner.objects.get(shortcode=request.user.shortcode)
     contest = get_object_or_404(Contest, business_owner=business, unique_id=unique_id)
     signup_url = request.build_absolute_uri(reverse("referral_register", args=(business.shortcode, contest.unique_id)))
-    share_message = f"Stand a chance of winning a cash/product price of #{contest.cash_price}" \
-                    f"just by referring people to {business.business_name}. Get started here: {signup_url}"
+    share_message = f"Stand a chance of winning a cash/product price of # {contest.cash_price}" \
+                    f" just by referring people to {business.business_name}. Get started here: {signup_url}"
 
     if request.method == "POST":
         link = "https://wa.me/?text=" + urllib.parse.quote(share_message)
