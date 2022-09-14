@@ -40,13 +40,7 @@ Technologies Used include;
 - Django
 - HTML, CSS, BOOTSTRAP and JS
 
-# LICENSE
-[![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)
 
-# OPERATING SYSTEM
-[![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg)
-
-# CONNECT WITH ME
+# CONNECT WITH ME TO COLLABORATE
 > LinkedIn [@lawal-afeez](https://www.linkedin.com/in/lawal-afeez/)
 > 
-> Twitter [lawal_afeez1](https://twitter.com/lawal_afeez1)
