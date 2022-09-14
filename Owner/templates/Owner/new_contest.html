@@ -1,0 +1,87 @@
+{% extends 'base_app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <!-- Header -->
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 class="text-center">Create New Contest for {{ business }}<span></span></h1>
+{#                <input type="hidden" id="business_name" value="{{ business }}">#}
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+    <div class="container mt-3">
+        <div class="col-md-6 offset-md-3 mt-5">
+                {% if messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                    <b>{{ message }}</b>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+            <form class="signup p-4 p-md-6 border rounded-3 bg-light" id="contest_form" method="post">
+                        {% csrf_token %}
+                        <div class="form-floating mb-3">
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    {{ field | as_crispy_field }}
+                                </div>
+                            {% endfor %}
+                            {% if redirect_field_value %}
+                                <input type="hidden" name="{{ redirect_field_name }}"
+                                       value="{{ redirect_field_value }}"/>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3  text-center">
+                            <button class="btn btn-success" type="button"
+                            onClick="confirmSubmit('{{ business.business_name }}');">Create Contest</button>
+                        </div>
+                        <hr class="my-4">
+                        <small class="text-muted">- Enter the Cash Price Amount.
+                        <br>- Select a Starting Date and Time.
+                        <br>- Select a Ending Date and Time.</small>
+                        <small class='text-small'></small>
+                        {#                              <a href="{% url 'account_reset_password' %}">Forgot Password? </a>#}
+
+
+                    </form>
+        </div>
+    </div>
+
+    <script src="{% static 'js/sweetalert/dist/sweetalert.min.js' %}"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(".alert").fadeTo(2000, 1000).slideUp(1000, function () {
+                $(".alert").slideUp(1000);
+            });
+
+         function confirmSubmit(name) {
+             let price = document.getElementById('id_cash_price').value;
+             console.log(price, name);
+
+            swal({
+                title: "Are you sure?",
+                text: `You want to create a New Contest for ${name.toUpperCase()} with Cash Price of #${price}?`,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                footer: "Why do I have this issue?",
+                confirmButtonText: "Yes, proceed!",
+                closeOnConfirm: true
+            }, function () {
+                $('#contest_form').submit();
+            })
+        }
+    </script>
+    {% block script %}
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js" integrity="sha512-k6/Bkb8Fxf/c1Tkyl39yJwcOZ1P4cRrJu77p83zJjN2Z55prbFHxPs9vN7q3l3+tSMGPDdoH51AEU8Vgo1cgAA==" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" integrity="sha512-3JRrEUwaCkFUBLK1N8HehwQgu8e23jTH4np5NHOmQOobuC4ROQxFwFgBLTnhcnQRMs84muMh0PnnwXlPq5MGjg==" crossorigin="anonymous" />
+        {% endblock %}
+{% endblock %}
