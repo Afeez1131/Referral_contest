@@ -19,7 +19,7 @@ One of the ways of generating massive contact list for the business owners is by
 After Launching the website in February, We have more than **20 business owners** who has created a contest using this applications. The application has successfully referred over **800 contacts** to different WhatsApp based SMEs from different states in Nigeria.
 
 # 4. HOW IT WORKS
-**The applications work in **5** simple steps**
+**The applications work in 5 simple steps**
 1. Business Owner create an account on the application.
 2. Start a contest by entering the amount to be awarded to the person with the highest number of refers, select the starting date and time as well as the ending date and time.
 3. The business owner will now share a pre-generated message to his/her contact to make them aware of the contest.
