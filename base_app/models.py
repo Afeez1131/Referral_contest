@@ -4,9 +4,8 @@ from django.urls import reverse
 from autoslug import AutoSlugField
 from .utils import create_shortcode
 from auth_app.models import Contest
-
-# from auth_app.models import BusinessOwner
-from django.conf import settings
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
 
 
 class Referral(models.Model):
@@ -24,7 +23,7 @@ class Referral(models.Model):
     )
     phone_number = models.CharField(validators=[phoneNumberRegex], max_length=11)
     ref_shortcode = models.CharField(max_length=15, blank=True, unique=True)
-    guest_count = models.PositiveIntegerField(blank=True, null=True)
+    guest_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.ref_shortcode
@@ -36,7 +35,6 @@ class Referral(models.Model):
     def save(self, *args, **kwargs):
         if not self.guest_count:
             self.guest_count = self.guest_referral.count()
-        # self.refer_message = str(self.refer_message) + " " + self.get_absolute_url()
         if not self.ref_shortcode:
             self.ref_shortcode = create_shortcode(self)
         super(Referral, self).save(*args, **kwargs)
@@ -47,9 +45,18 @@ class Referral(models.Model):
             kwargs={
                 "shortcode": self.business_owner.business_owner.shortcode,
                 "ref_shortcode": self.ref_shortcode,
-                "contest_id": self.business_owner.id,
+                "unique_id": self.business_owner.unique_id,
             },
         )
+
+
+# @receiver(post_save, sender=Referral)
+# def update_referral_count(sender, created, instance, **kwargs):
+#     if created:
+#         print('Before: ', instance.business_owner.referral_count)
+#         instance.business_owner.referral_count += 1
+#         instance.business_owner.save()
+#         print('After: ', instance.business_owner.referral_count)
 
 
 class Guest(models.Model):
@@ -82,3 +89,13 @@ class Guest(models.Model):
 
     class Meta:
         ordering = ("-id",)
+
+
+# @receiver(post_save, sender=Guest)
+# def update_guest_count(sender, created, instance, **kwargs):
+#     if created:
+#         print('Before guest_count: ', instance.referral.guest_count)
+#         instance.referral.guest_count += 1
+#         instance.referral.save()
+#         print('After: guest_count ', instance.referral.guest_count)
+

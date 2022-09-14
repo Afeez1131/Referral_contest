@@ -1,7 +1,16 @@
 {% extends 'base_app/base.html' %}
-{% load static%}
+{% load static %}
+{% load tags %}
+<style>
+    .modal-width {
+        width: 30%;
+    }
+</style>
 
 {% block content %}
+{#    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"/>#}
+
+
     <!-- Header -->
     <header class="ex-header">
         <div class="container">
@@ -14,65 +23,148 @@
         </div> <!-- end of container -->
     </header> <!-- end of ex-header -->
 
-
+<div id="example-table"></div>
 
     <div class="container mt-5">
-        <div class="col-12 text-center mt-3">
-            <a href="{% url 'export_all_contact' business.shortcode contest.id %}" class="btn btn-solid-sm">
-                Export all Contact as VCF <i class="fas fa-address-card"></i>
-            </a><br>
-        </div>
+        {% if request.user.is_authenticated and request.user.username == business.username and referral.count > 0 %}
+            <div class="col-12 text-center mt-3">
+                <a href="{% url 'export_all_contact' business.shortcode contest.id %}" class="btn btn-solid-sm">
+                    Export all Contact as VCF <i class="fas fa-address-card"></i>
+                </a><br>
+            </div>
+        {% endif %}
         <div class=" col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-sm-12 mt-5">
-            {% if request.user.is_authenticated and request.user.username == business.username %}
-                {% if referral %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissible fade show" id='message-alert' role="alert">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-                   <table class="table table-bordered table-hover">
-                        <thead class="bg-light">
-                            <tr>
-                                <th data-column-id="S/N">S/N</th>
-                                <th data-column-id="Referral">Referral Name</th>
-                                <th data-column-id="ID">Referral ID</th>
-                                <th data-column-id="Votes">Total Votes</th>
-                                <th data-column-id="Vote">+ Vote</th>
-                            </tr>
-                        </thead>
-                        {% for ref in referral %}
-                            <tbody>
-                            <tr>
-                                <th scope="row">{{ forloop.counter }}</th>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                      <img
-                                          src="https://dummyimage.com/640x360/fff/aaa"
-                                          alt=""
-                                          style="width: 45px; height: 45px"
-                                          class="rounded-circle"
-                                          />
-                                      <div class="ms-3">
-                                        <p class="fw-bold mb-1">{{ ref.refer_name|title }}</p>
-                                      </div>
-                                    </div>
-                                    </td>
-                                <td><p class="fw-normal mb-1">{{ ref.ref_shortcode }}</p></td>
-                                <td> <span class="btn btn-sm btn-success">{{ ref.guest_referral.all.count }} Vote{{ ref.guest_referral.all.count|pluralize }}</span></td>
-                                <td><a href="{{ ref.get_absolute_url }}"><button class="btn btn-sm btn-primary" >Vote <i class='fas fa-vote-yea'></i></button></a></td>
-                            </tr>
-                            </tbody>
-                        {% endfor %}
-                    </table>
-                {% else %}
-                    <h2 class="text-center">No referral currently</h2><br>
+            {% if messages %}
+                <div class="alert alert-danger alert-dismissible fade show" id='message-alert' role="alert">
+                    {% for message in messages %}
+                        <b>{{ message }}</b>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if referral %}
+{#                <input type="text" id="search" name="searchFilter" placeholder="Search..." style="width:200px;"/>#}
 
-                    <p class="text-center"><a href="{% url 'referral_register' business.shortcode contest.id %}" class="btn
+                <table id="table" class="display table table-bordered table-hover">
+                    <thead class="bg-light">
+                    <tr>
+                        <th>S/N</th>
+                        <th>Referral Name</th>
+                        <th>Referral ID</th>
+                        <th>Total Votes</th>
+                        <th>+ Vote</th>
+                    </tr>
+                    </thead>
+                    {% for ref in referral %}
+                        <tbody>
+                        <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img
+                                        src="https://dummyimage.com/640x360/fff/aaa"
+                                        alt=""
+                                        style="width: 45px; height: 45px"
+                                        class="rounded-circle"
+                                />
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">{{ ref.refer_name|title }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td><p class="fw-normal mb-1">{{ ref.ref_shortcode }}</p></td>
+                        <td><span
+                                class="btn btn-sm btn-success">{{ ref.guest_referral.all.count }}
+                            Vote{{ ref.guest_referral.all.count|pluralize }}</span>
+                        </td>
+{#                        </a>#}
+                        <td>
+                            <a href="{{ ref.get_absolute_url }}">
+                                <button class="btn btn-sm btn-primary">Vote <i
+                                        class='fas fa-vote-yea'></i></button>
+                            </a>
+                        </td>
+
+                        </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <h2 class="text-center">No referral currently</h2><br>
+
+                <p class="text-center"><a href="{% url 'referral_register' business.shortcode contest.unique_id %}"
+                                          class="btn
             btn-solid-sm">
-                        Add a Referral</a></p>
-                {% endif %}
+                    Add a Referral</a></p>
             {% endif %}
         </div>
     </div>
 
+    {#    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">#}
+    {#  Launch demo modal#}
+    {#</button>#}
+
+    <div class="modal fade modal-width" id="exampleModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" id="vote_form">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            {#          <span aria-hidden="true">&times;</span>#}
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form.as_p }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
     <script type="text/javascript">
 
-    </script>
+        function setModalValues(name) {
+            let modalTitle = document.getElementById('modalTitle');
+            modalTitle.innerHTML = `Vote for ${name}`;
+        }
 
-{% endblock %}
+        $(".alert").fadeTo(2000, 500).slideUp(1000, function () {
+            $(".alert").slideUp(1000);
+        });
+
+        function confirmSubmit() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }, function () {
+                {#$('#student-id').val(pk);#}
+                $('#vote_form').submit();
+            })
+        }
+
+
+    </script>
+{#{% endblock %}#}
+

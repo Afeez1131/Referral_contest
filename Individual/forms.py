@@ -17,11 +17,11 @@ class GuestRegisterForm(forms.ModelForm):
         self.fields["guest_name"].label = ""
         self.fields["guest_name"].widget.attrs = {
             "class": "form-control",
-            "placeholder": "Enter guest name...",
+            "placeholder": "Your name",
         }
 
         self.fields["phone_number"].label = ""
         self.fields["phone_number"].widget.attrs = {
             "class": "form-control",
-            "placeholder": "Enter phone number...",
+            "placeholder": "WhatsApp number...",
         }

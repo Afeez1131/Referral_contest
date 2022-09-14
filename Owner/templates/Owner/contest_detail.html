@@ -1,90 +1,114 @@
 {% extends 'base_app/base.html' %}
-{#End of the form errors and message alert #}
-{#{% if request.user.username == business.username %}#}
+{% load humanize %}
 {% block content %}
-<!-- Header -->
-<header class="ex-header">
-    <div class="container">
+    <!-- Header -->
+    <header class="ex-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 offset-xl-1">
+                    <h1 class="text-center">Contest HomePage<span></span></h1>
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </header> <!-- end of ex-header -->
+
+    <div class=" col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-sm-12 mt-5">
+     {% if messages %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+            <b>{{ message }}</b>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
         <div class="row">
-            <div class="col-xl-10 offset-xl-1">
-                <h1 class="text-center">Contest HomePage<span></span></h1>
-            </div> <!-- end of col -->
-        </div> <!-- end of row -->
-    </div> <!-- end of container -->
-</header> <!-- end of ex-header -->
+            <div class="col">
+                <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'business_all_contest' %}">All Contest</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Contest</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <section style="background-color: #eee;">
+            <div class="container py-5">
+                <div class="row">
+                    <div class="col">
 
-<div class="container rounded bg-white mt-5 mb-5">
-  <div class="row">
-    <div class="col-md-6 offset-md-3">
+                    </div>
+                </div>
 
-      <table class="table table-sm">
-        <tbody>
-          <tr>
-            <th scope="row">Business Name</th>
-            <td>{{ business.business_name }}</td>
-          </tr>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <p class="mb-0">Starting Date and Time</p>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <p class="text-muted mb-0">{{ contest.starting_date }}</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <p class="mb-0">Ending Date and Time</p>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <p class="text-muted mb-0">{{ contest.ending_date }}</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <p class="mb-0">Cash Price</p>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <p class="text-muted mb-0">&#8358; {{ contest.cash_price|intcomma:2 }}</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <p class="mb-0">Contest Duration</p>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <p class="text-muted mb-0">{{ contest.duration }} Hours</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <p class="mb-0">Referrals</p>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <a class="w-30 btn btn-sm btn-solid-sm"
+                                           href="{% url 'referral_list' business.shortcode contest.unique_id %}">View
+                                            Contest Stats.</a>
+                                    </div>
+                                </div>
+                                <br>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <textarea class="form-control" id="exampleFormControlTextarea1"
+                                                  rows="3">{{ share_message }}</textarea>
+                                        <div class="mt-2 mb-3 text-center">
+                                            <input class="btn btn-primary profile-button" type="submit"
+                                                   value="Share on WhatsApp">
+                                        </div>
+                                    </div>
 
-          <tr>
-            <th scope="row">Full Name</th>
-            <td>{{ business.full_name }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Username</th>
-            <td>{{ business.username }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Phone Number</th>
-            <td>{{ business.phone_number }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Referral Count</th>
-            <td>{{ contest.referral_contest.all.count }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Shortcode</th>
-            <td>{{ business.shortcode }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Cash Price</th>
-            <td>#{{ contest.cash_price }}</td>
-          </tr>
-        <tr>
-            <th scope="row">Starting Date</th>
-            <td>{{ contest.starting_date }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Ending Date</th>
-            <td>{{ contest.ending_date }}</td>
-          </tr>
-          <tr>
-              <th scope="row">Contest Duration</th>
-              <td>{{ contest.duration }} hours</td>
-                    </tr>
-        <tr>
-            <th scope="row">All Referral</th>
-            <td> <a class="btn btn-sm btn-solid-sm"
-                href="{% url 'referral_list' business.shortcode contest.unique_id %}">Referrals</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-    <div class="col-md-6 offset-md-3 mt-1">
+                                </form>
+                            </div>
+                        </div>
 
-    <form method="post">
-      {% csrf_token %}
-      <div class="form-group">
-                <label for="exampleFormControlTextarea1">Message </label>
-                <textarea class="form-control" id="exampleFormControlTextarea1"
-                    rows="3">{{ share_message }} {{ signup_url }}</textarea>
-                <div class="mt-2 mb-3 text-center">
-                    <input class="btn btn-primary profile-button " type="submit" value="Share on WhatsApp">
+                    </div>
                 </div>
             </div>
-
-    </form>
-
-  </div>
-</div>
+        </section>
+    </div>
 {% endblock %}

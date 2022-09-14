@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from .models import Contest
+from base_app.models import Contest
 
 from django.contrib.auth.admin import UserAdmin
 
@@ -34,5 +34,9 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
+class ContestAdmin(admin.ModelAdmin):
+    list_display = ['business_owner', 'cash_price', 'duration', 'referral_count']
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Contest)
+admin.site.register(Contest, ContestAdmin)

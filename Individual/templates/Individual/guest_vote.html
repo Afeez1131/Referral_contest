@@ -1,80 +1,95 @@
 {% extends 'base_app/base.html' %}
-
+{% load static %}
+{% load crispy_forms_tags %}
 {% block content %}
-<!-- Header -->
-<header class="ex-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-10 offset-xl-1">
-                <h1 class="text-center">Vote for Referral "{{referral.refer_name}}"<span></span></h1>
-            </div> <!-- end of col -->
-        </div> <!-- end of row -->
-    </div> <!-- end of container -->
-</header> <!-- end of ex-header -->
-<div class="container mt-3">
-<div class="col-md-6 offset-md-3 mt-3">
+    <!-- Header -->
+    <header class="ex-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 offset-xl-1">
+                    <h1 class="text-center">Vote for Referral "{{ referral.refer_name }}"<span></span></h1>
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </header> <!-- end of ex-header -->
+
     {#        {% include 'Individual/guest_profile.html' %}#}
-    {% if messages %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {% for message in messages %}
-        <strong>Error!</strong> {{ message }}
-        {% endfor %}
-        <hr>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endif %}
 
-    <div class="container">
-        <div class="border-right mt-5">
-            <h2 class='text-center'>Vote</h2>
-            {% if form.non_field_errors %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {% for error in form.non_field_errors %}
-                <b>{{ error }}</b>
-                {% endfor %}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+    <div class="container col-xl-8 offset-xl-2 col-md-8 col-xs-12 offset-md-2 mb-1">
+        <div class="row align-items-center">
+            <div class="col-md-10 offset-md-1 mx-auto col-lg-6 offset-lg-3">
+
+                <div class="text-box mt-3 mb-5">
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" id='message-alert' role="alert">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if messages %}
+                        <div class="alert alert-danger alert-dismissible fade show" id='message-alert' role="alert">
+                            {% for message in messages %}
+                                <b>{{ message }}</b>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <form class="signup p-4 p-md-6 border rounded-3 bg-light" id="vote_form" method="post">
+                        {% csrf_token %}
+                        <div class="form-floating mb-3">
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    {{ field | as_crispy_field }}
+                                </div>
+                            {% endfor %}
+                            {% if redirect_field_value %}
+                                <input type="hidden" name="{{ redirect_field_name }}"
+                                       value="{{ redirect_field_value }}"/>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3  text-center">
+                            <button class="btn btn-success" type="button"
+                                    onclick="confirmSubmit('{{ referral.refer_name }};');">Vote <i
+                                    class='fas fa-vote-yea'></i>
+                            </button>
+                            <a href="{% url 'referral_list' business.shortcode contest.unique_id %}">
+                                <button class="btn btn-secondary" type="button">LeaderBoard
+                                    <i class='fas fa-award'></i> </button>
+                            </a>
+                        </div>
+                        <hr class="my-4">
+                        <small class="text-muted">- Enter your name and WhatsApp Number.</small>
+                        <small class='text-small'></small>
+                        {#                              <a href="{% url 'account_reset_password' %}">Forgot Password? </a>#}
+
+
+                    </form>
+                </div>
             </div>
-            {% endif %}
-
-            {% if form.phone_number.errors %}
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                {% for error in form.phone_number.errors %}
-
-                <strong>Phone Number Error!</strong> {{ error }}
-                <hr>
-                {% endfor %}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {% endif %}
-
-         {% if form.ip.errors %}
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                {% for error in form.ip.errors %}
-
-                <strong>Error!</strong> {{ error }}
-                <hr>
-                {% endfor %}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {% endif %}
-            <form method="POST">
-                {% csrf_token %}
-                <p>{{form.guest_name}}</p>
-                <p>{{form.phone_number}}</p>
-{#                    {{ form.as_p }}#}
-                <div class="mt-2 text-center">
-                    <input class="btn btn-primary profile-button " type="submit" value="Vote"></div>
-            </form>
         </div>
-        <hr>
-        {% if referral.guest_referral %}
-        <h2 class="text-center mt-5 mb-3">Total Votes</h2>
-        <h1 class='text-center'>
-            {{referral.guest_referral.all.count}} Vote{{referral.guest_referral.all.count|pluralize}}
-        </h1>
-        {% endif %}
-{#        {% include 'Individual/guest_list.html' %}#}
     </div>
-</div>
-</div>
+    <script src="{% static 'js/sweetalert/dist/sweetalert.min.js' %}"></script>
+
+    <script type="text/javascript">
+        function confirmSubmit(name) {
+            swal({
+                title: "Are you sure?",
+                text: `You want to vote for Referral ${name.toUpperCase()}?`,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                footer: "Why do I have this issue?",
+                confirmButtonText: "Yes, proceed!",
+                closeOnConfirm: true
+            }, function () {
+                $('#vote_form').submit();
+            })
+        }
+
+        $(".alert").fadeTo(2000, 500).slideUp(1000, function () {
+            $(".alert").slideUp(1000);
+        });
+    </script>
 {% endblock %}

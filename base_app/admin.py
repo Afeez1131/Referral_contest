@@ -12,6 +12,7 @@ class AdminRefer(admin.TabularInline):
 
 class AdminGuest(admin.ModelAdmin):
     list_display = ["referral", "business_owner", "guest_name", "ip"]
+    list_filter = ['business_owner', 'guest_name']
 
 
 class GuestAdmin(admin.TabularInline):
@@ -28,6 +29,8 @@ class ReferAdmin(admin.ModelAdmin):
         "business_owner",
         "guest_count",
     ]
+    list_filter = ['business_owner']
+    search_fields = ['refer_name', 'phone_number']
     # inlines = [GuestAdmin]
 
 

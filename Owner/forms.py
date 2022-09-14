@@ -1,6 +1,7 @@
 from django import forms
 from base_app.models import Referral
-from auth_app.models import BusinessOwner, Contest
+from auth_app.models import BusinessOwner
+from base_app.models import Contest
 from django.core.validators import RegexValidator
 from django.forms import ValidationError
 from tempus_dominus.widgets import DateTimePicker

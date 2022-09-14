@@ -46,8 +46,8 @@
                                 </div>
                             {% endfor %}
                             {% if redirect_field_value %}
-                                <input type="hidden" name="{{ redirect_field_name }}"
-                                       value="{{ redirect_field_value }}"/>
+                                <input type="hidden" name="next"
+                                       value="{{ request.GET.next }}"/>
                             {% endif %}
                         </div>
                      <div class="mb-3  text-center">
