@@ -41,6 +41,6 @@ Technologies Used include;
 - HTML, CSS, BOOTSTRAP and JS
 
 
-# CONNECT WITH ME TO COLLABORATE
+# CONNECT WITH ME.
 > LinkedIn [@lawal-afeez](https://www.linkedin.com/in/lawal-afeez/)
 > 
