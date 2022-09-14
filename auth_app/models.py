@@ -84,12 +84,13 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
         ordering = ("-id",)
 
     def save(self, *args, **kwargs):
-        shortcode = slugify(self.business_name)
-        self.shortcode = shortcode
+        if not self.shortcode:
+            shortcode = slugify(self.business_name)
+            self.shortcode = shortcode
         return super(BusinessOwner, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse("business_owner_profile", kwargs={"shortcode": self.shortcode})
+        return reverse("business_owner_profile")
 
     def get_referral_list(self):
         return reverse("referral_list", kwargs={"shortcode": self.shortcode})
@@ -103,13 +104,14 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
 
 class Contest(models.Model):
     business_owner = models.ForeignKey(
-        BusinessOwner, on_delete=models.CASCADE, related_name="contest_owner"
+        BusinessOwner, on_delete=models.CASCADE, related_name="contests"
     )
     cash_price = models.DecimalField(max_digits=5, decimal_places=0)
     starting_date = models.DateTimeField()
     ending_date = models.DateTimeField()
     duration = models.PositiveIntegerField(blank=True, null=True)
     unique_id = models.CharField(max_length=30, null=True, blank=True)
+    referral_count = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs):
         # self.ending_date = self.starting_date + timedelta(days=self.duration)
@@ -118,11 +120,12 @@ class Contest(models.Model):
             seconds = df.total_seconds()
             self.duration = int(seconds / 3600)
 
-        unique_id = str(uuid.uuid4()).split('-')[0]
-        while Contest.objects.filter(unique_id=unique_id).exists():
-            print('ID: ', unique_id)
+        if not self.unique_id:
             unique_id = str(uuid.uuid4()).split('-')[0]
-        self.unique_id = unique_id
+            while Contest.objects.filter(unique_id=unique_id).exists():
+                print('ID: ', unique_id)
+                unique_id = str(uuid.uuid4()).split('-')[0]
+            self.unique_id = unique_id
         super(Contest, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -133,3 +136,11 @@ class Contest(models.Model):
 
     def get_absolute_url(self):
         return reverse("contest_detail", args=[str(self.id)])
+
+    def contest_time(self):
+        return (timezone.now() >= self.starting_date) and (self.ending_date > timezone.now())
+
+    def past_contest_time(self):
+        return timezone.now() > self.ending_date
+
+

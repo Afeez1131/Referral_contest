@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
-from auth_app.models import BusinessOwner, Contest
+from auth_app.models import BusinessOwner
+from base_app.models import Contest
 from allauth.account.forms import LoginForm
 from django import forms
 from django.forms import ValidationError

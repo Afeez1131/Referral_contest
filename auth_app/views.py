@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
@@ -32,9 +32,11 @@ def register_view(request):
 
 
 def login_user(request):
+
     if request.user.is_authenticated:
-        return redirect("business_owner_profile", request.user.shortcode)
+        return redirect("business_owner_profile")
     else:
+        next = request.GET.get('next', False)
         if request.method == "POST":
             form = CustomLoginForm(request.POST)
             login_field = request.POST["login"]
@@ -47,7 +49,11 @@ def login_user(request):
                         Q(username=login_field) | Q(phone_number=login_field)
                     )
                     login(request, user)
-                    return redirect("business_owner_profile", business.shortcode)
+                    # print(HttpResponseRedirect(next))
+                    if next:
+                        return HttpResponseRedirect(next)
+
+                    return redirect("business_owner_profile")
         else:
             form = CustomLoginForm()
         return render(request, "account/login.html", {"form": form})

@@ -1,155 +1,56 @@
-{#End of the form errors and message alert #}
-{#{% if request.user.username == business.username %}#}
-
 <div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
+    <div class="row mt-3">
+        <div class="col-md-6 offset-md-3">
 
-        <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-header text-center">
-                    <strong>Profile</strong>
-                </div>
-                <div class="card-body">
-                    <table class="table table-sm">
-                        <tbody>
-                        <tr>
-                            <th scope="row">Business Name</th>
-                            <td>{{ business.business_name }}</td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">Full Name</th>
-                            <td>{{ business.full_name }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Username</th>
-                            <td>{{ business.username }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Phone Number</th>
-                            <td>{{ business.phone_number }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Shortcode</th>
-                            <td>{{ business.shortcode }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-8 offset-md-2 mt-1">
-            {% if contests %}
-                <h3 class="text-center">All Contests.</h3>
-                <table class="table table-sm table-bordered">
-                    <thead class="text-center">
+            <table class="table table-sm table-hover ">
+                <tbody>
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Owner</th>
-                        <th scope="col">Cash Price</th>
-                        <th scope="col">Duration</th>
-                        <th scope="col">#</th>
+                        <th scope="row">Business Name</th>
+                        <td>{{ business.business_name }}</td>
                     </tr>
-                    </thead>
-                    {% for contest in contests %}
+                    <tr>
+                    <tr>
+                        <th scope="row">Referral Name</th>
+                        <td>{{ referral.refer_name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Phone Number</th>
+                        <td>{{ referral.phone_number }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Vote Count</th>
+                        <td>{{ referral.guest_referral.all.count }}
+                            Vote{{ referral.guest_referral.all.count|pluralize }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Referral ID</th>
+                        <td>{{ referral.ref_shortcode }}</td>
+                    </tr>
+{#                    {{ referral.get_absolute_url }}#}
+                </tbody>
+            </table>
 
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ contest.business_owner }}</td>
-                            <td>{{ contest.cash_price }}</td>
-                            <td>{{ contest.duration }} hours</td>
-                            <td><a href="{% url 'contest_detail' contest.unique_id %}"> Visit</a></td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            {% endif %}
-
-            <hr>
-
-            <div class="card">
-                <div class="card-header text-center">
-                    <small style="font-weight: bold;">Create a New Contest</small>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% if form.non_field_errors %}
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {% for error in form.non_field_errors %}
-                                    <b>{{ error }}</b>
-                                {% endfor %}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            </div>
-                        {% endif %}
-
-                        {% if form.duration.errors %}
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {% for error in form.duration.errors %}
-                                    <b>Phone Number Error! {{ error }}</b>
-                                {% endfor %}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            </div>
-                        {% endif %}
-                        {% if form.cash_price.errors %}
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {% for error in form.cash_price.errors %}
-                                    <b>Cash Price Error! {{ error }}</b>
-                                {% endfor %}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            </div>
-                        {% endif %}
-                        {% if form.starting_date.errors %}
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {% for error in form.starting_date.errors %}
-                                    <b>Starting Date Error! {{ error }}</b>
-                                {% endfor %}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            </div>
-                        {% endif %}
-
-                        {% if form.ending_date.errors %}
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {% for error in form.ending_date.errors %}
-                                    <b>Ending Date Error! {{ error }}</b>
-                                {% endfor %}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            </div>
-                        {% endif %}
-
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            {{ form.cash_price }}
-                            <small class="form-text text-muted">How much do you plan on spending on the
-                                contest.</small>
-
-                        </div>
-                        <div class="mb-3">
-                            {{ form.starting_date }}
-                            {#            <label for="floatingInput2">Starting Date & Time of the Contest</label>#}
-                            <small id="floatingInput" class="form-text text-muted">Select the starting date and time
-                                for the
-                                contest</small>
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form.ending_date }}
-                            {#            <label for="floatingInput2">Ending Date & Time of the Contest</label>#}
-                            <small id="floatingInput" class="form-text text-muted">select the ending date and time
-                                for the
-                                contest</small>
-                        </div>
-                        <div class="mb-3 text-center">
-                            <input class="btn btn-primary btn-md profile-button " type="submit"
-                                   value="Create Contest">
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
+
+
+
+
+    <div class="col-md-6 offset-md-3 mt-1">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Message </label>
+                <textarea class="form-control" id="exampleFormControlTextarea1"
+                    rows="3">{{ referral_message }}{{ vote_url }} </textarea>
+                <div class="mt-2 mb-3 text-center">
+                    <small id="floatingInput" class="form-text text-muted">Share on your status and with friends by clicking on the SHARE button below.</small>
+
+                    <input class="btn btn-primary profile-button " type="submit" value="Share on WhatsApp">
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+{% endblock %}
