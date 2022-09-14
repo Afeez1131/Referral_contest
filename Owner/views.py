@@ -30,7 +30,6 @@ def business_owner_home(request):
             contest = form.save(commit=False)
             contest.business_owner = business
             contest.save()
-            # form.save()
             return HttpResponseRedirect(reverse("contest_detail", args=[contest.unique_id]))
 
     return render(request, "Owner/referral_homepage.html",
