@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret
 SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "whatsapp-contest.herokuapp.com"]
 
@@ -42,12 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    # personal
     "base_app",
     "Owner",
     "Individual",
     # authentications
     "allauth",
     "allauth.account",
+    # third parties
     "crispy_forms",
     "tempus_dominus",
     'rest_framework',
@@ -196,7 +198,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = "DENY"
-# SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 3600
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True  # new
@@ -206,7 +208,6 @@ CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")  # new
 # SECURE_HSTS_SECONDS = 31536000
 django_heroku.settings(locals())
-
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 # TooManyFieldsSent at /admin/base_app/referral/98/change/
