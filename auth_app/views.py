@@ -21,7 +21,10 @@ def register_view(request):
             print(request.POST)
             form = UserRegistrationForm(request.POST)
             if form.is_valid():
-                form.save()
+                f = form.save(commit=False)
+                password = form.cleaned_data.get('password')
+                f.set_password(password)
+                f.save()
                 messages.success(request, "Registration Successfull, Login Below")
                 return redirect("account_login")
 

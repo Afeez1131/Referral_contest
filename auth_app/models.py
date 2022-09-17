@@ -137,10 +137,21 @@ class Contest(models.Model):
     def get_absolute_url(self):
         return reverse("contest_detail", args=[str(self.id)])
 
+    @property
     def contest_time(self):
         return (timezone.now() >= self.starting_date) and (self.ending_date > timezone.now())
 
+    @property
     def past_contest_time(self):
         return timezone.now() > self.ending_date
+
+    @property
+    def owner_name(self):
+        return self.business_owner.business_name
+
+    @property
+    def owner_user(self):
+        return self.business_owner.username
+
 
 
