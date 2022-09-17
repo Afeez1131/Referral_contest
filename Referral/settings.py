@@ -42,12 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    # personal
     "base_app",
     "Owner",
     "Individual",
     # authentications
     "allauth",
     "allauth.account",
+    # third parties
     "crispy_forms",
     "tempus_dominus",
     'rest_framework',
@@ -206,7 +208,6 @@ CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")  # new
 # SECURE_HSTS_SECONDS = 31536000
 django_heroku.settings(locals())
-
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 # TooManyFieldsSent at /admin/base_app/referral/98/change/
