@@ -7,3 +7,5 @@ db.sqlite3
 Analytic
 _migrations/*
 !_migrations/__init__.py
+backup.dump
+appname.dump
