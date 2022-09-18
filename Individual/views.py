@@ -23,9 +23,9 @@ from django.db.models import Q
 from django.utils import timezone
 
 
-def guest_vote_referral(request, shortcode, unique_id, ref_shortcode):
+def guest_vote_referral(request, shortcode, contest_id, ref_shortcode):
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
-    contest = get_object_or_404(Contest, unique_id=unique_id, business_owner=business)
+    contest = get_object_or_404(Contest, contest_id=contest_id, business_owner=business)
     referral = Referral.objects.get(contest=contest, ref_shortcode=ref_shortcode)
 
     ending_date = contest.ending_date

@@ -99,7 +99,7 @@
             {% else %}
                 <h2 class="text-center">No referral currently</h2><br>
 
-                <p class="text-center"><a href="{% url 'referral_register' business.shortcode contest.unique_id %}"
+                <p class="text-center"><a href="{% url 'referral_register' business.shortcode contest.id %}"
                                           class="btn
             btn-solid-sm">
                     Become a Referral</a></p>
