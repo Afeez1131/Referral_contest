@@ -75,7 +75,7 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     objects = CustomAccountManager()
 
     USERNAME_FIELD = "phone_number"
-    REQUIRED_FIELDS = ["username", "full_name", "business_name", "cash_price"]
+    REQUIRED_FIELDS = ["username", "full_name", "business_name"]  #, "cash_price"]
 
     def __str__(self):
         return self.business_name
