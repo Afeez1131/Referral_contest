@@ -14,7 +14,7 @@ import uuid
 
 class CustomAccountManager(BaseUserManager):
     def create_superuser(
-            self, username, full_name, password, cash_price, **other_fields
+            self, username, full_name, password, **other_fields
     ):
         other_fields.setdefault("is_staff", True)
         other_fields.setdefault("is_superuser", True)
@@ -26,10 +26,10 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError("Superuser must be given a superuser status")
         # email = self.normalize_email(email)
         return self.create_user(
-            username, full_name, password, cash_price, **other_fields
+            username, full_name, password, **other_fields
         )
 
-    def create_user(self, username, full_name, password, cash_price, **other_fields):
+    def create_user(self, username, full_name, password, **other_fields):
         # email = self.normalize_email(email)
         # if not email:
         #     raise ValueError('You must provide an E-mail address.')
@@ -40,7 +40,7 @@ class CustomAccountManager(BaseUserManager):
             username=username,
             full_name=full_name,
             password=password,
-            cash_price=cash_price,
+            # cash_price=cash_price,
             **other_fields
         )
 
@@ -62,7 +62,7 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(
         max_length=11, validators=[phone_regex], unique=True
     )
-    cash_price = models.DecimalField(max_digits=5, decimal_places=0)
+    # cash_price = models.DecimalField(max_digits=5, decimal_places=0)
     full_name = models.CharField(max_length=150)
     shortcode = models.CharField(max_length=30, null=True, blank=True)
 
