@@ -106,7 +106,7 @@ class Contest(models.Model):
     business_owner = models.ForeignKey(
         BusinessOwner, on_delete=models.CASCADE, related_name="contests"
     )
-    cash_price = models.DecimalField(max_digits=5, decimal_places=0)
+    cash_price = models.DecimalField(max_digits=5, decimal_places=0, default=0)
     starting_date = models.DateTimeField()
     ending_date = models.DateTimeField()
     duration = models.PositiveIntegerField(blank=True, null=True)
