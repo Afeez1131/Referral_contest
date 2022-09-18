@@ -84,8 +84,8 @@ def referral_list(request, shortcode, unique_id):
     form = GuestRegisterForm()
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
     contest = get_object_or_404(Contest, unique_id=unique_id, business_owner=business)
-    referral = Referral.objects.filter(business_owner=contest)
-    ref_list = Referral.objects.values_list("refer_name", "ref_shortcode", "guest_referral")
+    referral = Referral.objects.filter(contest=contest)
+    # ref_list = Referral.objects.values_list("refer_name", "ref_shortcode", "guest_referral")
 
     return render(request, "Owner/referral_list.html",
         {"referral": referral, "business": business, "contest": contest, "form": form, }, )
@@ -97,7 +97,7 @@ def register_referral(request, shortcode, unique_id):
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
 
     contest = get_object_or_404(Contest, unique_id=unique_id, business_owner=business)
-    referral = Referral.objects.filter(business_owner=contest)
+    referral = Referral.objects.filter(contest=contest)
     ending_date = contest.ending_date
     starting_date = contest.starting_date
 
@@ -108,19 +108,19 @@ def register_referral(request, shortcode, unique_id):
             refer_name = form.cleaned_data["refer_name"]
             phone_number = form.cleaned_data["phone_number"]
 
-            if contest.contest_time():
-                referral_instance = Referral.objects.filter(business_owner=contest)
+            if contest.contest_time:
+                referral_instance = Referral.objects.filter(contest=contest)
                 referral_instance = referral_instance.filter(phone_number=phone_number)
 
                 if not referral_instance.exists():
-                    referral_instance = Referral(business_owner=contest, refer_name=refer_name,
+                    referral_instance = Referral(contest=contest, refer_name=refer_name,
                                                  phone_number=phone_number)
 
                     shortcode = create_shortcode(referral_instance, size=4)
                     referral_instance.ref_shortcode = shortcode
-                    referral_instance.business_owner.referral_count += 1
+                    referral_instance.contest.referral_count += 1
 
-                    referral_instance.business_owner.save()
+                    referral_instance.contest.save()
                     referral_instance.save()
                     print(referral_instance, shortcode)
                     # save
@@ -137,7 +137,7 @@ def register_referral(request, shortcode, unique_id):
                                           f' you can only register as a referral once the contest begins. Kindly , checkback in '
                                           f' {time_left} Minutes. ')
 
-            elif contest.past_contest_time():
+            elif contest.past_contest_time:
                 print('contest ended')
                 # if the current time == the ending time
                 messages.warning(request, "You can no longer join this contest has it ended on %s" % ending_date, )
@@ -149,7 +149,7 @@ def register_referral(request, shortcode, unique_id):
 def referral_profile(request, shortcode, unique_id, ref_shortcode):
     business = BusinessOwner.objects.get(shortcode=shortcode)
     contest = get_object_or_404(Contest, unique_id=unique_id, business_owner=business)
-    referral = Referral.objects.get(ref_shortcode=ref_shortcode, business_owner=contest)
+    referral = Referral.objects.get(ref_shortcode=ref_shortcode, contest=contest)
 
     vote_url = request.build_absolute_uri(
         reverse("referral_vote", args=[business.shortcode, contest.unique_id, referral.ref_shortcode], ))
@@ -168,8 +168,8 @@ def referral_profile(request, shortcode, unique_id, ref_shortcode):
 def export_all_contact(request, shortcode, contest_id):
     business = BusinessOwner.objects.get(shortcode=shortcode)
     contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
-    referral = Referral.objects.filter(business_owner=contest)
-    guest = Guest.objects.filter(business_owner=contest)
+    referral = Referral.objects.filter(contest=contest)
+    guest = Guest.objects.filter(contest=contest)
 
     file_name = str(business.shortcode) + "-contact.vcf"
     response = HttpResponse(content_type="text/x-vCard")

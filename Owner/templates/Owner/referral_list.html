@@ -81,8 +81,8 @@
                         </td>
                         <td><p class="fw-normal mb-1">{{ ref.ref_shortcode }}</p></td>
                         <td><span
-                                class="btn btn-sm btn-success">{{ ref.guest_referral.all.count }}
-                            Vote{{ ref.guest_referral.all.count|pluralize }}</span>
+                                class="btn btn-sm btn-success">{{ ref.guest_count }}
+                            Vote{{ ref.guest_count.all.count|pluralize }}</span>
                         </td>
 {#                        </a>#}
                         <td>
@@ -102,7 +102,7 @@
                 <p class="text-center"><a href="{% url 'referral_register' business.shortcode contest.unique_id %}"
                                           class="btn
             btn-solid-sm">
-                    Add a Referral</a></p>
+                    Become a Referral</a></p>
             {% endif %}
         </div>
     </div>

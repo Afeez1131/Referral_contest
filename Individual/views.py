@@ -26,7 +26,7 @@ from django.utils import timezone
 def guest_vote_referral(request, shortcode, unique_id, ref_shortcode):
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
     contest = get_object_or_404(Contest, unique_id=unique_id, business_owner=business)
-    referral = Referral.objects.get(business_owner=contest, ref_shortcode=ref_shortcode)
+    referral = Referral.objects.get(contest=contest, ref_shortcode=ref_shortcode)
 
     ending_date = contest.ending_date
     starting_date = contest.starting_date
@@ -39,17 +39,17 @@ def guest_vote_referral(request, shortcode, unique_id, ref_shortcode):
             guest_phone = form.cleaned_data["phone_number"]
             guest_ip = get_ip_address(request)
 
-            if contest.contest_time():
+            if contest.contest_time:
                 guest_verify = Guest.objects.filter(
-                    referral=referral,
-                    business_owner=contest,
-                    ip=guest_ip)
+                    Q(referral=referral) &
+                    Q(contest=contest) &
+                    Q(ip=guest_ip))  # & Q(phone_number=guest_phone))
 
-                guest_verify = Guest.objects.filter(referral=referral, business_owner=contest,phone_number=guest_phone)
+                # guest_verify = Guest.objects.filter(referral=referral, contest=contest, phone_number=guest_phone)
 
                 if not guest_verify.exists():
                     guest_instance = form.save(commit=False)
-                    guest_instance.business_owner = contest
+                    guest_instance.contest = contest
                     guest_instance.referral = referral
                     guest_instance.ip = guest_ip
                     guest_instance.referral.guest_count += 1
@@ -57,17 +57,17 @@ def guest_vote_referral(request, shortcode, unique_id, ref_shortcode):
                     guest_instance.referral.save()
                     guest_instance.save()
                     guest_message = (
-                        r"Hello, I was referred by Referral "
-                        + referral.refer_name
-                        + " my name is "
-                        + guest_name
+                            r"Hello, I was referred by Referral "
+                            + referral.refer_name
+                            + " my name is "
+                            + guest_name
                     )
 
                     whatsapp_link = (
-                        "https://wa.me/"
-                        + str(phone_num_val(business.phone_number))
-                        + "?text="
-                        + urllib.parse.quote(guest_message))
+                            "https://wa.me/"
+                            + str(phone_num_val(business.phone_number))
+                            + "?text="
+                            + urllib.parse.quote(guest_message))
                     return HttpResponseRedirect(whatsapp_link)
 
                 else:
@@ -82,7 +82,7 @@ def guest_vote_referral(request, shortcode, unique_id, ref_shortcode):
                         starting_date.strftime("%H:%M:%S"),
                     ),
                 )
-            elif contest.past_contest_time():
+            elif contest.past_contest_time:
                 messages.warning(
                     request,
                     "You can no longer join this contest as it ended on %s by %s"

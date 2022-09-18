@@ -9,10 +9,9 @@ from django.dispatch import receiver
 
 
 class Referral(models.Model):
-    business_owner = models.ForeignKey(
+    contest = models.ForeignKey(
         Contest,
         on_delete=models.CASCADE,
-        related_name="referral_contest",
         null=True,
         blank=True,
     )
@@ -30,11 +29,10 @@ class Referral(models.Model):
 
     class Meta:
         ordering = ("-id",)
-        unique_together = ("business_owner", "refer_name", "phone_number")
+        unique_together = ("contest", "refer_name", "phone_number")
 
     def save(self, *args, **kwargs):
-        if not self.guest_count:
-            self.guest_count = self.guest_referral.count()
+
         if not self.ref_shortcode:
             self.ref_shortcode = create_shortcode(self)
         super(Referral, self).save(*args, **kwargs)
@@ -43,9 +41,9 @@ class Referral(models.Model):
         return reverse(
             "referral_vote",
             kwargs={
-                "shortcode": self.business_owner.business_owner.shortcode,
+                "shortcode": self.contest.business_owner.shortcode,
                 "ref_shortcode": self.ref_shortcode,
-                "unique_id": self.business_owner.unique_id,
+                "unique_id": self.contest.unique_id,
             },
         )
 
@@ -61,11 +59,10 @@ class Referral(models.Model):
 
 class Guest(models.Model):
     referral = models.ForeignKey(
-        Referral, related_name="guest_referral", on_delete=models.CASCADE
+        Referral, on_delete=models.CASCADE
     )
-    business_owner = models.ForeignKey(
+    contest = models.ForeignKey(
         Contest,
-        related_name="contest_guest",
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -84,7 +81,7 @@ class Guest(models.Model):
         return str(self.guest_name)
 
     def save(self, *args, **kwargs):
-        self.referral.guest_count += 1
+        # self.referral.guest_count += 1
         super(Guest, self).save(*args, **kwargs)
 
     class Meta:

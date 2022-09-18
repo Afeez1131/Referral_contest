@@ -22,7 +22,8 @@ def register_view(request):
             form = UserRegistrationForm(request.POST)
             if form.is_valid():
                 f = form.save(commit=False)
-                password = form.cleaned_data.get('password')
+                password = form.cleaned_data.get('password1')
+                print('password: ', password)
                 f.set_password(password)
                 f.save()
                 messages.success(request, "Registration Successfull, Login Below")
@@ -45,12 +46,12 @@ def login_user(request):
             login_field = request.POST["login"]
             password = request.POST["password"]
             if form.is_valid():
-                user = authenticate(request, username=form.cleaned_data.get('login'), password=form.cleaned_data.get('password'))
-                # authenticate the user
+                user = authenticate(request, username=login_field, password=password)
+                print('checking password ', user.check_password('testpass123'))
                 if user is not None:
-                    business = BusinessOwner.objects.get(
-                        Q(username=login_field) | Q(phone_number=login_field)
-                    )
+                    # business = BusinessOwner.objects.get(
+                    #     Q(username=login_field) | Q(phone_number=login_field)
+                    # )
                     login(request, user)
                     # print(HttpResponseRedirect(next))
                     if next:

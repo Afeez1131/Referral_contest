@@ -46,6 +46,15 @@ class UserRegistrationForm(UserCreationForm):
             "password2",
         )
 
+    def clean_password1(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password1')
+
+        if password1 != password2:
+            raise forms.ValidationError('The two passwords must match')
+        return password1
+
+
     def clean_phone_number(self):
         phone = self.cleaned_data.get('phone_number')
         return phone.replace('-', '')
