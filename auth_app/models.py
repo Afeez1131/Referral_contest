@@ -110,7 +110,7 @@ class Contest(models.Model):
     starting_date = models.DateTimeField()
     ending_date = models.DateTimeField()
     duration = models.PositiveIntegerField(blank=True, null=True)
-    unique_id = models.CharField(max_length=30, null=True, blank=True)
+    # unique_id = models.CharField(max_length=30, null=True, blank=True)
     referral_count = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs):
@@ -120,12 +120,12 @@ class Contest(models.Model):
             seconds = df.total_seconds()
             self.duration = int(seconds / 3600)
 
-        if not self.unique_id:
-            unique_id = str(uuid.uuid4()).split('-')[0]
-            while Contest.objects.filter(unique_id=unique_id).exists():
-                print('ID: ', unique_id)
-                unique_id = str(uuid.uuid4()).split('-')[0]
-            self.unique_id = unique_id
+        # if not self.unique_id:
+        #     unique_id = str(uuid.uuid4()).split('-')[0]
+        #     while Contest.objects.filter(unique_id=unique_id).exists():
+        #         print('ID: ', unique_id)
+        #         unique_id = str(uuid.uuid4()).split('-')[0]
+        #     self.unique_id = unique_id
         super(Contest, self).save(*args, **kwargs)
 
     def __str__(self):
