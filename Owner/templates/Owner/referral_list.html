@@ -28,7 +28,7 @@
     <div class="container mt-5">
         {% if request.user.is_authenticated and request.user.username == business.username and referral.count > 0 %}
             <div class="col-12 text-center mt-3">
-                <a href="{% url 'export_all_contact' business.shortcode contest.id %}" class="btn btn-solid-sm">
+                <a href="{% url 'export_all_contact' business.shortcode contest.unique_id %}" class="btn btn-solid-sm">
                     Export all Contact as VCF <i class="fas fa-address-card"></i>
                 </a><br>
             </div>
@@ -99,7 +99,7 @@
             {% else %}
                 <h2 class="text-center">No referral currently</h2><br>
 
-                <p class="text-center"><a href="{% url 'referral_register' business.shortcode contest.id %}"
+                <p class="text-center"><a href="{% url 'referral_register' business.shortcode contest.unique_id %}"
                                           class="btn
             btn-solid-sm">
                     Become a Referral</a></p>

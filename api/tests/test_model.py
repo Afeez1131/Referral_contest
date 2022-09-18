@@ -140,7 +140,7 @@ class APIEndpointsPublicTest(TestCase):
     def test_public_retrieve_contest_fail(self):
         user = sample_business_owner(phone_number='0812233034')
         contest = sample_contest(business_owner=user)
-        url = get_url('contest', contest.id)
+        url = get_url('contest', contest.unique_id)
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -213,7 +213,7 @@ class APIEndpointsPrivate(TestCase):
     def test_private_retrieve_contest_pass(self):
         contest = sample_contest(business_owner=self.user)
         exist = Contest.objects.filter(business_owner=contest.business_owner)
-        url = get_url('contest', contest.id)
+        url = get_url('contest', contest.unique_id)
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -274,7 +274,7 @@ class APIEndpointsPrivate(TestCase):
         contest = sample_contest(business_owner=business_owner)
         data = {
             "refer_name": "Test Referral",
-            "business_owner": contest.id,
+            "business_owner": contest.unique_id,
             "phone_number": business_owner.phone_number,
         }
 

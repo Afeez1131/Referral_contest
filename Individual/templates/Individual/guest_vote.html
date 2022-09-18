@@ -54,7 +54,7 @@
                                     onclick="confirmSubmit('{{ referral.refer_name }};');">Vote <i
                                     class='fas fa-vote-yea'></i>
                             </button>
-                            <a href="{% url 'referral_list' business.shortcode contest.id %}">
+                            <a href="{% url 'referral_list' business.shortcode contest.unique_id %}">
                                 <button class="btn btn-secondary" type="button">LeaderBoard
                                     <i class='fas fa-award'></i> </button>
                             </a>

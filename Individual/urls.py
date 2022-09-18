@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path(
-        "vote/<shortcode>/<contest_id>/<ref_shortcode>/",
+        "vote/<shortcode>/<unique_id>/<ref_shortcode>/",
         views.guest_vote_referral,
         name="referral_vote",
     ),

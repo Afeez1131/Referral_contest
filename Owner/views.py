@@ -30,7 +30,7 @@ def business_owner_home(request):
             contest = form.save(commit=False)
             contest.business_owner = business
             contest.save()
-            return HttpResponseRedirect(reverse("contest_detail", args=[contest.id]))
+            return HttpResponseRedirect(reverse("contest_detail", args=[contest.unique_id]))
 
     return render(request, "Owner/referral_homepage.html",
         {"business": business, "form": form, "contests": contests, }, )
@@ -51,7 +51,7 @@ def business_new_contest(request):
             contest.save()
             # form.save()
             messages.success(request, 'Contest created successfully.')
-            return HttpResponseRedirect(reverse("contest_detail", args=[contest.id]))
+            return HttpResponseRedirect(reverse("contest_detail", args=[contest.unique_id]))
     return render(request, 'Owner/new_contest.html', {'form': form, 'business': business})
 
 
@@ -66,10 +66,10 @@ def business_all_contest(request):
 
 
 @login_required(login_url="account_login")
-def contest_detail(request, contest_id):
+def contest_detail(request, unique_id):
     business = BusinessOwner.objects.get(shortcode=request.user.shortcode)
-    contest = get_object_or_404(Contest, business_owner=business, id=contest_id)
-    signup_url = request.build_absolute_uri(reverse("referral_register", args=(business.shortcode, contest.id)))
+    contest = get_object_or_404(Contest, business_owner=business, unique_id=unique_id)
+    signup_url = request.build_absolute_uri(reverse("referral_register", args=(business.shortcode, contest.unique_id)))
     share_message = f"Stand a chance of winning a cash/product price of # {contest.cash_price}" \
                     f" just by referring people to {business.business_name}. Get started here: {signup_url}"
 
@@ -81,10 +81,10 @@ def contest_detail(request, contest_id):
 
 
 # @login_required(login_url="account_login")
-def referral_list(request, shortcode, contest_id):
+def referral_list(request, shortcode, unique_id):
     form = GuestRegisterForm()
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
-    contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
+    contest = get_object_or_404(Contest, unique_id=unique_id, business_owner=business)
     referral = Referral.objects.filter(contest=contest)
     # ref_list = Referral.objects.values_list("refer_name", "ref_shortcode", "guest_referral")
 
@@ -92,12 +92,12 @@ def referral_list(request, shortcode, contest_id):
         {"referral": referral, "business": business, "contest": contest, "form": form, }, )
 
 
-def register_referral(request, shortcode, contest_id):
+def register_referral(request, shortcode, unique_id):
     form = ReferralRegistration()
 
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
 
-    contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
+    contest = get_object_or_404(Contest, unique_id=unique_id, business_owner=business)
     referral = Referral.objects.filter(contest=contest)
     ending_date = contest.ending_date
     starting_date = contest.starting_date
@@ -126,7 +126,7 @@ def register_referral(request, shortcode, contest_id):
                     print(referral_instance, shortcode)
                     # save
                     return HttpResponseRedirect(reverse("referral_profile",
-                                                        args=[contest.business_owner.shortcode, contest.id,
+                                                        args=[contest.business_owner.shortcode, contest.unique_id,
                                                               referral_instance.ref_shortcode]))
                 else:
                     messages.warning(request, 'A Referral exist with this Phone Number, try again.')
@@ -147,13 +147,13 @@ def register_referral(request, shortcode, contest_id):
         {"form": form, "business": business, "referral": referral, }, )
 
 
-def referral_profile(request, shortcode, contest_id, ref_shortcode):
+def referral_profile(request, shortcode, unique_id, ref_shortcode):
     business = BusinessOwner.objects.get(shortcode=shortcode)
-    contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
+    contest = get_object_or_404(Contest, unique_id=unique_id, business_owner=business)
     referral = Referral.objects.get(ref_shortcode=ref_shortcode, contest=contest)
 
     vote_url = request.build_absolute_uri(
-        reverse("referral_vote", args=[business.shortcode, contest.id, referral.ref_shortcode], ))
+        reverse("referral_vote", args=[business.shortcode, contest.unique_id, referral.ref_shortcode], ))
     referral_message = ("Hello, i am participating in a referral contest, the person with the highest "
                         f"vote wins the Cash/Gift price. kindly vote for me here: {vote_url}")
 
@@ -166,9 +166,9 @@ def referral_profile(request, shortcode, contest_id, ref_shortcode):
         {"business": business, "referral": referral, "vote_url": vote_url, "referral_message": referral_message, }, )
 
 
-def export_all_contact(request, shortcode, contest_id):
+def export_all_contact(request, shortcode, unique_id):
     business = BusinessOwner.objects.get(shortcode=shortcode)
-    contest = get_object_or_404(Contest, id=contest_id, business_owner=business)
+    contest = get_object_or_404(Contest, unique_id=unique_id, business_owner=business)
     referral = Referral.objects.filter(contest=contest)
     guest = Guest.objects.filter(contest=contest)
 
