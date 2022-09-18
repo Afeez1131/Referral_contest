@@ -62,7 +62,7 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(
         max_length=11, validators=[phone_regex], unique=True
     )
-    # cash_price = models.DecimalField(max_digits=5, decimal_places=0)
+    cash_price = models.DecimalField(max_digits=5, decimal_places=0)
     full_name = models.CharField(max_length=150)
     shortcode = models.CharField(max_length=30, null=True, blank=True)
 
