@@ -110,7 +110,7 @@ class Contest(models.Model):
     starting_date = models.DateTimeField()
     ending_date = models.DateTimeField()
     duration = models.PositiveIntegerField(blank=True, null=True)
-    unique_id = models.CharField(max_length=30, null=True, blank=True)
+    unique_id = models.CharField(max_length=30, null=True, blank=True, default=uuid.uuid4())
     referral_count = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs):
