@@ -4,16 +4,14 @@ from django.urls import reverse
 from autoslug import AutoSlugField
 from .utils import create_shortcode
 from auth_app.models import Contest
-
-# from auth_app.models import BusinessOwner
-from django.conf import settings
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
 
 
 class Referral(models.Model):
-    business_owner = models.ForeignKey(
+    contest = models.ForeignKey(
         Contest,
         on_delete=models.CASCADE,
-        related_name="referral_contest",
         null=True,
         blank=True,
     )
@@ -24,19 +22,17 @@ class Referral(models.Model):
     )
     phone_number = models.CharField(validators=[phoneNumberRegex], max_length=11)
     ref_shortcode = models.CharField(max_length=15, blank=True, unique=True)
-    guest_count = models.PositiveIntegerField(blank=True, null=True)
+    guest_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.ref_shortcode
 
     class Meta:
         ordering = ("-id",)
-        unique_together = ("business_owner", "refer_name", "phone_number")
+        unique_together = ("contest", "refer_name", "phone_number")
 
     def save(self, *args, **kwargs):
-        if not self.guest_count:
-            self.guest_count = self.guest_referral.count()
-        # self.refer_message = str(self.refer_message) + " " + self.get_absolute_url()
+
         if not self.ref_shortcode:
             self.ref_shortcode = create_shortcode(self)
         super(Referral, self).save(*args, **kwargs)
@@ -45,20 +41,28 @@ class Referral(models.Model):
         return reverse(
             "referral_vote",
             kwargs={
-                "shortcode": self.business_owner.business_owner.shortcode,
+                "shortcode": self.contest.business_owner.shortcode,
                 "ref_shortcode": self.ref_shortcode,
-                "contest_id": self.business_owner.id,
+                "contest_id": self.contest.unique_id,
             },
         )
 
 
+# @receiver(post_save, sender=Referral)
+# def update_referral_count(sender, created, instance, **kwargs):
+#     if created:
+#         print('Before: ', instance.business_owner.referral_count)
+#         instance.business_owner.referral_count += 1
+#         instance.business_owner.save()
+#         print('After: ', instance.business_owner.referral_count)
+
+
 class Guest(models.Model):
     referral = models.ForeignKey(
-        Referral, related_name="guest_referral", on_delete=models.CASCADE
+        Referral, on_delete=models.CASCADE
     )
-    business_owner = models.ForeignKey(
+    contest = models.ForeignKey(
         Contest,
-        related_name="contest_guest",
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -77,8 +81,18 @@ class Guest(models.Model):
         return str(self.guest_name)
 
     def save(self, *args, **kwargs):
-        self.referral.guest_count += 1
+        # self.referral.guest_count += 1
         super(Guest, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ("-id",)
+
+
+# @receiver(post_save, sender=Guest)
+# def update_guest_count(sender, created, instance, **kwargs):
+#     if created:
+#         print('Before guest_count: ', instance.referral.guest_count)
+#         instance.referral.guest_count += 1
+#         instance.referral.save()
+#         print('After: guest_count ', instance.referral.guest_count)
+

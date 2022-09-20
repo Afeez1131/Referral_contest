@@ -1,71 +1,68 @@
 {% extends "base_app/base.html" %}
 
 {% load i18n %}
+{% load crispy_forms_tags %}
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
 {% block content %}
-<!-- Header -->
-<header class="ex-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-10 offset-xl-1">
-                <h1 class="text-center">{% trans "Sign In" %}</h1>
+    <!-- Header -->
+    <header class="ex-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 offset-xl-1">
+                    <h1 class="text-center">{% trans "Sign In" %}</h1>
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </header> <!-- end of ex-header -->
 
-            </div> <!-- end of col -->
-        </div> <!-- end of row -->
-    </div> <!-- end of container -->
-</header> <!-- end of ex-header -->
+    <div class="container col-xl-8 offset-xl-2 col-md-8 col-xs-12 offset-md-2 mb-1">
+        <div class="row align-items-center">
+             <div class="col-md-10 offset-md-1 mx-auto col-lg-6 offset-lg-3">
 
+                <div class="text-box mt-3 mb-5">
+                {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" id='message-alert' role="alert">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
-<!-- Basic -->
-<div class="ex-form-1 pt-5 pb-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-6 offset-xl-3">
-
-            {% if form.non_field_errors %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {% for error in form.non_field_errors %}
-                <b>{{ error }}</b>
-                {% endfor %}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {% endif %}
-
-                {% if messages %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {% for message in messages %}
-                    <b>{{ message }}</b>
-                    {% endfor %}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                {% endif %}
-                <div class="text-box mt-5 mb-5">
-                    <p class="mb-4">You don't have a password? Then please <a class="blue"
-                            href="{% url 'account_signup' %}">Sign Up</a></p>
-                    <hr>
-                    <!-- Log In Form -->
-                    <form method="post">
+                    {% if messages %}
+                        <div class="alert alert-danger alert-dismissible fade show" id='message-alert' role="alert">
+                            {% for message in messages %}
+                                <b>{{ message }}</b>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <form class="signup p-4 p-md-6 border rounded-3 bg-light" id="signup_form" method="post">
                         {% csrf_token %}
-                        <div class="mb-4 form-floating">
-                            {{ form.login }}
-                            <label for="floatingInput">Username or Phone Number</label>
+                        <div class="form-floating mb-3">
+                           {% for field in form %}
+                                <div class="mb-3">
+                                    {{ field | as_crispy_field }}
+                                </div>
+                            {% endfor %}
+                            {% if redirect_field_value %}
+                                <input type="hidden" name="next"
+                                       value="{{ request.GET.next }}"/>
+                            {% endif %}
                         </div>
-                        <div class="mb-4 form-floating">
+                     <div class="mb-3  text-center">
+                        <button class="w-50 btn btn-lg btn-primary" type="submit">Log in&raquo;</button>
+                     </div>
+                        <hr class="my-4">
+                        <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
+                        <small class='text-small'>If you have not created an account yet, then please <a
+                                href="{% url 'account_signup' %}">sign up</a> first.</small><br>
 
-                            {{ form.password }}
-                            <label for="floatingPassword">Password</label>
-                        </div>
-{#                        <input type="hidden" name="next" value="{{ next }}" />#}
-                        <input type="submit" class="form-control-submit-button" value="Log in">
+
                     </form>
-                    <!-- end of log in form -->
+                </div>
+            </div>
+        </div>
+    </div>
 
-                </div> <!-- end of text-box -->
-            </div> <!-- end of col -->
-        </div> <!-- end of row -->
-    </div> <!-- end of container -->
-</div> <!-- end of ex-basic-1 -->
-<!-- end of basic -->
 {% endblock %}

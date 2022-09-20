@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
-from auth_app.models import BusinessOwner, Contest
+from auth_app.models import BusinessOwner
+from base_app.models import Contest
 from allauth.account.forms import LoginForm
 from django import forms
 from django.forms import ValidationError
@@ -30,6 +31,10 @@ class CustomLoginForm(LoginForm):
 
 
 class UserRegistrationForm(UserCreationForm):
+    phone_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-mask', 'autocomplete': "off", 'data-mask': "0000-000-0000", 'placeholder': "Phone Number (080x-xxx-xxxx)"}))
+
+    full_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': "Full Name", 'autocomplete': "off"}))
+
     class Meta:
         model = BusinessOwner
         fields = (
@@ -37,10 +42,30 @@ class UserRegistrationForm(UserCreationForm):
             "phone_number",
             "full_name",
             "business_name",
-            # "cash_price",
             "password1",
             "password2",
         )
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password1')
+
+        if password1 != password2:
+            raise forms.ValidationError('The two passwords must match')
+        return password1
+
+
+    def clean_phone_number(self):
+        phone = self.cleaned_data.get('phone_number')
+        return phone.replace('-', '')
+
+    def clean_full_name(self):
+        name = self.cleaned_data.get('full_name')
+        print("name", name)
+        name_list = name.split(' ')
+        if len(name_list) < 2:
+            raise forms.ValidationError('Ensure to enter your first and last name.')
+        return name.title()
 
     def __init__(self, *args, **kwargs):
         # self.request = kwargs.pop('request', None)
@@ -49,38 +74,23 @@ class UserRegistrationForm(UserCreationForm):
         # self.fields["username"] = forms.CharField(label='Phone Number', max_length=100)
         self.fields["username"].widget.attrs[
             "placeholder"
-        ] = "Enter your username or phone number"
+        ] = "username/phone number"
         self.fields["username"].widget.attrs["class"] = "form-control"
+        self.fields["username"].help_text = " "
 
-        self.fields["full_name"].widget.attrs["class"] = "form-control"
-        self.fields["full_name"].widget.attrs["placeholder"] = "your Full name..."
-
-        self.fields["phone_number"].widget.attrs["class"] = "form-control"
-        self.fields["phone_number"].widget.attrs["placeholder"] = "Phone Number..."
-        self.fields["phone_number"].help_text = "Enter your 11 digit phone number"
 
         self.fields["business_name"].widget.attrs["class"] = "form-control"
         self.fields["business_name"].widget.attrs["placeholder"] = "Business Name..."
+        self.fields["business_name"].help_text = " "
 
         self.fields["password1"].widget = forms.PasswordInput()
         self.fields["password1"].widget.attrs["class"] = "form-control"
         self.fields["password1"].widget.attrs["placeholder"] = "Password..."
+        self.fields["password1"].help_text = " "
 
         self.fields["password2"].widget = forms.PasswordInput()
         self.fields["password2"].widget.attrs["class"] = "form-control"
         self.fields["password2"].widget.attrs["placeholder"] = "Confirm Password..."
+        self.fields["password2"].help_text = ""
 
-    # def clean_phone_number(self):
-    #     phone_number = self.cleaned_data["phone_number"]
-    #     if str(phone_number).startswith("0") and len(str(phone_number)) == 11:
-    #         phone_number_list = list(phone_number)
-    #         phone_number_list[0] = "234"
-    #         p = "".join([str(elem) for elem in phone_number_list])
-    #         return p
-    #
-    #     else:
-    #         raise ValidationError(
-    #             _(
-    #                 "Incorrect Phone Number entered check the phone number and try again. e.g 08035221111"
-    #             )
-    #         )
+

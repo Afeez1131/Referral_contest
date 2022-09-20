@@ -1,13 +1,13 @@
 {% extends 'base_app/base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
     <!-- Header -->
 <header class="ex-header">
     <div class="container">
         <div class="row">
             <div class="col-xl-10 offset-xl-1">
-                <h1 class="text-center">Register Referral for {{ business }}<span></span></h1>
-
+                <h1 class="text-center">Register as a Referral for {{ business }}<span></span></h1>
+{#                <input type="hidden" id="business_name" value="{{ business }}">#}
             </div> <!-- end of col -->
         </div> <!-- end of row -->
     </div> <!-- end of container -->
@@ -22,41 +22,52 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endif %}
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {% for error in form.non_field_errors %}
-                    <b>{{ error }}</b>
-                    {% endfor %}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endif %}
-            {% if form.phone_number.errors %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {% for error in form.phone_number.errors %}
-                    Phone Number Error! <b>{{ error }}</b>
-                    {% endfor %}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endif %}
-            {% if form.refer_name.errors %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {% for error in form.refer_name.errors %}
-                    Referral Name Error! <b>{{ error }}</b>
-                    {% endfor %}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endif %}
+            <form class="signup p-4 p-md-6 border rounded-3 bg-light" id="referral_form" method="post">
+                        {% csrf_token %}
+                        <div class="form-floating mb-3">
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    {{ field | as_crispy_field }}
+                                </div>
+                            {% endfor %}
+                            {% if redirect_field_value %}
+                                <input type="hidden" name="{{ redirect_field_name }}"
+                                       value="{{ redirect_field_value }}"/>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3  text-center">
+                            <button class="btn btn-success" type="submit">Register as Referral </button>
 
-            <form method="post">
-                {% csrf_token %}
-{#                <p><input type="text" name="refer_name" class="form-control" placeholder="referral name.."></p>#}
-{#                <p><input type="text" name="phone_number" class="form-control" placeholder="phone number..." maxlength="11"></p>#}
-                <p>{{ form.refer_name }}</p>
-                <p>{{ form.phone_number }}</p>
-                <div class="mt-2 mb-3 text-center">
-                    <input class="btn btn-primary profile-button " type="submit" value="Become Referral">
-                </div>
-            </form>
+                        </div>
+                        <hr class="my-4">
+                        <small class="text-muted">- Enter your Name and WhatsApp Number.
+                        <br>- Click on the Button to Register as a Referral.
+                        <br>- Share your link with friends and families so they can vote for you.</small>
+                        <small class='text-small'></small>
+                        {#                              <a href="{% url 'account_reset_password' %}">Forgot Password? </a>#}
+
+
+                    </form>
         </div>
     </div>
+    <script type="text/javascript">
+        $(".alert").fadeTo(2000, 1000).slideUp(1000, function () {
+                $(".alert").slideUp(1000);
+            });
+
+         function confirmSubmit(name) {
+            swal({
+                title: "Are you sure?",
+                text: `You want to become a Referral ${name.toUpperCase()}?`,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                footer: "Why do I have this issue?",
+                confirmButtonText: "Yes, proceed!",
+                closeOnConfirm: true
+            }, function () {
+                $('#referral_form').submit();
+            })
+        }
+    </script>
 {% endblock %}

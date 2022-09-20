@@ -13,12 +13,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os.path
 from pathlib import Path
 import django_heroku
+from decouple import config
 import dj_database_url
 
-import environ
-
-env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret
-SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
+SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "whatsapp-contest.herokuapp.com"]
 
@@ -42,17 +39,38 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    'django.contrib.humanize',
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    # personal
     "base_app",
     "Owner",
     "Individual",
     # authentications
     "allauth",
     "allauth.account",
+    # third parties
     "crispy_forms",
     "tempus_dominus",
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -101,9 +119,9 @@ WSGI_APPLICATION = "Referral.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
+        "NAME": config("DB_NAME"),
+        "USER": config("DB_USER"),
+        "PASSWORD": config("DB_PASSWORD"),
         # "HOST": "127.0.0.1",
         # "PORT": "5432",
     }
@@ -177,6 +195,14 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 # ACCOUNT_USERNAME_REQUIRED = True
 # ACCOUNT_AUTHENTICATION_METHOD = "username"
 #
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = config('HOST_USER')
+EMAIL_HOST_PASSWORD = config('HOST_PASSWORD')
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL =
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'   #for testing
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = "DENY"
@@ -190,7 +216,6 @@ CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")  # new
 # SECURE_HSTS_SECONDS = 31536000
 django_heroku.settings(locals())
-
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 # TooManyFieldsSent at /admin/base_app/referral/98/change/
