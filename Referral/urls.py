@@ -28,6 +28,7 @@ urlpatterns = [
     # path("accounts/", include("allauth.urls")),
     # path("accounts/", include("django.contrib.auth.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 handler404 = "base_app.views.error_404"
 # handler500 = "base_app.views.error_500"
 # handler403 = "base_app.views.error_403"
