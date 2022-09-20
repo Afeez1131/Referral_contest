@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "whatsapp-contest.herokuapp.com", "whatsapp-contests.herokuapp.com/"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "whatsapp-contest.herokuapp.com", "whatsapp-contests.herokuapp.com"]
 
 # Application definition
 
