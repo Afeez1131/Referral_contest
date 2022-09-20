@@ -64,7 +64,7 @@ class BusinessOwner(AbstractBaseUser, PermissionsMixin):
     )
     # cash_price = models.DecimalField(max_digits=5, decimal_places=0)
     full_name = models.CharField(max_length=150)
-    shortcode = models.CharField(max_length=30, null=True, blank=True)
+    shortcode = models.CharField(max_length=100, null=True, blank=True)
 
     # not visible in the form
     start_date = models.DateTimeField(default=timezone.now)
@@ -110,7 +110,7 @@ class Contest(models.Model):
     starting_date = models.DateTimeField()
     ending_date = models.DateTimeField()
     duration = models.PositiveIntegerField(blank=True, null=True)
-    unique_id = models.CharField(max_length=30, null=True, blank=True, default=uuid.uuid4())
+    unique_id = models.CharField(max_length=100, null=True, blank=True, default=uuid.uuid4())
     referral_count = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs):
