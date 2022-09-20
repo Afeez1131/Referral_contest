@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "www.whatsapp-contest.herokuapp.com", "www.whatsapp-contests.herokuapp.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "whatsapp-contests.herokuapp.com"]
 
 # Application definition
 
@@ -172,8 +172,7 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-STATICFILES_STORAGE = '.storage.WhiteNoiseStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
