@@ -43,7 +43,7 @@ class Referral(models.Model):
             kwargs={
                 "shortcode": self.contest.business_owner.shortcode,
                 "ref_shortcode": self.ref_shortcode,
-                "contest_id": self.contest.unique_id,
+                "unique_id": self.contest.unique_id,
             },
         )
 

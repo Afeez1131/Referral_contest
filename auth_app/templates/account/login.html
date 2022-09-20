@@ -39,6 +39,8 @@
                     {% endif %}
                     <form class="signup p-4 p-md-6 border rounded-3 bg-light" id="signup_form" method="post">
                         {% csrf_token %}
+                    <small>For Testing, Use dafault credentials: <strong>demo / password@123</strong></small>
+                        <hr>
                         <div class="form-floating mb-3">
                            {% for field in form %}
                                 <div class="mb-3">

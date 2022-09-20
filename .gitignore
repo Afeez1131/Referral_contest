@@ -9,4 +9,4 @@ _migrations/*
 !_migrations/__init__.py
 backup.dump
 appname.dump
-fixtures
+dumps

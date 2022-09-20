@@ -85,7 +85,8 @@ def referral_list(request, shortcode, unique_id):
     form = GuestRegisterForm()
     business = get_object_or_404(BusinessOwner, shortcode=shortcode)
     contest = get_object_or_404(Contest, unique_id=unique_id, business_owner=business)
-    referral = Referral.objects.filter(contest=contest)
+    # referral = Referral.objects.filter(contest=contest)
+    referral = contest.referral_set.all().order_by('-guest_count')
     # ref_list = Referral.objects.values_list("refer_name", "ref_shortcode", "guest_referral")
 
     return render(request, "Owner/referral_list.html",
@@ -197,7 +198,7 @@ def export_all_contact(request, shortcode, unique_id):
             name_phone[g.guest_name] = g.phone_number
 
     for name, number in name_phone.items():
-        vcard = make_vcard(name + "-" + str(business.shortcode), number)
+        vcard = make_vcard(name, number)
         # convert the k, v into vcard object
         vcard_list.append(vcard)
     # append the vcard obj to a list
