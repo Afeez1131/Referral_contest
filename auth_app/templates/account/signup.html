@@ -59,8 +59,8 @@
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
                     <hr class="my-4">
                     <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
-                    <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}"><strong>sign
-                        in&raquo;</strong> </a>{% endblocktrans %}</p>
+                    <p>Already have an account? Then please <a href="{% url 'account_login' %}"><strong>sign
+                        in&raquo;</strong> </a></p>
                 </form>
             </div>
         </div>

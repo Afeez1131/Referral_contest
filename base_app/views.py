@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 
+
 def error_404(request, exception):
     data = {}
     return render(request, "base_app/404.html", data)
