@@ -16,7 +16,7 @@ One of the ways of generating massive contact list for the business owners is by
 
 
 # 3. PROGRESS.
-After Launching the website in February, We have more than **20 business owners** who has created a contest using this applications. The application has successfully referred over **800 contacts** to different WhatsApp based SMEs from different states in Nigeria.
+After Launching the website in February, We have more than **20 business owners** who started a contest using this applications. The application has successfully referred over **800 contacts** to different WhatsApp based SMEs from different states in Nigeria.
 
 # 4. HOW IT WORKS
 **The applications work in 5 simple steps**
@@ -29,8 +29,8 @@ After Launching the website in February, We have more than **20 business owners*
 And at the end of the contest, all contact of participants including the Referrals and people referred can be exported as a **Contact File**.
 
 # 4. FUTURE PLANS.
+- Using the WhatsApp/Twitter API to handle all the process from the comfort of WhatsApp, So people do not have to leave any social media to start a contest, and we can present them with result on request also.
 - Going global, the issue of SMEs taking their business to whatsApp is global, and them needing contacts is also a global issue, so there is future plan to take this global.
-- Integration with whatsApp Api to make the application much more robust.
 - Handling the disbursement of contest payment to the winners: right now, we are only hoping the business owners who create contest on our platforms will disburse rewards accordingly. In the future we plan on handling the disbursement of the payment to the winners directly.
 - Make the UI UX much more better.
 
