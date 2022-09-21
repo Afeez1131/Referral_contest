@@ -29,7 +29,7 @@ After Launching the website in February, We have more than **20 business owners*
 And at the end of the contest, all contact of participants including the Referrals and people referred can be exported as a **Contact File**.
 
 # 4. FUTURE PLANS.
-- Using the WhatsApp/Twitter API to handle all the process from the comfort of WhatsApp, So people do not have to leave any social media to start a contest, and we can present them with result on request also.
+- Using the WhatsApp/Twitter API to handle all the process, i.e Business Owner do not have to leave any social media to start a contest, and we can present them with result on request also.
 - Going global, the issue of SMEs taking their business to whatsApp is global, and them needing contacts is also a global issue, so there is future plan to take this global.
 - Handling the disbursement of contest payment to the winners: right now, we are only hoping the business owners who create contest on our platforms will disburse rewards accordingly. In the future we plan on handling the disbursement of the payment to the winners directly.
 - Make the UI UX much more better.
